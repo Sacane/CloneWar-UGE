@@ -84,6 +84,22 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.39.3.0</version>
         </dependency>
+        <!-- jakarta setup-->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>9.1.0</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.helidon.integrations.cdi</groupId>-->
+<!--            <artifactId>helidon-integrations-cdi-jpa</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -93,6 +109,33 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+
+                <!-- ... -->
+
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default-compile</id>
+                            <configuration>
+                                <annotationProcessorPaths>
+                                    <annotationProcessorPath>
+                                        <groupId>org.hibernate.orm</groupId>
+                                        <artifactId>hibernate-jpamodelgen</artifactId>
+                                        <version>6.1.1.Final</version>
+                                    </annotationProcessorPath>
+                                </annotationProcessorPaths>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- ... -->
+
+            </plugins>
+        </pluginManagement>
     </build>
     <repositories>
         <repository>
