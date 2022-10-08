@@ -10,3 +10,6 @@ out/
 
 ### VS Code ###
 .vscode
+
+## Unwanted in production
+./database/*.db
