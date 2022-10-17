@@ -2,11 +2,16 @@ package fr.ramatellier.clonewar.util;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HasherTest {
 
+    @Test
+    public void hashFunctionPrecondition(){
+        var content = "";
+        assertThrows(IllegalArgumentException.class, () -> Hasher.hashInstruction(content));
+        assertThrows(NullPointerException.class, () -> Hasher.hashInstruction(null));
+    }
 
     @Test
     public void hashShouldMatchWithSameContent(){
