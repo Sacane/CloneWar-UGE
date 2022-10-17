@@ -36,24 +36,6 @@ public class Instruction {
         this.content = content;
         this.hash = Hasher.hashInstruction(content);
     }
-
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setHash(long hash) {
-        this.hash = hash;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setLineNumberStart(int lineNumberStart) {
-        this.lineNumberStart = lineNumberStart;
-    }
-
     public int getLineNumberStart() {
         return lineNumberStart;
     }
@@ -61,7 +43,6 @@ public class Instruction {
     public long hashValue() {
         return hash;
     }
-
     public String content() {
         return content;
     }
