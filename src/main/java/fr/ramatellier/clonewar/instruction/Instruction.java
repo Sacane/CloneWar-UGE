@@ -15,11 +15,12 @@ public class Instruction {
     @GeneratedValue
     private UUID id;
 
+    private String filename;
     @NotBlank
     private int lineNumberStart;
 
     @NotBlank
-    private String content; //Each piece of instruction is separate with spaces
+    private String content; //Each piece of instruction is separate with \n
 
     @NotBlank
     private long hash;
