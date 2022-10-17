@@ -1,9 +1,8 @@
 package fr.ramatellier.clonewar.artifact;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.ramatellier.clonewar.instruction.Instruction;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import java.util.UUID;
 public class Artifact {
 
     @Id
+    @GeneratedValue
     private UUID id;
 
     @NotBlank
@@ -24,12 +24,28 @@ public class Artifact {
     @NotBlank
     private Date inputDate;
 
-    @OneToMany
+    @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Instruction> instructions = new ArrayList<>();
 
     public Artifact(){}
-    public Artifact(@NotBlank String name, @NotBlank String url, @NotBlank String inputDate){
+    public Artifact(@NotBlank String name, @NotBlank String url, @NotBlank Date inputDate){
+        this.name= name;
+        this.url = url;
+        this.inputDate = inputDate;
+    }
 
+    public UUID id(){
+        return id;
+    }
+    public String name(){
+        return name;
+    }
+    public String url(){
+        return url;
+    }
+    public Date inputDate(){
+        return inputDate;
     }
 
 }
