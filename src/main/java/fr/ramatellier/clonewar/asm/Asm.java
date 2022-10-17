@@ -1,5 +1,6 @@
 package fr.ramatellier.clonewar.asm;
 
+import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import org.objectweb.asm.*;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 
 public class Asm {
     public static void main(String[] args) throws IOException {
+        var builder = new InstructionBuilder();
         var finder = ModuleFinder.of(Path.of("TestJar.jar"));
         var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
         try(var reader = moduleReference.open()) {
