@@ -6,11 +6,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class InstructionBuilder {
-    private List<String> instructions;
+    private final List<String> instructions;
     private StringBuilder actual_instruction;
 
     public InstructionBuilder() {
-        instructions = new ArrayList<String>();
+        instructions = new ArrayList<>();
         actual_instruction = new StringBuilder();
     }
 

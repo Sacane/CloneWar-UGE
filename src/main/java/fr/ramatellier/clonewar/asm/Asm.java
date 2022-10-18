@@ -9,7 +9,6 @@ import java.lang.constant.MethodTypeDesc;
 import java.lang.module.ModuleFinder;
 import java.lang.reflect.Modifier;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class Asm {
     public static void main(String[] args) throws IOException {
@@ -154,7 +153,7 @@ public class Asm {
                                 @Override
                                 public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
                                     var s = switch(opcode) {
-                                        case Opcodes.INVOKEVIRTUAL -> "";
+                                        // case Opcodes.INVOKEVIRTUAL -> "";
                                         case Opcodes.INVOKESPECIAL -> "constructor";
                                         case Opcodes.INVOKESTATIC -> {
                                             var owners = owner.split("/");
