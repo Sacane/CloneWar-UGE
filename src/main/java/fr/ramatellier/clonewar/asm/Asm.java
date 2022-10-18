@@ -136,16 +136,19 @@ public class Asm {
                                 public void visitInsn(int opcode) {
                                     var code = (isStoreInstr(opcode)) ? "Store" : (isAStoreInstr(opcode)) ? "AStore" : (isLoadInstr(opcode)) ? "Load" : (isALoadInstr(opcode)) ? "ALoad" : (isReturnInstr(opcode)) ? "Return" : String.valueOf(opcode);
                                     System.err.println("opcode " + code);
+                                    builder.append("opcode " + code);
                                 }
 
                                 @Override
                                 public void visitIntInsn(int opcode, int operand) {
                                     System.err.println("opcode : " + opcode + " operand : " + operand);
+                                    builder.append("opcode : " + opcode + " operand : " + operand);
                                 }
 
                                 @Override
                                 public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
                                     System.err.println("opcode field " + opcode);
+                                    builder.append("opcode field " + opcode);
                                 }
 
                                 @Override
@@ -160,21 +163,25 @@ public class Asm {
                                         default -> "";
                                     };
                                     System.err.println("opcode " + opcode + " " + s);
+                                    builder.append("opcode " + opcode + " " + s);
                                 }
 
                                 @Override
                                 public void visitVarInsn(int opcode, int varIndex) {
                                     System.err.println("opcode " + opcode + " " + varIndex);
+                                    builder.append("opcode " + opcode + " " + varIndex);
                                 }
 
                                 @Override
                                 public void visitTypeInsn(int opcode, String type) {
                                     System.err.println("opcode " + opcode);
+                                    builder.append("opcode " + opcode);
                                 }
 
                                 @Override
                                 public void visitEnd() {
                                     System.err.println("end");
+                                    builder.endInstruction();
                                 }
                             };
                         }
@@ -182,5 +189,7 @@ public class Asm {
                 }
             }
         }
+
+        builder.addToDataBase();
     }
 }

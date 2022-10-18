@@ -9,7 +9,7 @@ public class InstructionBuilder {
     private List<String> instructions;
     private StringBuilder actual_instruction;
 
-    public void IntructionBuilder() {
+    public InstructionBuilder() {
         instructions = new ArrayList<String>();
         actual_instruction = new StringBuilder();
     }
@@ -24,16 +24,18 @@ public class InstructionBuilder {
     public void endInstruction() {
         var instruction = actual_instruction.toString();
         if (!instructions.equals("")) {
-            instructions.add(actual_instruction.toString());
+            instructions.add(instruction);
         }
         actual_instruction = new StringBuilder();
     }
 
     public void addToDataBase() {
+        System.out.println("Affichage du builder :");
+        System.out.println(this);
     }
 
     @Override
     public String toString() {
-        return instructions.stream().collect(Collectors.joining("NEW BLOC --- >\n"));
+        return "NEW BLOC --- >\n" + instructions.stream().collect(Collectors.joining("NEW BLOC --- >\n"));
     }
 }
