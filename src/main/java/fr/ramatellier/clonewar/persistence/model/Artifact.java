@@ -1,35 +1,38 @@
-package fr.ramatellier.clonewar.artifact;
+package fr.ramatellier.clonewar.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.ramatellier.clonewar.instruction.Instruction;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import org.springframework.cglib.core.Local;
 
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name="artifact")
 public class Artifact {
 
     @Id
     @GeneratedValue
     private UUID id;
 
-    @NotBlank
-    private String name;
-    @NotBlank
-    private String url;
-    @NotBlank
-    private Date inputDate;
 
-    @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL)
+    private String name;
+
+    private String url;
+
+    private LocalDate inputDate;
+
+    @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Instruction> instructions = new ArrayList<>();
 
     public Artifact(){}
-    public Artifact(@NotBlank String name, @NotBlank String url, @NotBlank Date inputDate){
+    public Artifact(String name, String url, LocalDate inputDate){
         this.name= name;
         this.url = url;
         this.inputDate = inputDate;
@@ -44,7 +47,7 @@ public class Artifact {
     public String url(){
         return url;
     }
-    public Date inputDate(){
+    public LocalDate inputDate(){
         return inputDate;
     }
 
