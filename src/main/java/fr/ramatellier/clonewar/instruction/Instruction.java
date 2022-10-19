@@ -2,7 +2,6 @@ package fr.ramatellier.clonewar.instruction;
 
 import fr.ramatellier.clonewar.util.Hasher;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
@@ -16,22 +15,22 @@ public class Instruction {
     @GeneratedValue
     private UUID id;
 
-    @Column(name = "filename")
+    @Column(name = "filename", nullable = false)
     private String filename;
-    @NotBlank
-    @Column(name = "startLine")
+
+    @Column(name = "startLine", nullable = false)
     private int lineNumberStart;
 
-    @NotBlank
+
     @Column(name = "content")
     private String content; //Each piece of instruction is separate with \n
 
-    @NotBlank
+
     @Column(name = "hash_value")
     private long hash;
 
     public Instruction(){}
-    public Instruction(@NotBlank int lineNumberStart, @NotBlank String content){
+    public Instruction(int lineNumberStart, String content){
         this.lineNumberStart = lineNumberStart;
         this.content = content;
         this.hash = Hasher.hashInstruction(content);
