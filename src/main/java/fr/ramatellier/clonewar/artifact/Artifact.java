@@ -1,10 +1,8 @@
-package fr.ramatellier.clonewar.persistence.model;
+package fr.ramatellier.clonewar.artifact;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.ramatellier.clonewar.instruction.Instruction;
 import jakarta.persistence.*;
-
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +15,6 @@ public class Artifact {
     @Id
     @GeneratedValue
     private UUID id;
-
-
     private String name;
 
     private String url;
@@ -27,7 +23,7 @@ public class Artifact {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Instruction> instructions = new ArrayList<>();
+    private final List<Instruction> instructions = new ArrayList<>();
 
     public Artifact(){}
     public Artifact(String name, String url, LocalDate inputDate){

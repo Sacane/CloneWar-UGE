@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.dto;
+package fr.ramatellier.clonewar.artifact;
 
 import java.time.LocalDate;
 

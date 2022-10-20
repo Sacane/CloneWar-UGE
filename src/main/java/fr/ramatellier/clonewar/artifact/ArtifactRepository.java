@@ -1,6 +1,5 @@
-package fr.ramatellier.clonewar.persistence.repository;
+package fr.ramatellier.clonewar.artifact;
 
-import fr.ramatellier.clonewar.persistence.model.Artifact;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import java.util.UUID;
