@@ -21,10 +21,9 @@ public class ArtifactController {
 
 
     @PostMapping(path = "/api/artifact/save")
-    public Mono<Artifact> save(@RequestBody ArtifactSaveDTO artifact){
+    public Artifact save(@RequestBody ArtifactSaveDTO artifact){
         var entity = new Artifact(artifact.name(), artifact.url(), artifact.date());
-        service.save(entity);
-        return Mono.just(entity);
+        return service.save(entity);
     }
     @GetMapping(path= "/api/test")
     public Flux<String> send(){

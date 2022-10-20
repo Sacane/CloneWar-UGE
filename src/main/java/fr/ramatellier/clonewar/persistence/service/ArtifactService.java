@@ -4,7 +4,6 @@ import fr.ramatellier.clonewar.persistence.model.Artifact;
 import fr.ramatellier.clonewar.persistence.repository.ArtifactRepository;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class ArtifactService {
 
