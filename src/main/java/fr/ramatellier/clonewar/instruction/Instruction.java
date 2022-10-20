@@ -25,7 +25,8 @@ public class Instruction {
     @Column(name = "content")
     private String content; //Each piece of instruction is separate with \n
 
-
+    @Column(name="order_entry")
+    private int order;
     @Column(name = "hash_value")
     private long hash;
 
