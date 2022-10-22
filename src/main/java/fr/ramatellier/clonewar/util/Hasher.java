@@ -1,8 +1,5 @@
 package fr.ramatellier.clonewar.util;
 
-import fr.ramatellier.clonewar.instruction.Instruction;
-
-import java.util.List;
 import java.util.Objects;
 
 public class Hasher {
