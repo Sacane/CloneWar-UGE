@@ -7,9 +7,6 @@ import java.util.Objects;
 
 public class Hasher {
 
-    private long hash(String str){
-        return 0L;
-    }
     public static long hashInstruction(String content){
         Objects.requireNonNull(content);
         if(content.equals("")) throw new IllegalArgumentException("Can't hash an empty content");
