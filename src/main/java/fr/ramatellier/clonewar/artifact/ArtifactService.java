@@ -8,6 +8,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.util.UUID;
+
 @Service
 public class ArtifactService {
 
@@ -22,7 +24,7 @@ public class ArtifactService {
     }
 
     public Mono<ArtifactDTO> saveArtifact(Artifact entity){
-        var dto = new ArtifactDTO(entity.name(), entity.inputDate().toString(), entity.url());
+        var dto = new ArtifactDTO(entity.id().toString(), entity.name(), entity.inputDate().toString(), entity.url());
         return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
             repository.save(entity);
             return dto;
