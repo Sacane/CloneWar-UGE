@@ -1,5 +1,6 @@
 package fr.ramatellier.clonewar.artifact;
 
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -49,7 +50,7 @@ public class ArtifactWebLayerIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(ArtifactDTO.class)
-                .value(artifactDTO -> artifactsMatches(artifactDTO, dto));
+                .value(artifactDTO -> artifactsMatches(artifactDTO, dto), IsEqual.equalTo(true));
     }
 
     @Test
@@ -60,6 +61,12 @@ public class ArtifactWebLayerIntegrationTest {
                 .exchange()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectStatus().isOk()
-                .expectBodyList(ArtifactDTO.class);
+                .expectBodyList(ArtifactDTO.class)
+                .value(List::size, IsEqual.equalTo(5))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact1", LocalDate.now().toString(), "artifact1.jar"))), IsEqual.equalTo(true))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact2", LocalDate.now().toString(), "artifact2.jar"))), IsEqual.equalTo(true))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact3", LocalDate.now().toString(), "artifact3.jar"))), IsEqual.equalTo(true))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact4", LocalDate.now().toString(), "artifact4.jar"))), IsEqual.equalTo(true))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact5", LocalDate.now().toString(), "artifact5.jar"))), IsEqual.equalTo(true));
     }
 }
