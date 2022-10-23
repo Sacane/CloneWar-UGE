@@ -10,8 +10,12 @@ import java.time.Duration;
 
 @RestController
 public class ArtifactController {
-    @Autowired
-    private ArtifactService service;
+
+    private final ArtifactService service;
+
+    public ArtifactController(ArtifactService service){
+        this.service = service;
+    }
 
     @PostMapping(path = "/api/artifact/save")
     public Mono<ArtifactDTO> save(@RequestBody ArtifactSaveDTO artifact){
