@@ -24,10 +24,9 @@ public class ArtifactService {
     }
 
     public Mono<ArtifactDTO> saveArtifact(Artifact entity){
-        var dto = new ArtifactDTO(entity.id().toString(), entity.name(), entity.inputDate().toString(), entity.url());
         return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
-            repository.save(entity);
-            return dto;
+            var entityResponse = repository.save(entity);
+            return new ArtifactDTO(entityResponse.id().toString(), entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url());
         })).subscribeOn(schedulerCtx);
     }
 
