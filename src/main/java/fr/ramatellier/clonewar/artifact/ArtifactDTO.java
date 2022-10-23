@@ -1,4 +1,5 @@
 package fr.ramatellier.clonewar.artifact;
 
-public record ArtifactDTO(String name, String date, String url) {
-}
+import java.util.UUID;
+
+public record ArtifactDTO(String id, String name, String date, String url) {}

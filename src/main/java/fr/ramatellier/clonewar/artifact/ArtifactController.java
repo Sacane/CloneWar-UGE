@@ -12,6 +12,7 @@ import java.time.Duration;
 public class ArtifactController {
     @Autowired
     private ArtifactService service;
+
     @PostMapping(path = "/api/artifact/save")
     public Mono<ArtifactDTO> save(@RequestBody ArtifactSaveDTO artifact){
         var entity = new Artifact(artifact.name(), artifact.url(), artifact.date());
@@ -20,6 +21,6 @@ public class ArtifactController {
 
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
-        return service.findAll().delayElements(Duration.ofMillis(150)).map(m -> new ArtifactDTO(m.name(), m.url(), m.inputDate().toString()));
+        return service.findAll().delayElements(Duration.ofMillis(150)).map(m -> new ArtifactDTO(m.id().toString(), m.name(), m.url(), m.inputDate().toString()));
     }
 }
