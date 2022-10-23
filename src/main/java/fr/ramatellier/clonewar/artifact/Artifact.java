@@ -1,6 +1,7 @@
 package fr.ramatellier.clonewar.artifact;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.ramatellier.clonewar.EntitySerializable;
 import fr.ramatellier.clonewar.instruction.Instruction;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name="artifact")
-public class Artifact {
+public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     @Id
     @GeneratedValue
@@ -45,4 +46,8 @@ public class Artifact {
         return inputDate;
     }
 
+    @Override
+    public ArtifactDTO toDto() {
+        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url);
+    }
 }
