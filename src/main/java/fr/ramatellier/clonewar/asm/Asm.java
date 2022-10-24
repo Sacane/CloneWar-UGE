@@ -13,6 +13,7 @@ import java.nio.file.Path;
 public class Asm {
     public static void main(String[] args) throws IOException {
         var builder = new InstructionBuilder();
+        var hasFirstLine = false;
         var file_name = "TestJar.jar";
         var finder = ModuleFinder.of(Path.of(file_name));
         var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
@@ -62,6 +63,9 @@ public class Asm {
 
                                 @Override
                                 public void visitLineNumber(int line, Label start) {
+                                    if(!builder.hasFirstLine()) {
+                                        builder.firstLine(line);
+                                    }
                                     System.err.println("line -> " + line);
                                 }
 

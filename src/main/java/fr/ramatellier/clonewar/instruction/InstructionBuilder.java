@@ -6,36 +6,48 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class InstructionBuilder {
-    private final List<String> instructions;
-    private StringBuilder actual_instruction;
+    private final ArrayList<Instruction> instructions;
+    private StringBuilder actualInstruction;
+    private int actualFirstLine;
+    private boolean hasFirstLine;
 
     public InstructionBuilder() {
         instructions = new ArrayList<>();
-        actual_instruction = new StringBuilder();
+        actualInstruction = new StringBuilder();
+    }
+
+    public boolean hasFirstLine() {
+        return hasFirstLine;
     }
 
     public void append(String str) {
         Objects.requireNonNull(str);
 
-        actual_instruction.append(str);
-        actual_instruction.append("\n");
+        actualInstruction.append(str);
+        actualInstruction.append("\n");
+    }
+
+    public void firstLine(int line) {
+        actualFirstLine = line;
+        hasFirstLine = true;
     }
 
     public void endInstruction() {
-        var instruction = actual_instruction.toString();
+        var instruction = actualInstruction.toString();
         if (!instructions.equals("")) {
-            instructions.add(instruction);
+            instructions.add(new Instruction(actualFirstLine, actualInstruction.toString()));
         }
-        actual_instruction = new StringBuilder();
+        actualInstruction = new StringBuilder();
+        hasFirstLine = false;
     }
 
     public void addToDataBase() {
-        System.out.println("Affichage du builder :");
+        System.out.println("Affichage des instructions :");
         System.out.println(this);
     }
 
     @Override
     public String toString() {
-        return "NEW BLOC --- >\n" + instructions.stream().collect(Collectors.joining("NEW BLOC --- >\n"));
+        return "NEW INSTRUCTION --- >\n" + instructions.stream().map(Instruction::toString).collect(Collectors.joining("NEW INSTRUCTION --- >\n"));
     }
 }

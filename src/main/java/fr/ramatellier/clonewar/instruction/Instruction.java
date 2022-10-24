@@ -64,4 +64,9 @@ public class Instruction {
     public UUID id() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "FIRST LINE IS " + lineNumberStart + "\n" + content;
+    }
 }
