@@ -1,7 +1,7 @@
 package fr.ramatellier.clonewar.asm;
 
+import aj.org.objectweb.asm.*;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
-import org.objectweb.asm.*;
 
 import java.io.IOException;
 import java.lang.constant.ClassDesc;
