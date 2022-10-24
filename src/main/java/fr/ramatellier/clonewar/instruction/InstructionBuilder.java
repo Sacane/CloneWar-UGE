@@ -35,7 +35,7 @@ public class InstructionBuilder {
 
     public void endInstruction() {
         var instruction = actualInstruction.toString();
-        if (!instructions.equals("")) {
+        if (!instruction.equals("")) {
             instructions.add(new Instruction(filename, actualFirstLine, actualInstruction.toString(), 0));
         }
         actualInstruction = new StringBuilder();
