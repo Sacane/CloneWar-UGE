@@ -31,11 +31,18 @@ public class Instruction {
     private long hash;
 
     public Instruction(){}
-    public Instruction(int lineNumberStart, String content){
+    public Instruction(String filename, int lineNumberStart, String content, int order){
+        this.filename = filename;
         this.lineNumberStart = lineNumberStart;
         this.content = content;
         this.hash = Hasher.hashInstruction(content);
+        this.order = order;
     }
+
+    public String filename() {
+        return filename;
+    }
+
     public int getLineNumberStart() {
         return lineNumberStart;
     }
@@ -49,6 +56,10 @@ public class Instruction {
 
     public UUID id() {
         return id;
+    }
+
+    public int order() {
+        return order;
     }
 
     @Override
