@@ -18,7 +18,7 @@ public class ArtifactController {
     }
 
     @PostMapping(path = "/api/artifact/save")
-    public Mono<ArtifactDTO> save(@RequestBody ArtifactDTO artifact){
+    public Mono<ArtifactDTO> save(@RequestBody ArtifactSaveDTO artifact){
         return service.saveArtifact(artifact.toEntity());
     }
 
