@@ -12,7 +12,7 @@ import java.nio.file.Path;
 
 public class Asm {
     public static void buildInstructionsFromJar(String jarName) throws IOException {
-        var builder = new InstructionBuilder();
+        var builder = new InstructionBuilder(jarName);
         var finder = ModuleFinder.of(Path.of(jarName));
         var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
         try(var reader = moduleReference.open()) {

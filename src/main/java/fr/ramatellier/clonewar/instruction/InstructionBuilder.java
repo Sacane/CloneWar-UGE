@@ -1,17 +1,18 @@
 package fr.ramatellier.clonewar.instruction;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class InstructionBuilder {
+    private final String filename;
     private final ArrayList<Instruction> instructions;
     private StringBuilder actualInstruction;
     private int actualFirstLine;
     private boolean hasFirstLine;
 
-    public InstructionBuilder() {
+    public InstructionBuilder(String name) {
+        filename = name;
         instructions = new ArrayList<>();
         actualInstruction = new StringBuilder();
     }
@@ -35,7 +36,7 @@ public class InstructionBuilder {
     public void endInstruction() {
         var instruction = actualInstruction.toString();
         if (!instructions.equals("")) {
-            instructions.add(new Instruction(actualFirstLine, actualInstruction.toString()));
+            instructions.add(new Instruction(filename, actualFirstLine, actualInstruction.toString(), 0));
         }
         actualInstruction = new StringBuilder();
         hasFirstLine = false;
