@@ -11,11 +11,9 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 
 public class Asm {
-    public static void main(String[] args) throws IOException {
+    public static void buildInstructionsFromJar(String jarName) throws IOException {
         var builder = new InstructionBuilder();
-        var hasFirstLine = false;
-        var file_name = "TestJar.jar";
-        var finder = ModuleFinder.of(Path.of(file_name));
+        var finder = ModuleFinder.of(Path.of(jarName));
         var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
         try(var reader = moduleReference.open()) {
             for(var filename: (Iterable<String>) reader.list()::iterator) {
