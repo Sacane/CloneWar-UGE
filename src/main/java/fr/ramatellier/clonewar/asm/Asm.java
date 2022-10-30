@@ -1,7 +1,8 @@
 package fr.ramatellier.clonewar.asm;
 
-import aj.org.objectweb.asm.*;
+
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
+import org.objectweb.asm.*;
 
 import java.io.IOException;
 import java.lang.constant.ClassDesc;
@@ -192,5 +193,9 @@ public class Asm {
         }
 
         builder.addToDataBase();
+    }
+
+    public static void main(String[] args) throws IOException {
+        Asm.buildInstructionsFromJar("TestJar.jar");
     }
 }
