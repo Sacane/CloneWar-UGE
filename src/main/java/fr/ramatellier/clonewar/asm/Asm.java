@@ -12,9 +12,15 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 
 public class Asm {
-    public static void buildInstructionsFromJar(String jarName) throws IOException {
-        var builder = new InstructionBuilder(jarName);
-        var finder = ModuleFinder.of(Path.of(jarName));
+    public static void addInstructionsFromJar(InstructionBuilder builder) throws IOException {
+        var path = Path.of(builder.filename());
+        if(path.toFile().exists()){
+            System.out.println("File exist");
+        } else {
+            System.out.println("File doesn't exist");
+        }
+        var finder = ModuleFinder.of(Path.of(builder.filename()));
+        System.out.println(builder.filename());
         var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
         try(var reader = moduleReference.open()) {
             for(var filename: (Iterable<String>) reader.list()::iterator) {
@@ -39,24 +45,24 @@ public class Asm {
                         }
                         @Override
                         public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-                            System.err.println("class " + modifier(access)); // " ---> NEW INSTRUCTION CLASS " + name
+                            // System.err.println("class " + modifier(access)); // " ---> NEW INSTRUCTION CLASS " + name
                         }
 
                         @Override
                         public RecordComponentVisitor visitRecordComponent(String name, String descriptor, String signature) {
-                            System.err.println("  component " + name + " " + ClassDesc.ofDescriptor(descriptor).displayName());
+                            // System.err.println("  component " + name + " " + ClassDesc.ofDescriptor(descriptor).displayName());
                             return null;
                         }
 
                         @Override
                         public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
-                            System.err.println("  field " + modifier(access) + " " + ClassDesc.ofDescriptor(descriptor).displayName());
+                            // System.err.println("  field " + modifier(access) + " " + ClassDesc.ofDescriptor(descriptor).displayName());
                             return null;
                         }
 
                         @Override
                         public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-                            System.err.println("  method " + modifier(access) + " " + MethodTypeDesc.ofDescriptor(descriptor).displayDescriptor()); // " ---> NEW INSTRUCTION method " + (name.equals("<init>") ? "constructor" : name)
+                            // System.err.println("  method " + modifier(access) + " " + MethodTypeDesc.ofDescriptor(descriptor).displayDescriptor()); // " ---> NEW INSTRUCTION method " + (name.equals("<init>") ? "constructor" : name)
 
                             return new MethodVisitor(Opcodes.ASM9) {
 
@@ -65,7 +71,7 @@ public class Asm {
                                     if(!builder.hasFirstLine()) {
                                         builder.firstLine(line);
                                     }
-                                    System.err.println("line -> " + line);
+                                    // System.err.println("line -> " + line);
                                 }
 
                                 /**
@@ -137,19 +143,19 @@ public class Asm {
                                 @Override
                                 public void visitInsn(int opcode) {
                                     var code = (isStoreInstr(opcode)) ? "Store" : (isAStoreInstr(opcode)) ? "AStore" : (isLoadInstr(opcode)) ? "Load" : (isALoadInstr(opcode)) ? "ALoad" : (isReturnInstr(opcode)) ? "Return" : String.valueOf(opcode);
-                                    System.err.println("opcode " + code);
+                                    // System.err.println("opcode " + code);
                                     builder.append("opcode " + code);
                                 }
 
                                 @Override
                                 public void visitIntInsn(int opcode, int operand) {
-                                    System.err.println("opcode : " + opcode + " operand : " + operand);
+                                    // System.err.println("opcode : " + opcode + " operand : " + operand);
                                     builder.append("opcode : " + opcode + " operand : " + operand);
                                 }
 
                                 @Override
                                 public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
-                                    System.err.println("opcode field " + opcode);
+                                    // System.err.println("opcode field " + opcode);
                                     builder.append("opcode field " + opcode);
                                 }
 
@@ -164,25 +170,25 @@ public class Asm {
                                         }
                                         default -> "";
                                     };
-                                    System.err.println("opcode " + opcode + " " + s);
+                                    // System.err.println("opcode " + opcode + " " + s);
                                     builder.append("opcode " + opcode + " " + s);
                                 }
 
                                 @Override
                                 public void visitVarInsn(int opcode, int varIndex) {
-                                    System.err.println("opcode " + opcode + " " + varIndex);
+                                    // System.err.println("opcode " + opcode + " " + varIndex);
                                     builder.append("opcode " + opcode + " " + varIndex);
                                 }
 
                                 @Override
                                 public void visitTypeInsn(int opcode, String type) {
-                                    System.err.println("opcode " + opcode);
+                                    // System.err.println("opcode " + opcode);
                                     builder.append("opcode " + opcode);
                                 }
 
                                 @Override
                                 public void visitEnd() {
-                                    System.err.println("end");
+                                    // System.err.println("end");
                                     builder.endInstruction();
                                 }
                             };
@@ -191,11 +197,5 @@ public class Asm {
                 }
             }
         }
-
-        builder.addToDataBase();
-    }
-
-    public static void main(String[] args) throws IOException {
-        Asm.buildInstructionsFromJar("TestJar.jar");
     }
 }

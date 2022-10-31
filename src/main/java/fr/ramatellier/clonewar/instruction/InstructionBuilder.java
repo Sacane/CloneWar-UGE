@@ -1,5 +1,9 @@
 package fr.ramatellier.clonewar.instruction;
 
+import fr.ramatellier.clonewar.artifact.ArtifactController;
+import fr.ramatellier.clonewar.asm.Asm;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -15,6 +19,10 @@ public class InstructionBuilder {
         filename = name;
         instructions = new ArrayList<>();
         actualInstruction = new StringBuilder();
+    }
+
+    public String filename() {
+        return filename;
     }
 
     public boolean hasFirstLine() {
@@ -42,9 +50,12 @@ public class InstructionBuilder {
         hasFirstLine = false;
     }
 
-    public void addToDataBase() {
-        System.out.println("Affichage des instructions :");
-        System.out.println(this);
+    public static ArrayList<Instruction> buildInstructionFromJar(String jarName) throws IOException {
+        var builder = new InstructionBuilder(jarName);
+
+        Asm.addInstructionsFromJar(builder);
+
+        return builder.instructions;
     }
 
     @Override
