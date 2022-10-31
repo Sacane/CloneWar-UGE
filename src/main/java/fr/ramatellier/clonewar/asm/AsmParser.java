@@ -5,22 +5,12 @@ import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import org.objectweb.asm.*;
 
 import java.io.IOException;
-import java.lang.constant.ClassDesc;
-import java.lang.constant.MethodTypeDesc;
 import java.lang.module.ModuleFinder;
-import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 
-public class Asm {
+public class AsmParser {
     public static void addInstructionsFromJar(InstructionBuilder builder) throws IOException {
-        var path = Path.of(builder.filename());
-        if(path.toFile().exists()){
-            System.out.println("File exist");
-        } else {
-            System.out.println("File doesn't exist");
-        }
         var finder = ModuleFinder.of(Path.of(builder.filename()));
-        System.out.println(builder.filename());
         var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
         try(var reader = moduleReference.open()) {
             for(var filename: (Iterable<String>) reader.list()::iterator) {
@@ -31,18 +21,6 @@ public class Asm {
                     var classReader = new ClassReader(inputStream);
                     classReader.accept(new ClassVisitor(Opcodes.ASM9) {
 
-                        private static String modifier(int access) {
-                            if (Modifier.isPublic(access)) {
-                                return "public";
-                            }
-                            if (Modifier.isPrivate(access)) {
-                                return "private";
-                            }
-                            if (Modifier.isProtected(access)) {
-                                return "protected";
-                            }
-                            return "";
-                        }
                         @Override
                         public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
                             // System.err.println("class " + modifier(access)); // " ---> NEW INSTRUCTION CLASS " + name
