@@ -33,9 +33,20 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
         this.inputDate = inputDate;
     }
 
+    public void addAllInstructions(List<Instruction> instructions) {
+        for(var instruction: instructions) {
+            this.instructions.add(instruction);
+        }
+    }
+
+    public List<Instruction> getInstructions() {
+        return instructions;
+    }
+
     public UUID id(){
         return id;
     }
+
     public String name(){
         return name;
     }

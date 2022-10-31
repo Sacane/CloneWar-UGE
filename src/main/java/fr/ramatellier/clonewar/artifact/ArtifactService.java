@@ -1,5 +1,6 @@
 package fr.ramatellier.clonewar.artifact;
 
+import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Service
@@ -26,6 +30,17 @@ public class ArtifactService {
     public Mono<ArtifactDTO> saveArtifact(Artifact entity){
         return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
             var entityResponse = repository.save(entity);
+            return new ArtifactDTO(entityResponse.id().toString(), entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url());
+        })).subscribeOn(schedulerCtx);
+    }
+
+    public Mono<ArtifactDTO> saveArtifactWithInstruction(ArtifactSaveDTO dto) throws IOException {
+        var list = InstructionBuilder.buildInstructionFromJar(dto.url());
+        var artifact = new Artifact(dto.name(), dto.url(), LocalDate.now());
+
+        return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
+            artifact.addAllInstructions(list);
+            var entityResponse = repository.save(artifact);
             return new ArtifactDTO(entityResponse.id().toString(), entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url());
         })).subscribeOn(schedulerCtx);
     }
