@@ -67,23 +67,4 @@ public class Instruction {
         return "FILE NAME IS " + filename + " FIRST LINE IS " + lineNumberStart + "\n" + content;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setHash(long hash) {
-        this.hash = hash;
-    }
-
-    public void setLineNumberStart(int lineNumberStart) {
-        this.lineNumberStart = lineNumberStart;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
 }
