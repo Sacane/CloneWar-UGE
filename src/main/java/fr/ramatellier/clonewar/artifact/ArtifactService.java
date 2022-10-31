@@ -13,10 +13,12 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Service
 public class ArtifactService {
 
+    private final static Logger LOGGER = Logger.getLogger(ArtifactService.class.getName());
     private final ArtifactRepository repository;
     private final TransactionTemplate transactionTemplate;
     private final Scheduler schedulerCtx;
@@ -35,12 +37,13 @@ public class ArtifactService {
     }
 
     public Mono<ArtifactDTO> saveArtifactWithInstruction(ArtifactSaveDTO dto) throws IOException {
+        LOGGER.info("Parsing artifacts and its instructions");
         var list = InstructionBuilder.buildInstructionFromJar(dto.url());
         var artifact = new Artifact(dto.name(), dto.url(), LocalDate.now());
-
         return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
             artifact.addAllInstructions(list);
             var entityResponse = repository.save(artifact);
+            LOGGER.info("Saving artifact done.");
             return new ArtifactDTO(entityResponse.id().toString(), entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url());
         })).subscribeOn(schedulerCtx);
     }
