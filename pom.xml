@@ -73,8 +73,13 @@
             <artifactId>expressly</artifactId>
             <version>5.0.0</version>
         </dependency>
+        <!-- OpenAPI for api documentation -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webflux-ui</artifactId>
+            <version>1.6.12</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>

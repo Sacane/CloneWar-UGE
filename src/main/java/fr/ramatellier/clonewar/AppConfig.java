@@ -9,7 +9,6 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 @Configuration
