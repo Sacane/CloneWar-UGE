@@ -1,24 +1,25 @@
 package fr.ramatellier.clonewar.instruction;
 
-import fr.ramatellier.clonewar.artifact.ArtifactController;
-import fr.ramatellier.clonewar.asm.Asm;
+import fr.ramatellier.clonewar.asm.AsmParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * TODO all the logic here has to be refract because a builder should take the filename of the
+ */
 public class InstructionBuilder {
     private final String filename;
-    private final ArrayList<Instruction> instructions;
-    private StringBuilder actualInstruction;
+    private final ArrayList<Instruction> instructions = new ArrayList<>();
+    private StringBuilder actualInstruction = new StringBuilder();
     private int actualFirstLine;
     private boolean hasFirstLine;
 
     public InstructionBuilder(String name) {
+        Objects.requireNonNull(name);
         filename = name;
-        instructions = new ArrayList<>();
-        actualInstruction = new StringBuilder();
     }
 
     public String filename() {
@@ -53,7 +54,7 @@ public class InstructionBuilder {
     public static ArrayList<Instruction> buildInstructionFromJar(String jarName) throws IOException {
         var builder = new InstructionBuilder(jarName);
 
-        Asm.addInstructionsFromJar(builder);
+        AsmParser.addInstructionsFromJar(builder);
 
         return builder.instructions;
     }
