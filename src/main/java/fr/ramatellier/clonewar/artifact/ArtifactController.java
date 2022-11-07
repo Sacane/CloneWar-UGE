@@ -1,10 +1,6 @@
 package fr.ramatellier.clonewar.artifact;
 
-import fr.ramatellier.clonewar.CloneWarApplication;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.rsocket.RSocketProperties;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -14,6 +10,7 @@ import java.util.logging.Logger;
 
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ArtifactController {
     private final ArtifactService service;
     private static final Logger LOGGER = Logger.getLogger(ArtifactController.class.getName());
