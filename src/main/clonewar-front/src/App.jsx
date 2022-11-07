@@ -14,14 +14,16 @@ function App() {
   return (
     <div className="App">
       <h1 className={"title is-1"}><b>Clonewar</b></h1>
-      <p>Clonewar est une application vous permettant d'analyser des fichiers Jar et de détecter des codes communs entre plusieurs projets.</p>
+      <p>Clonewar is an web-app that allow you to analyze jarfiles and find its clone among others projects</p>
       <div className={"table-wrapper"}>
-        <table id={"artifacts"} className={"table is-striped"}>
+        <p>Here is the list of the registered , click on the desired one to see its detail</p>
+        <table id={"artifacts"} className={"table is-fullwidth"}>
           <thead>
           <tr>
             <th>Artifact name</th>
             <th>Url jar</th>
             <th>Input date</th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
