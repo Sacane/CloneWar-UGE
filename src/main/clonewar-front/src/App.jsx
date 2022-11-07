@@ -7,9 +7,13 @@ import Artifact from "./component/Artifact.jsx";
 function App() {
   const [artifacts, setArtifacts] = useState([]);
   useEffect(function() {
+
+  //   fetch("http://localhost:8087/api/artifacts").then(res => res.json())
+  //       .then(data => setArtifacts(data))
+  // }, []);
     fetch("http://localhost:8087/api/artifacts").then(res => res.json())
-        .then(data => setArtifacts(data))
-  }, []);
+          .then(data => setArtifacts(data))
+    }, []);
 
   return (
     <div className="App">
