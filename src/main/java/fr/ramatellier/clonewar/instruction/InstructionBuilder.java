@@ -30,6 +30,10 @@ public class InstructionBuilder {
         return hasFirstLine;
     }
 
+    public ArrayList<Instruction> instructions() {
+        return instructions;
+    }
+
     public void append(String str) {
         Objects.requireNonNull(str);
 
@@ -52,11 +56,9 @@ public class InstructionBuilder {
     }
 
     public static ArrayList<Instruction> buildInstructionFromJar(String jarName) throws IOException {
-        var builder = new InstructionBuilder(jarName);
+        var list = AsmParser.addInstructionsFromJar(jarName);
 
-        AsmParser.addInstructionsFromJar(builder);
-
-        return builder.instructions;
+        return list;
     }
 
     @Override
