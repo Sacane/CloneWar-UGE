@@ -1,15 +1,18 @@
 package fr.ramatellier.clonewar.asm;
 
 
+import fr.ramatellier.clonewar.instruction.Instruction;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import org.objectweb.asm.*;
 
 import java.io.IOException;
 import java.lang.module.ModuleFinder;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class AsmParser {
-    public static void addInstructionsFromJar(InstructionBuilder builder) throws IOException {
+    public static ArrayList<Instruction> addInstructionsFromJar(String jarName) throws IOException {
+        var builder = new InstructionBuilder(jarName);
         var finder = ModuleFinder.of(Path.of(builder.filename()));
         var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
         try(var reader = moduleReference.open()) {
@@ -175,5 +178,7 @@ public class AsmParser {
                 }
             }
         }
+
+        return builder.instructions();
     }
 }
