@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Kaplin {
-    private static final int occurences(String text, String caracter) {
-        var matcher = Pattern.compile(caracter).matcher(text);
+    private static int contentLength(String text) {
+        var matcher = Pattern.compile("\n").matcher(text);
         int occur = 0;
 
         while(matcher.find()) {
@@ -21,7 +21,7 @@ public class Kaplin {
         var scorePerInstruction = 100 / instructions.size();
 
         for(var elem: instructions) {
-            if(instruction.hashValue() == elem.hashValue() && occurences(instruction.content(), "\n") == occurences(elem.content(), "\n")) {
+            if(instruction.hashValue() == elem.hashValue() && contentLength(instruction.content()) == contentLength(elem.content())) {
                 score += scorePerInstruction;
             }
         }
