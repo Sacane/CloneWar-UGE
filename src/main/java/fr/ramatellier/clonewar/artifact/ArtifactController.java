@@ -39,13 +39,12 @@ public class ArtifactController {
 
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
-    public Mono<Void> uploadJarFile(@RequestPart("fileJar") Mono<FilePart> jarFile){
+    public Mono<Void> uploadJarFile(@RequestPart("jar") Mono<FilePart> jarFile){
         LOGGER.info("Attempt to upload a file: ");
-        var res = jarFile
+        return jarFile
                 .doOnNext(fp -> LOGGER.info("Received file : " + fp.filename()))
                 .flatMap(fp -> fp.transferTo(UPLOAD_PATH.resolve(fp.filename())))
                 .then();
-        return res;
     }
 
     @PostMapping(path = "/api/artifact/persist")
