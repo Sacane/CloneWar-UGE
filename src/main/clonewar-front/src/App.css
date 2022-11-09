@@ -11,3 +11,10 @@ html{
 
 }
 
+.App h1{
+  text-align: center;
+}
+
+.content{
+  display: flex;
+}
