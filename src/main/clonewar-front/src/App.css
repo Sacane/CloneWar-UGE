@@ -18,3 +18,13 @@ html{
 .content{
   display: flex;
 }
+
+.form{
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  background-color: white;
+  margin: 20px;
+  border-radius: 1em;
+
+}

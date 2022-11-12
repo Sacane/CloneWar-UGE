@@ -56,7 +56,7 @@ function Upload(){
         <div className={"Upload"}>
 
             <div className="form">
-                <p>Fill this form to add another artifact</p>
+                <p><b>Fill this form to add another artifact</b></p>
                 <div className={"field"}>
                     <label className={"label"}>Artifact name</label>
                     <input className={"input"} type={"text"} placeholder={"Artifact name..."}/>

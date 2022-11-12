@@ -12,8 +12,10 @@ function App() {
       <h1 className={"title is-1"}><b>Clonewar</b></h1>
       <p>Clonewar is an web-app that allow you to analyze jarfiles and find its clone among others projects</p>
         <div className={"content"}>
-            <Upload></Upload>
             <Artifact></Artifact>
+            <div className={"form"}>
+                <Upload></Upload>
+            </div>
         </div>
     </div>
   )
