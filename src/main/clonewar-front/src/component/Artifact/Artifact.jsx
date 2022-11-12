@@ -10,7 +10,6 @@ function Artifact(){
 
     return (
         <div className={"table-wrapper"}>
-            <p>Here is the list of the registered , click on the desired one to see its detail</p>
             <table id={"artifacts"} className={"table is-fullwidth"}>
                 <thead>
                 <tr>
