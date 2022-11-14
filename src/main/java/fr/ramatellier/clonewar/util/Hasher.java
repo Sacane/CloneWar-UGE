@@ -21,6 +21,11 @@ public final class Hasher {
 //        return hashValue;
 //    }
 
+    /**
+     * Hash an instruction using the rolling-hash strategy.
+     * @param instruction to hash
+     * @return the hash value of the given instruction
+     */
     public static long hash(String instruction){
         Objects.requireNonNull(instruction);
         if(instruction.equals("")) throw new IllegalArgumentException("Can't hash an empty instruction");
@@ -29,14 +34,8 @@ public final class Hasher {
         var value = 0L;
         for(var insPart : toHash){
             value = (value + (insPart.hashCode()) + LIMIT * pow) % LIMIT;
-            pow = (pow * BASE + 1) % LIMIT;
+            pow = (pow * BASE) % LIMIT;
         }
         return value;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(hash("MOV 10"));
-        System.out.println(hash("MOV 11"));
-        System.out.println(hash("MOV 102"));
     }
 }
