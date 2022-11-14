@@ -35,7 +35,7 @@ public class Instruction {
         this.filename = filename;
         this.lineNumberStart = lineNumberStart;
         this.content = content;
-        this.hash = Hasher.hashInstruction(content);
+        this.hash = Hasher.hash(content);
         this.order = order;
     }
 
