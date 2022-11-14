@@ -40,4 +40,16 @@ public class Kaplin {
 
         return false;
     }
+
+    public static int compareJarInstructions(List<Instruction> instructions1, List<Instruction> instructions2) {
+        var nbClone = 0;
+
+        for(var instruction: instructions1) {
+            if(compareInstructionWithJarInstructions(instruction, instructions2)) {
+                nbClone++;
+            }
+        }
+
+        return (nbClone / instructions1.size()) * 100;
+    }
 }
