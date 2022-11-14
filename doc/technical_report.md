@@ -8,6 +8,8 @@
 Clonewar is a web-app that allow you to analyze and detect clones among multiple java project. 
 It works using artifacts that can be build by giving a jar-archive. From here the application will index all the instructions in bytecode of the project. Then you can analyze several artifacts knowing if there is clone between them.
 
+This report is a technical report and contains all the information about the architecture and organisation 
+of the development.
 ## 2. Architecture
 Clonewar is divide in two sub-applications : a back-end for persistence and computation and a front-end for user interface.
 
@@ -29,7 +31,7 @@ And the second one represent the requests and interaction with our database.
 
 For example the main entity in this project is the **Artifact** entity. So we will create
 multiple class around this entity to manipulate it through the several layers of the application.
-Here is an example of the Artifact entity that will be persist in our db :
+Here is an example of the Artifact entity that will be persisted in our db :
 
 ```java
 @Entity
@@ -142,9 +144,13 @@ public class ArtifactController {
     }
 }
 ```
+
+When we launch the server those methods will be executed, here is an example of how to use our custom Api-rest and call data : 
+
+![image](./postman-spec-getMethods.png)
+
 ### II. Front-end
-
-
+**TODO**
 ## 3. Techs
 
 |       Back        | Front | Mapping persistence | Database | UI |
