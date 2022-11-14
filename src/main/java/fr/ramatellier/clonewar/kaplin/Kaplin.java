@@ -18,11 +18,11 @@ public class Kaplin {
     }
 
     private static boolean rabinKarp(String s, String pattern) {
-        var hashPattern = Hasher.hashInstruction(pattern);
+        var hashPattern = Hasher.hash(pattern);
 
         for(var i = 0; i < s.length() - pattern.length() + 1; i++) {
             var subS = s.substring(i, i + pattern.length() - 1);
-            var hashS = Hasher.hashInstruction(subS);
+            var hashS = Hasher.hash(subS);
             if(hashS == hashPattern && contentLength(subS) == contentLength(pattern)) {
                 return true;
             }
