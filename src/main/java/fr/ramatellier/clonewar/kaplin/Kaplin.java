@@ -1,6 +1,7 @@
 package fr.ramatellier.clonewar.kaplin;
 
 import fr.ramatellier.clonewar.instruction.Instruction;
+import fr.ramatellier.clonewar.util.Hasher;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -16,16 +17,27 @@ public class Kaplin {
         return occur;
     }
 
-    public static int compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
-        var score = 0;
-        var scorePerInstruction = 100 / instructions.size();
+    private static boolean rabinKarp(String s, String pattern) {
+        var hashPattern = Hasher.hashInstruction(pattern);
 
-        for(var elem: instructions) {
-            if(instruction.hashValue() == elem.hashValue() && contentLength(instruction.content()) == contentLength(elem.content())) {
-                score += scorePerInstruction;
+        for(var i = 0; i < s.length() - pattern.length() + 1; i++) {
+            var subS = s.substring(i, i + pattern.length() - 1);
+            var hashS = Hasher.hashInstruction(subS);
+            if(hashS == hashPattern && contentLength(subS) == contentLength(pattern)) {
+                return true;
             }
         }
 
-        return score;
+        return false;
+    }
+
+    public static boolean compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
+        for(var elem: instructions) {
+            if(rabinKarp(instruction.content(), elem.content())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
