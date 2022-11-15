@@ -23,7 +23,6 @@ The back-end part has 2 main connexions :
 1. With our database.
 2. With the outside, the web.
 
-
 So basically, the first one is alimented by classes which represents controller that represents methods in our api rest, so we will use dto to map json object to our java application. 
 And the second one represent the requests and interaction with our database. 
 
