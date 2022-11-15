@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ArtifactController {
     private static final Path UPLOAD_PATH = Paths.get("./src/main/resources/upload/");
     private final ArtifactService service;
@@ -38,12 +37,16 @@ public class ArtifactController {
 
 
 
-    @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
-    public Mono<Void> uploadJarFile(@RequestPart("jar") Mono<FilePart> jarFile){
+    @PostMapping(path="/api/artifact/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Mono<Void> uploadJarFile(@ModelAttribute Mono<ArtifactUploadDTO> dtoMono){
         LOGGER.info("Attempt to upload a file: ");
-        return jarFile
-                .doOnNext(fp -> LOGGER.info("Received file : " + fp.filename()))
-                .flatMap(fp -> fp.transferTo(UPLOAD_PATH.resolve(fp.filename())))
+        return dtoMono
+                .doOnNext(fp -> {
+                    LOGGER.info("Received file : " + fp.url());
+                    LOGGER.info("Received artifact name : " + fp.name());
+                    LOGGER.info("Received artifact url : " + fp.url());
+                })
+                .flatMap(fp -> fp.document().transferTo(UPLOAD_PATH.resolve(fp.url())))
                 .then();
     }
 
