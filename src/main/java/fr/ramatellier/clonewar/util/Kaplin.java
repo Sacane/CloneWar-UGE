@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.kaplin;
+package fr.ramatellier.clonewar.util;
 
 import fr.ramatellier.clonewar.instruction.Instruction;
 import fr.ramatellier.clonewar.util.Hasher;
