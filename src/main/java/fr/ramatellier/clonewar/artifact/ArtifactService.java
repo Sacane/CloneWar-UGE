@@ -11,8 +11,6 @@ import reactor.core.scheduler.Scheduler;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 @Service
@@ -36,10 +34,10 @@ public class ArtifactService {
         })).subscribeOn(schedulerCtx);
     }
 
-    public Mono<ArtifactDTO> saveArtifactWithInstruction(ArtifactSaveDTO dto) throws IOException {
+    public Mono<ArtifactDTO> saveArtifactWithInstruction(ArtifactUploadDTO dto) throws IOException {
         LOGGER.info("Parsing artifacts and its instructions");
-        var list = InstructionBuilder.buildInstructionFromJar(dto.url());
         var artifact = new Artifact(dto.name(), dto.url(), LocalDate.now());
+        var list = InstructionBuilder.buildInstructionFromJar(dto.url());
         return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
             artifact.addAllInstructions(list);
             var entityResponse = repository.save(artifact);

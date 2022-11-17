@@ -16,9 +16,10 @@ import java.util.logging.Logger;
 
 @RestController
 public class ArtifactController {
-    private static final Path UPLOAD_PATH = Paths.get("./src/main/resources/upload/");
+
     private final ArtifactService service;
     private static final Logger LOGGER = Logger.getLogger(ArtifactController.class.getName());
+    private static final Path UPLOAD_PATH = Paths.get("./src/main/resources/upload/");
     public ArtifactController(ArtifactService service){
         this.service = service;
     }
@@ -36,28 +37,23 @@ public class ArtifactController {
     }
 
 
-
+    private Mono<Void> uploadFile(Mono<ArtifactUploadDTO> monoDto){
+        return monoDto.flatMap(fp -> fp.document().transferTo(UPLOAD_PATH.resolve(fp.url())));
+    }
     @PostMapping(path="/api/artifact/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Mono<Void> uploadJarFile(@ModelAttribute Mono<ArtifactUploadDTO> dtoMono){
+    public Mono<Void> uploadJarFile(@ModelAttribute ArtifactUploadDTO dtoMono){
         LOGGER.info("Attempt to upload a file: ");
-        return dtoMono
-                .doOnNext(fp -> {
-                    LOGGER.info("Received file : " + fp.url());
-                    LOGGER.info("Received artifact name : " + fp.name());
-                    LOGGER.info("Received artifact url : " + fp.url());
-                })
-                .flatMap(fp -> fp.document().transferTo(UPLOAD_PATH.resolve(fp.url())))
-                .then();
+        return uploadFile(Mono.just(dtoMono));
     }
 
-    @PostMapping(path = "/api/artifact/persist")
-    public Mono<ArtifactDTO> putArtifacts(@RequestBody ArtifactSaveDTO dto){
-        LOGGER.info("Persist an artifact and its instructions");
-        try {
-            return service.saveArtifactWithInstruction(dto);
-        } catch (IOException e) {
-            LOGGER.severe("Cannot found jar : " + dto.url());
-            return Mono.error(new IOException("No file as " + dto.url() + " found"));
-        }
-    }
+//    @PostMapping(path = "/api/artifact/persist")
+//    public Mono<ArtifactDTO> putArtifacts(@RequestBody ArtifactSaveDTO dto){
+//        LOGGER.info("Persist an artifact and its instructions");
+//        try {
+//            return service.saveArtifactWithInstruction(dto);
+//        } catch (IOException e) {
+//            LOGGER.severe("Cannot found jar : " + dto.url());
+//            return Mono.error(new IOException("No file as " + dto.url() + " found"));
+//        }
+//    }
 }
