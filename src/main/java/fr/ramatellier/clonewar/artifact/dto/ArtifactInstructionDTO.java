@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.artifact;
+package fr.ramatellier.clonewar.artifact.dto;
 
 public record ArtifactInstructionDTO(String idArtifact, String idInstruction) {
 }

@@ -1,6 +1,6 @@
 package fr.ramatellier.clonewar.instruction;
 
-import fr.ramatellier.clonewar.asm.AsmParser;
+import fr.ramatellier.clonewar.util.AsmParser;
 
 import java.io.IOException;
 import java.util.ArrayList;

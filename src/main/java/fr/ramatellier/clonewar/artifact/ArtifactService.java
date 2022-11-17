@@ -1,7 +1,8 @@
 package fr.ramatellier.clonewar.artifact;
 
+import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
+import fr.ramatellier.clonewar.artifact.dto.ArtifactUploadDTO;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;

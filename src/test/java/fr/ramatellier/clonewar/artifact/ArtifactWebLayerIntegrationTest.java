@@ -1,5 +1,6 @@
 package fr.ramatellier.clonewar.artifact;
 
+import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

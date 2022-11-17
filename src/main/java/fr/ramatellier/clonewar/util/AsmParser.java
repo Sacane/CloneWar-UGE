@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.asm;
+package fr.ramatellier.clonewar.util;
 
 
 import fr.ramatellier.clonewar.instruction.Instruction;

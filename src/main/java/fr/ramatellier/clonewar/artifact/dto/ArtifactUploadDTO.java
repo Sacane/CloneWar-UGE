@@ -1,6 +1,7 @@
-package fr.ramatellier.clonewar.artifact;
+package fr.ramatellier.clonewar.artifact.dto;
 
 import fr.ramatellier.clonewar.DtoPersistable;
+import fr.ramatellier.clonewar.artifact.Artifact;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.multipart.MultipartFile;
 
