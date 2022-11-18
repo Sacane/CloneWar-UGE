@@ -1,7 +1,7 @@
 package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
-import fr.ramatellier.clonewar.artifact.dto.ArtifactUploadDTO;
+import fr.ramatellier.clonewar.artifact.dto.ArtifactSaveDTO;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ public class ArtifactService {
     private final ArtifactRepository repository;
     private final TransactionTemplate transactionTemplate;
     private final Scheduler schedulerCtx;
+    private static final String UPLOAD_PATH = "./src/main/resources/upload/";
 
     public ArtifactService(ArtifactRepository repository, TransactionTemplate transactionTemplate, @Qualifier("schedulerCtx") Scheduler schedulerCtx){
         this.repository = repository;
@@ -35,15 +36,15 @@ public class ArtifactService {
         })).subscribeOn(schedulerCtx);
     }
 
-    public Mono<ArtifactDTO> saveArtifactWithInstruction(ArtifactUploadDTO dto) throws IOException {
+    public Mono<ArtifactSaveDTO> saveArtifactWithInstruction(ArtifactSaveDTO dto) throws IOException {
         LOGGER.info("Parsing artifacts and its instructions");
         var artifact = new Artifact(dto.name(), dto.url(), LocalDate.now());
-        var list = InstructionBuilder.buildInstructionFromJar(dto.url());
+        var list = InstructionBuilder.buildInstructionFromJar(ArtifactController.UPLOAD_PATH.resolve(dto.url()).toString());
         return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
             artifact.addAllInstructions(list);
             var entityResponse = repository.save(artifact);
             LOGGER.info("Saving artifact done.");
-            return new ArtifactDTO(entityResponse.id().toString(), entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url());
+            return new ArtifactSaveDTO(entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url());
         })).subscribeOn(schedulerCtx);
     }
 
