@@ -23,16 +23,8 @@ const uploadJar = (jar) => {
 
 function Upload(){
 
-    const [files, updateFiles] = useState(
-        {
-            jar: null,
-            src: null
-        }
-    );
-
     let jar = null;
-
-    let artifactSave =
+    const artifactSave =
         {
             name: '',
             url: '',
@@ -47,16 +39,12 @@ function Upload(){
         jar = file.target.files[0];
     }
     const upload = () => {
-        const formData = new FormData();
-        formData.append('document', jar)
-        formData.append('date', artifactSave.date)
-        formData.append('name', artifactSave.name)
-        formData.append('url', jar.name)
-        console.log('Artifact name : ' + artifactSave.name);
         updateArtifact(jar.name);
+        const data = new FormData();
+        data.append("jar", jar);
         fetch('http://localhost:8087/api/artifact/upload', {
             method: 'POST',
-            body: formData,
+            body: data,
         }).then(data => {
             console.log(data);
         }).catch(r => {
@@ -64,6 +52,24 @@ function Upload(){
             console.log(r)
         });
     }
+
+    const submit = () => {
+        console.log(artifactSave);
+        fetch('http://localhost:8087/api/artifact/create', {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(artifactSave),
+        }).then(data => {
+            console.log(data);
+        }).catch(r => {
+            console.log('error !')
+            console.error(r)
+        });
+    }
+
     return (
         <div className={"Upload"}>
 
@@ -90,7 +96,10 @@ function Upload(){
                     </div>
                 </div>
                 <div className={"field"}>
-                    <button className="button" onClick={upload}>Create Artifact</button>
+                    <button className="button" onClick={upload}>Upload jar</button>
+                </div>
+                <div className={"field"}>
+                    <button className="button" onClick={submit}>Create Artifact</button>
                 </div>
             </div>
         </div>
