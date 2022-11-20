@@ -2,6 +2,7 @@ package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
 import fr.ramatellier.clonewar.artifact.dto.ArtifactSaveDTO;
+import fr.ramatellier.clonewar.artifact.dto.ArtifactUploadDTO;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -34,6 +35,10 @@ public class ArtifactController {
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
         LOGGER.info("Starting to retrieve all artifacts in database");
         return service.findAll().delayElements(Duration.ofMillis(150)).map(Artifact::toDto);
+    }
+
+    public Mono<Void> saveArtifact(ArtifactUploadDTO dto){
+        return service.saveArtifact(dto);
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")

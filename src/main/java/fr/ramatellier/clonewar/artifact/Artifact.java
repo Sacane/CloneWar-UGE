@@ -21,6 +21,11 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     private String url;
 
+    @Lob
+    private byte[] jarFile;
+
+    @Lob
+    private byte[] srcFile;
     private LocalDate inputDate;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -28,10 +33,14 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
     private final List<Instruction> instructions = new ArrayList<>();
 
     public Artifact(){}
-    public Artifact(String name, String url, LocalDate inputDate){
+    public Artifact(String name, String url, LocalDate inputDate, byte[] jarFile){
         this.name= name;
         this.url = url;
         this.inputDate = inputDate;
+        this.jarFile = jarFile;
+    }
+    public Artifact(String name, String url, LocalDate inputDate){
+        this(name, url, inputDate, null);
     }
 
     public void addAllInstructions(List<Instruction> instructions) {
