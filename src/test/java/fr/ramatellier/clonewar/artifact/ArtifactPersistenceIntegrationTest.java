@@ -22,8 +22,7 @@ public class ArtifactPersistenceIntegrationTest {
 
     @BeforeEach
     public void setupArtifacts(){
-        artifact = new Artifact("artifact123", "testArtifact1.jar", LocalDate.now());
-        System.out.println(artifactRepository.save(artifact));
+        artifact = new Artifact("artifact123", "testArtifact1.jar", LocalDate.now(), null);
     }
 
     @Test
