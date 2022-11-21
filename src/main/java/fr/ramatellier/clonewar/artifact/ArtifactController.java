@@ -34,25 +34,13 @@ public class ArtifactController {
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
         LOGGER.info("Starting to retrieve all artifacts in database");
-        return service.findAll().delayElements(Duration.ofMillis(150)).map(Artifact::toDto);
-    }
-
-    public Mono<Void> saveArtifact(ArtifactUploadDTO dto){
-        return service.saveArtifact(dto);
+        return service.findAll().map(Artifact::toDto);
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
-    public Mono<Void> uploadJarFile(@RequestPart("jar") Mono<FilePart> jarFile){
+    public Mono<ArtifactDTO> uploadJarFile(@RequestPart("jar") FilePart jarFile){
         LOGGER.info("Attempt to upload a file: ");
-        return jarFile
-                .doOnNext(fp -> LOGGER.info("Received file : " + fp.filename()))
-                .flatMap(fp -> fp.transferTo(UPLOAD_PATH.resolve(fp.filename())))
-                .then();
+        return service.createArtifactFromFileAndThenPersist(jarFile);
     }
 
-    @PostMapping(path = "/api/artifact/create")
-    public Mono<ArtifactSaveDTO> buildAndPersistArtifact(@RequestBody ArtifactSaveDTO dto) throws IOException {
-        LOGGER.info("Attempt to create an artifact : ");
-        return service.saveArtifactWithInstruction(dto);
-    }
 }
