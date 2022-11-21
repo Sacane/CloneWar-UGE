@@ -21,11 +21,11 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     private String url;
 
-    @Lob
+//    @Lob
     private byte[] jarFile;
 
-    @Lob
-    private byte[] srcFile;
+//    @Lob
+//    private byte[] srcFile;
     private LocalDate inputDate;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -39,14 +39,12 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
         this.inputDate = inputDate;
         this.jarFile = jarFile;
     }
-    public Artifact(String name, String url, LocalDate inputDate){
-        this(name, url, inputDate, null);
-    }
+//    public Artifact(String name, String url, LocalDate inputDate){
+//        this(name, url, inputDate, null);
+//    }
 
     public void addAllInstructions(List<Instruction> instructions) {
-        for(var instruction: instructions) {
-            this.instructions.add(instruction);
-        }
+        this.instructions.addAll(instructions);
     }
 
     public List<Instruction> getInstructions() {
@@ -55,6 +53,10 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     public UUID id(){
         return id;
+    }
+
+    public byte[] jarfile(){
+        return jarFile;
     }
 
     public String name(){
@@ -69,6 +71,6 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     @Override
     public ArtifactDTO toDto() {
-        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url);
+        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url, jarFile);
     }
 }
