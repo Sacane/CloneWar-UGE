@@ -35,32 +35,11 @@ function Upload(props){
         });
     }
 
-    const submit = () => {
-        console.log(artifactSave);
-        fetch('http://localhost:8087/api/artifact/create', {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(artifactSave),
-        }).then(data => {
-            console.log(data);
-        }).catch(r => {
-            console.log('error !')
-            console.error(r)
-        });
-    }
-
     return (
         <div className={"Upload"}>
 
             <div className="form">
-                <p><b>Fill this form to add another artifact</b></p>
-                <div className={"field"}>
-                    <label className={"label"}>Artifact name</label>
-                    <input className={"input"} type={"text"} onInput={name => artifactSave.name = name.target.value}/>
-                </div>
+                <p><b>Select your jar's source and main archive to create an artifact</b></p>
                 <div className={"field"}>
                     <label className={"label"}>Files</label>
                     <div className={"file"}>
@@ -78,10 +57,7 @@ function Upload(props){
                     </div>
                 </div>
                 <div className={"field"}>
-                    <button className="button" onClick={upload}>Upload jar</button>
-                </div>
-                <div className={"field"}>
-                    <button className="button" onClick={submit}>Create Artifact</button>
+                    <button className="button" onClick={upload}>Create an artifact</button>
                 </div>
             </div>
         </div>
