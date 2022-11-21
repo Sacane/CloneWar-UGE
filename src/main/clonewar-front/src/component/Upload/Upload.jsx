@@ -1,27 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import './Upload.css'
 
-const uploadJar = (jar) => {
-    const files = jar.target.files;
-    const formData = new FormData();
-    if(!files[0].name.endsWith(".jar")){
-        console.log(files[0].name)
-        alert("Wrong file")
-        return
-    }
-    formData.append('jar', files[0])
-    fetch('http://localhost:8087/api/artifact/upload', {
-        method: 'POST',
-        body: formData
-    }).then(r => {
-        console.log('error')
-        console.log(r)
-    });
-}
-
-
-
-function Upload(){
+function Upload(props){
 
     let jar = null;
     const artifactSave =
@@ -46,7 +26,9 @@ function Upload(){
             method: 'POST',
             body: data,
         }).then(data => {
-            console.log(data);
+            data.json().then(r => {
+                props.set(r);
+            })
         }).catch(r => {
             console.log('error !')
             console.log(r)
