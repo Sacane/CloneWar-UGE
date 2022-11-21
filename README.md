@@ -15,3 +15,7 @@
   * On Windows : ```.\mvnw.cmd package```
   * The **front** files will be generated in the **src/main/clonewar-front/public/** folder
   * the executable jar will be generated in the **target** folder
+
+* To run the application : ```java -jar Clonewar-xxx.jar``` 
+  * path of the application : ```http://localhost:<port>/```  with <port> set to 8087 by default
+
