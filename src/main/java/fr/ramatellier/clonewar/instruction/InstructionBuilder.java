@@ -56,7 +56,18 @@ public class InstructionBuilder {
     }
 
     public static ArrayList<Instruction> buildInstructionFromJar(String jarName) throws IOException {
-        var list = AsmParser.addInstructionsFromJar(jarName);
+        var fenetre = 3;
+        var list = new ArrayList<Instruction>();
+
+        var content = AsmParser.addInstructionsFromJar(jarName).get(0).content().split("\n");
+
+        for(var i = 0; i < content.length - fenetre + 1; i++) {
+            var newChaine = "";
+            for(var j = i; j < i + fenetre; j++) {
+                newChaine += content[j];
+            }
+            System.out.println(newChaine);
+        }
 
         return list;
     }
