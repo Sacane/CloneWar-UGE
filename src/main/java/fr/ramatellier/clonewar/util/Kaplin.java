@@ -1,8 +1,10 @@
 package fr.ramatellier.clonewar.util;
 
 import fr.ramatellier.clonewar.instruction.Instruction;
+import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import fr.ramatellier.clonewar.util.Hasher;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -33,7 +35,7 @@ public class Kaplin {
 
     public static boolean compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
         for(var elem: instructions) {
-            if(rabinKarp(instruction.content(), elem.content())) {
+            if(elem.hashValue() == instruction.hashValue() && rabinKarp(elem.content(), instruction.content())) {
                 return true;
             }
         }
@@ -41,15 +43,18 @@ public class Kaplin {
         return false;
     }
 
-    public static int compareJarInstructions(List<Instruction> instructions1, List<Instruction> instructions2) {
-        var nbClone = 0;
+    public static int compareJarInstructions(String jarName1, String jarName2) throws IOException {
+        var instructionsJar1 = InstructionBuilder.buildInstructionFromJar(jarName1);
+        var instructionsJar2 = InstructionBuilder.buildInstructionFromJar(jarName2);
+        var nbActualInstruction = 0;
+        var nbInstruction = instructionsJar1.size();
 
-        for(var instruction: instructions1) {
-            if(compareInstructionWithJarInstructions(instruction, instructions2)) {
-                nbClone++;
+        for(var instruction: instructionsJar1) {
+            if(compareInstructionWithJarInstructions(instruction, instructionsJar2)) {
+                nbActualInstruction++;
             }
         }
 
-        return (nbClone / instructions1.size()) * 100;
+        return (nbActualInstruction / nbInstruction) * 100;
     }
 }
