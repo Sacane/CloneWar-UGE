@@ -39,7 +39,7 @@ public class ArtifactController {
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
     public Mono<ArtifactDTO> uploadJarFile(@RequestPart("jar") FilePart jarFile){
-        LOGGER.info("Attempt to upload a file: ");
+        LOGGER.info("Attempt to upload a file: " + jarFile.filename());
         return service.createArtifactFromFileAndThenPersist(jarFile);
     }
 
