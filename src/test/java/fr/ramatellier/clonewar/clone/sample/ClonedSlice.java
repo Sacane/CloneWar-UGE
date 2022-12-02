@@ -86,9 +86,15 @@ public sealed interface ClonedSlice<E> {
             return new SubArrayClonedSlice<>(array, from + this.from, to + this.from);
         }
 
+        //@Clone using StringBuilder instead of stream
         @Override
         public String toString() {
-            return "[" + Arrays.stream(array, from, to).map(i -> (i == null) ? "null" : i.toString()).collect(Collectors.joining(", ")) + "]";
+            var builder = new StringBuilder("[");
+            for(int i = from; i < to; i++){
+                builder.append((array[i] == null ? "null" : array[i]));
+                if(i < to - 1) builder.append(" ,");
+            }
+            return builder.append("]").toString();
         }
     }
 }
