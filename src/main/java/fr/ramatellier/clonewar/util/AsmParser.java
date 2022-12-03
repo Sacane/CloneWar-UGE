@@ -11,6 +11,16 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class AsmParser {
+
+    public static void printStream(Path path) throws IOException {
+        var finder = ModuleFinder.of(path);
+        var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
+        try(var reader = moduleReference.open()){
+            for(var filename: (Iterable<String>) reader.list()::iterator){
+                System.out.println(filename);
+            }
+        }
+    }
     public static ArrayList<Instruction> addInstructionsFromJar(String jarName) throws IOException {
         var builder = new InstructionBuilder(jarName);
         var finder = ModuleFinder.of(Path.of(builder.filename()));
