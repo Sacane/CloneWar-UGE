@@ -24,6 +24,8 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 //    @Lob
     private byte[] jarFile;
 
+    private byte[] srcFile;
+
 //    @Lob
 //    private byte[] srcFile;
     private LocalDate inputDate;
@@ -33,11 +35,12 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
     private final List<Instruction> instructions = new ArrayList<>();
 
     public Artifact(){}
-    public Artifact(String name, String url, LocalDate inputDate, byte[] jarFile){
+    public Artifact(String name, String url, LocalDate inputDate, byte[] jarFile, byte[] srcFile){
         this.name= name;
         this.url = url;
         this.inputDate = inputDate;
         this.jarFile = jarFile;
+        this.srcFile = srcFile;
     }
 //    public Artifact(String name, String url, LocalDate inputDate){
 //        this(name, url, inputDate, null);
@@ -57,6 +60,9 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     public byte[] jarfile(){
         return jarFile;
+    }
+    public byte[] srcFile(){
+        return srcFile;
     }
 
     public String name(){
