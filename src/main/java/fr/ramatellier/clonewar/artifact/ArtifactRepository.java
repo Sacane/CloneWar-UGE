@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ArtifactRepository extends CrudRepository<Artifact, UUID> {}
+public interface ArtifactRepository extends CrudRepository<Artifact, UUID> {
+    Artifact findByName(String name);
+}

@@ -44,14 +44,13 @@ public class ArtifactService {
         })).subscribeOn(schedulerCtx);
     }
 
-    //TODO remove at end
     public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(FilePart filePart){
         LOGGER.info("Start parsing a file");
         LOGGER.info("On schedule file :" + filePart.filename());
         return filePart.content().publishOn(Schedulers.boundedElastic()).map(signal -> {
             try(var sig = signal.asInputStream()){
                 var bytes = sig.readAllBytes();
-                var artifact = new Artifact(filePart.filename(), filePart.filename(), LocalDate.now(), bytes);
+                var artifact = new Artifact(filePart.filename(), filePart.filename(), LocalDate.now(), bytes, null);
                 return repository.save(artifact).toDto();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -62,5 +61,8 @@ public class ArtifactService {
     public Flux<Artifact> findAll(){
         var defer = Flux.defer(() -> Flux.fromIterable(repository.findAll()));
         return defer.subscribeOn(schedulerCtx);
+    }
+    public void configure(){
+        var artifact = repository.findByName("");
     }
 }
