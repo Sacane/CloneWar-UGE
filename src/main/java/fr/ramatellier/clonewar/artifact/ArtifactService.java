@@ -1,6 +1,10 @@
 package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
+import fr.ramatellier.clonewar.instruction.InstructionBuilder;
+import fr.ramatellier.clonewar.util.AsmParser;
+import fr.ramatellier.clonewar.util.ByteResourceReader;
+import fr.ramatellier.clonewar.util.PomExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
@@ -11,7 +15,10 @@ import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
 @Service
@@ -42,16 +49,29 @@ public class ArtifactService {
         })).subscribeOn(schedulerCtx);
     }
 
+    //SRC -> .JAVA
+    ///MAIN -> .CLASS
+    private Artifact createArtifactByInfos(byte[] srcContent, byte[] mainContent) throws IOException {
+        var artifactIdOptional = PomExtractor.getProjectArtifactId(srcContent);
+        if(artifactIdOptional.isEmpty()) throw new NoSuchElementException("There is no artifactId in this pom content");
+        var artifactId = artifactIdOptional.get();
+        var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
+        var artifact = new Artifact(artifactId, artifactId, LocalDate.now(), mainContent, srcContent); //TODO replace second argument to URL
+        artifact.addAllInstructions(instructions);
+        System.out.println("Instructions --> " + instructions);
+        return artifact;
+    }
+
     public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(FilePart filePart){
-        LOGGER.info("Start parsing a file");
-        LOGGER.info("On schedule file :" + filePart.filename());
+        LOGGER.info("Persist file :" + filePart.filename());
         return filePart.content().publishOn(Schedulers.boundedElastic()).map(signal -> {
             try(var sig = signal.asInputStream()){
                 var bytes = sig.readAllBytes();
-                var artifact = new Artifact(filePart.filename(), filePart.filename(), LocalDate.now(), bytes, null);
+                var srcBytes = Files.readAllBytes(Path.of("src/test/resources/samples/SeqSrc.jar")); //TODO remove this and replace by the given src jar(from front)
+                var artifact = createArtifactByInfos(srcBytes, bytes);
                 return repository.save(artifact).toDto();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new AssertionError(e);
             }
         }).single();
     }
