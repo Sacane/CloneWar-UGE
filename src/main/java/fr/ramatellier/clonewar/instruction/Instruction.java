@@ -8,7 +8,6 @@ import java.util.UUID;
 @Entity
 @Table(name="instruction")
 public class Instruction {
-
     private static final long serialUUID = 2233498293L;
 
     @Id
@@ -50,6 +49,7 @@ public class Instruction {
     public long hashValue() {
         return hash;
     }
+
     public String content() {
         return content;
     }
