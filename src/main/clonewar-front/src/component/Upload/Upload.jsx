@@ -35,7 +35,7 @@ function Upload(props){
             <div className="form">
                 <p><b>Select your project archives</b></p>
                 <div className={"field"}>
-                    <label className={"label"}>Source archive (.class)</label>
+                    <label className={"label"}>Main archive (.class)</label>
                     <div className={"file"}>
                         <label className={"file-label"}>
                             <input className={"file-input"} onChange={onPutMain} type={"file"} id={"mainFileId"}/>
@@ -51,7 +51,7 @@ function Upload(props){
                     </div>
                 </div>
                 <div className={"field"}>
-                    <label className={"label"}>Main archive (.java)</label>
+                    <label className={"label"}>Source archive (.java)</label>
                     <div className={"file"}>
                         <label className={"file-label"}>
                             <input className={"file-input"} type={"file"} onChange={onPutSrc} id={"srcFileId"}/>
