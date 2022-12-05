@@ -59,11 +59,11 @@ public class InstructionBuilder {
     private static List<String> cutStringWithWindow(String[] content, int window) {
         var contentList = new ArrayList<String>();
         for(var i = 0; i < content.length - window + 1; i++) {
-            var newContent = "";
+            var newContent = new StringBuilder();
             for(var j = i; j < i + window; j++) {
-                newContent += content[j];
+                newContent.append(content[j]);
             }
-            contentList.add(newContent);
+            contentList.add(newContent.toString());
         }
         return contentList;
     }
@@ -71,7 +71,7 @@ public class InstructionBuilder {
     public static ArrayList<Instruction> buildInstructionFromJar(String jarName) throws IOException {
         var window = 3;
         var list = new ArrayList<Instruction>();
-
+        
         var content = cutStringWithWindow(AsmParser.addInstructionsFromJar(jarName).get(0).content().split("\n"), window);
         for(var elem: content) {
             System.out.println(elem);
