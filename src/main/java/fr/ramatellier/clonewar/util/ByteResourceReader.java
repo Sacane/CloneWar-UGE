@@ -13,6 +13,7 @@ public class ByteResourceReader {
     private static int id;
     private final String readerId;
     private ModuleReference finder;
+    private JarReader jarReader;
     private boolean isInit;
 
     public ByteResourceReader(byte[] bytes){
@@ -23,7 +24,7 @@ public class ByteResourceReader {
 
     private void builderFinderFromBytes(){
         isInit = true;
-        var jarReader = new JarReader(bytes);
+        this.jarReader = new JarReader(bytes);
         var path = jarReader.toPath(readerId);
         finder = ModuleFinder.of(path).findAll().stream().findFirst().orElseThrow();
     }
@@ -34,6 +35,7 @@ public class ByteResourceReader {
         try(var reader = finder.open()){
             consumer.accept(reader);
         }
+        jarReader.delete();
     }
 
     public <T> T retrieveFromReader(Function<? super ModuleReader, ? extends T> fun) throws IOException {
@@ -41,7 +43,10 @@ public class ByteResourceReader {
         if(!isInit) builderFinderFromBytes();
         try(var reader= finder.open()){
             return fun.apply(reader);
+        } finally {
+            jarReader.delete();
         }
+
     }
 
 }
