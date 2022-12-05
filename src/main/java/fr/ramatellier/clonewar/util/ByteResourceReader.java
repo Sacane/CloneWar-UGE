@@ -6,6 +6,7 @@ import java.lang.module.ModuleReader;
 import java.lang.module.ModuleReference;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ByteResourceReader {
     private final byte[] bytes;
@@ -21,6 +22,7 @@ public class ByteResourceReader {
     }
 
     private void builderFinderFromBytes(){
+        isInit = true;
         var jarReader = new JarReader(bytes);
         var path = jarReader.toPath(readerId);
         finder = ModuleFinder.of(path).findAll().stream().findFirst().orElseThrow();
@@ -28,9 +30,17 @@ public class ByteResourceReader {
 
     public void consumeReader(Consumer<? super ModuleReader> consumer) throws IOException {
         Objects.requireNonNull(consumer);
-        builderFinderFromBytes();
+        if(!isInit) builderFinderFromBytes();
         try(var reader = finder.open()){
             consumer.accept(reader);
+        }
+    }
+
+    public <T> T retrieveFromReader(Function<? super ModuleReader, ? extends T> fun) throws IOException {
+        Objects.requireNonNull(fun);
+        if(!isInit) builderFinderFromBytes();
+        try(var reader= finder.open()){
+            return fun.apply(reader);
         }
     }
 
