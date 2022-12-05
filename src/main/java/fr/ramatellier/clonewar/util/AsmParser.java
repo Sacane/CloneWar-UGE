@@ -27,7 +27,7 @@ public class AsmParser {
         resourceReader.consumeReader(r -> {
             try {
                 for(var filename: (Iterable<String>) r.list()::iterator) {
-                    if (!filename.endsWith(".class")) {
+                    if (!filename.endsWith(".class") || filename.contains("Test")) {
                         continue;
                     }
                     try(var inputStream = r.open(filename).orElseThrow()) {
