@@ -21,6 +21,13 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     private String url;
 
+//    @Lob
+    private byte[] jarFile;
+
+    private byte[] srcFile;
+
+//    @Lob
+//    private byte[] srcFile;
     private LocalDate inputDate;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -28,16 +35,19 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
     private final List<Instruction> instructions = new ArrayList<>();
 
     public Artifact(){}
-    public Artifact(String name, String url, LocalDate inputDate){
+    public Artifact(String name, String url, LocalDate inputDate, byte[] jarFile, byte[] srcFile){
         this.name= name;
         this.url = url;
         this.inputDate = inputDate;
+        this.jarFile = jarFile;
+        this.srcFile = srcFile;
     }
+//    public Artifact(String name, String url, LocalDate inputDate){
+//        this(name, url, inputDate, null);
+//    }
 
     public void addAllInstructions(List<Instruction> instructions) {
-        for(var instruction: instructions) {
-            this.instructions.add(instruction);
-        }
+        this.instructions.addAll(instructions);
     }
 
     public List<Instruction> getInstructions() {
@@ -46,6 +56,13 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     public UUID id(){
         return id;
+    }
+
+    public byte[] jarfile(){
+        return jarFile;
+    }
+    public byte[] srcFile(){
+        return srcFile;
     }
 
     public String name(){
@@ -60,6 +77,6 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     @Override
     public ArtifactDTO toDto() {
-        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url);
+        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url, jarFile);
     }
 }

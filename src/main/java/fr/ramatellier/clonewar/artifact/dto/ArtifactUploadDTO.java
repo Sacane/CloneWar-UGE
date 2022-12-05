@@ -10,6 +10,6 @@ import java.time.LocalDate;
 public record ArtifactUploadDTO(String name, String url, String date, FilePart document) implements DtoPersistable<Artifact> {
     @Override
     public Artifact toEntity() {
-        return new Artifact(name, url, LocalDate.now());
+        return new Artifact(name, url, LocalDate.now(), null, null);
     }
 }

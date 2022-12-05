@@ -1,17 +1,24 @@
 package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
-import fr.ramatellier.clonewar.artifact.dto.ArtifactSaveDTO;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
+import fr.ramatellier.clonewar.util.AsmParser;
+import fr.ramatellier.clonewar.util.ByteResourceReader;
+import fr.ramatellier.clonewar.util.PomExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
 @Service
@@ -29,27 +36,51 @@ public class ArtifactService {
         this.schedulerCtx = schedulerCtx;
     }
 
+    /**
+     * TODO REMOVE
+     * @Deprecated
+     * @param entity
+     * @return
+     */
     public Mono<ArtifactDTO> saveArtifact(Artifact entity){
         return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
             var entityResponse = repository.save(entity);
-            return new ArtifactDTO(entityResponse.id().toString(), entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url());
+            return new ArtifactDTO(entityResponse.id().toString(), entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url(), null);
         })).subscribeOn(schedulerCtx);
     }
 
-    public Mono<ArtifactSaveDTO> saveArtifactWithInstruction(ArtifactSaveDTO dto) throws IOException {
-        LOGGER.info("Parsing artifacts and its instructions");
-        var artifact = new Artifact(dto.name(), dto.url(), LocalDate.now());
-        var list = InstructionBuilder.buildInstructionFromJar(ArtifactController.UPLOAD_PATH.resolve(dto.url()).toString());
-        return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
-            artifact.addAllInstructions(list);
-            var entityResponse = repository.save(artifact);
-            LOGGER.info("Saving artifact done.");
-            return new ArtifactSaveDTO(entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url());
-        })).subscribeOn(schedulerCtx);
+    //SRC -> .JAVA
+    ///MAIN -> .CLASS
+    private Artifact createArtifactByInfos(byte[] srcContent, byte[] mainContent) throws IOException {
+        var artifactIdOptional = PomExtractor.getProjectArtifactId(srcContent);
+        if(artifactIdOptional.isEmpty()) throw new NoSuchElementException("There is no artifactId in this pom content");
+        var artifactId = artifactIdOptional.get();
+        var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
+        var artifact = new Artifact(artifactId, artifactId, LocalDate.now(), mainContent, srcContent); //TODO replace second argument to URL
+        artifact.addAllInstructions(instructions);
+        System.out.println("Instructions --> " + instructions);
+        return artifact;
+    }
+
+    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(FilePart filePart){
+        LOGGER.info("Persist file :" + filePart.filename());
+        return filePart.content().publishOn(Schedulers.boundedElastic()).map(signal -> {
+            try(var sig = signal.asInputStream()){
+                var bytes = sig.readAllBytes();
+                var srcBytes = Files.readAllBytes(Path.of("src/test/resources/samples/SeqSrc.jar")); //TODO remove this and replace by the given src jar(from front)
+                var artifact = createArtifactByInfos(srcBytes, bytes);
+                return repository.save(artifact).toDto();
+            } catch (IOException e) {
+                throw new AssertionError(e);
+            }
+        }).single();
     }
 
     public Flux<Artifact> findAll(){
         var defer = Flux.defer(() -> Flux.fromIterable(repository.findAll()));
         return defer.subscribeOn(schedulerCtx);
+    }
+    public void configure(){
+        var artifact = repository.findByName("");
     }
 }

@@ -1,2 +1,2 @@
 package fr.ramatellier.clonewar.artifact.dto;
-public record ArtifactDTO(String id, String name, String date, String url) {}
+public record ArtifactDTO(String id, String name, String date, String url, byte[] jarfile) {}

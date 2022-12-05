@@ -2,19 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <groupId>fr.ramatellier</groupId>
+    <artifactId>CloneWar</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>CloneWar</name>
+    <description>Project allow people to detect plagiarism between two projects</description>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.0.0-M5</version>
         <relativePath/>
     </parent>
-    <groupId>fr.ramatellier</groupId>
-    <artifactId>CloneWar</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>CloneWar</name>
-    <description>Project allow people to detect plagiarism between two projects</description>
     <properties>
-        <java.version>19</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -54,12 +54,6 @@
             <version>6.1.4.Final</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.1.3.Final</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -87,6 +81,23 @@
             <artifactId>maven-resources-plugin</artifactId>
             <version>3.3.0</version>
             <scope>runtime</scope>
+        </dependency>
+        <!--Necessary jakarta expression language dependencies-->
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>5.0.1</version>
+        </dependency>
+        <!-- End jakarta el dependency-->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
+            <version>5.0.0-M1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.4</version>
         </dependency>
     </dependencies>
     <build>
@@ -155,7 +166,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>src/main/clonewar-front/public</outputDirectory>
+                            <outputDirectory>target/classes/static</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/clonewar-front/dist</directory>
