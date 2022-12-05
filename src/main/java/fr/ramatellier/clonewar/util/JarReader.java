@@ -8,27 +8,31 @@ public class JarReader {
     private final byte[] fluxJar;
     private boolean hasAlreadyWrite;
     private File file;
-    private static int storingId;
 
     public JarReader(byte[] fluxJar){
         this.fluxJar = Objects.requireNonNull(fluxJar);
     }
 
-    public void store() {
-        var tmpName = "storingTmp" + storingId + ".jar";
-        var file = new File(tmpName);
+    private void store(String name) {
+        var file = new File(name);
         try(var os = new FileOutputStream(file)){
             os.write(fluxJar);
             hasAlreadyWrite = true;
-            storingId++;;;;;;
             this.file = file;
         } catch (IOException e) {
             throw new AssertionError("This error could not occur");
         }
     }
 
-    public Path toPath(){
+    public Path toPath(String path){
+        if(!path.endsWith(".jar")) throw new IllegalArgumentException("Should take a jarPath");
+        store(path);
         return file.toPath();
+    }
+
+    public File toFile(){
+        if(!hasAlreadyWrite) store("tmp.jar");
+        return file;
     }
 
     public void delete(){
