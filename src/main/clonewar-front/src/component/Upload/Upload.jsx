@@ -15,7 +15,8 @@ function Upload(props){
     }
     const upload = () => {
         const data = new FormData();
-        data.append("jar", jar);
+        data.append("main", jar);
+        data.append("src", src);
         fetch('http://localhost:8087/api/artifact/upload', {
             method: 'POST',
             body: data,
