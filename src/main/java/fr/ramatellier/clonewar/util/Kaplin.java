@@ -43,9 +43,9 @@ public class Kaplin {
         return false;
     }
 
-    public static int compareJarInstructions(String jarName1, String jarName2) throws IOException {
-        var instructionsJar1 = InstructionBuilder.buildInstructionFromJar(jarName1);
-        var instructionsJar2 = InstructionBuilder.buildInstructionFromJar(jarName2);
+    public static int compareJarInstructions(String jarName1, String jarName2, byte[] first, byte[] second) throws IOException {
+        var instructionsJar1 = InstructionBuilder.buildInstructionFromJar(jarName1, first);
+        var instructionsJar2 = InstructionBuilder.buildInstructionFromJar(jarName2, second);
         var nbActualInstruction = 0;
         var nbInstruction = instructionsJar1.size();
 

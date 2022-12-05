@@ -30,11 +30,6 @@ public class JarReader {
         return file.toPath();
     }
 
-    public File toFile(){
-        if(!hasAlreadyWrite) store("tmp.jar");
-        return file;
-    }
-
     public void delete(){
         if(!hasAlreadyWrite) throw new IllegalStateException("You can't close a reader while the file is not open");
         if(!file.delete()) throw new IllegalStateException("This file could not be deleted");

@@ -11,7 +11,7 @@ public class JarReaderTest {
 
     @Test
     public void storeShouldNotThrowAnyException(){
-        var jar = new File("./src/test/resources/TestJar.jar");
+        var jar = new File("./src/test/resources/Seq.jar");
         var bytes = assertDoesNotThrow(() -> Files.readAllBytes(jar.toPath()));
         var reader = new JarReader(bytes);
         assertDoesNotThrow(() -> AsmParser.printStream(reader.toPath("path.jar")));

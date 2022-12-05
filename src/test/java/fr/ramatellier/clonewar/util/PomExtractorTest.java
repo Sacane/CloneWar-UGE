@@ -3,6 +3,7 @@ package fr.ramatellier.clonewar.util;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +17,8 @@ public class PomExtractorTest {
         assertTrue(extracted.isPresent());
         assertEquals("CloneWar", extracted.get());
     }
+
+
 
     @Test
     public void preconditions(){

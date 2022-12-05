@@ -68,24 +68,14 @@ public class InstructionBuilder {
         return contentList;
     }
 
-    public static ArrayList<Instruction> buildInstructionFromJar(String jarName) throws IOException {
+    public static ArrayList<Instruction> buildInstructionFromJar(String jarName, byte[] bytes) throws IOException {
         var window = 3;
         var list = new ArrayList<Instruction>();
         
-        var content = cutStringWithWindow(AsmParser.addInstructionsFromJar(jarName).get(0).content().split("\n"), window);
+        var content = cutStringWithWindow(AsmParser.addInstructionsFromJar(jarName, bytes).get(0).content().split("\n"), window);
         for(var elem: content) {
-            System.out.println(elem);
+            list.add(new Instruction(jarName, 0, elem, 0));
         }
-        /*var content = AsmParser.addInstructionsFromJar(jarName).get(0).content().split("\n");
-
-        for(var i = 0; i < content.length - window + 1; i++) {
-            var newContent = "";
-            for(var j = i; j < i + window; j++) {
-                newContent += content[j];
-            }
-            System.out.println(newContent);
-        }*/
-
         return list;
     }
 
