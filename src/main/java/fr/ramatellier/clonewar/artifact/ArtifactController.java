@@ -22,16 +22,10 @@ public class ArtifactController {
 
     private final ArtifactService service;
     private static final Logger LOGGER = Logger.getLogger(ArtifactController.class.getName());
-    public static final Path UPLOAD_PATH = Paths.get("./src/main/resources/upload/");
     public ArtifactController(ArtifactService service){
         this.service = service;
     }
 
-    @PostMapping(path = "/api/artifact/save")
-    public Mono<ArtifactDTO> save(@RequestBody ArtifactSaveDTO artifact){
-        LOGGER.info("Trying to persist an simple artifact without instructions");
-        return service.saveArtifact(artifact.toEntity());
-    }
 
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
