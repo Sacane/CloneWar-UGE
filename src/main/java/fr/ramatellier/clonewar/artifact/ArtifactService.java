@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 @Service
@@ -84,11 +83,6 @@ public class ArtifactService {
         var defer = Flux.defer(() -> Flux.fromIterable(repository.findAll()));
         return defer.subscribeOn(schedulerCtx);
     }
-
-    public Mono<String> getNameById(String id) {
-        return Mono.just(repository.findById(UUID.fromString(id)).get().name());
-    }
-
     public void configure(){
         var artifact = repository.findByName("");
     }
