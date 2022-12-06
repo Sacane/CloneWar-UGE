@@ -1,22 +1,25 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './Upload.css'
 
 function Upload(props){
 
-    let jar = null;
-    let src = null;
+    const [srcFile, setSrcFile] = useState({name: ''});
+    const [mainFile, setMainFile] = useState({name: ''});
     const onPutSrc = (file) => {
-        src = file.target.files[0];
-        console.log(file.target.files[0]);
+        setSrcFile(file.target.files[0]);
+
     }
     const onPutMain = (file) => {
-        jar = file.target.files[0];
-        console.log(file.target.files[0]);
+        setMainFile(file.target.files[0]);
     }
     const upload = () => {
+        if(mainFile.name === '' || srcFile.name === ''){
+            alert("You have to put both src and main archives !");
+            return;
+        }
         const data = new FormData();
-        data.append("main", jar);
-        data.append("src", src);
+        data.append("main", mainFile);
+        data.append("src", srcFile);
         fetch('http://localhost:8087/api/artifact/upload', {
             method: 'POST',
             body: data,
@@ -25,8 +28,8 @@ function Upload(props){
                 props.set(r);
             })
         }).catch(r => {
-            console.log('error !')
-            console.log(r)
+            console.log('TODO : Resolve error properly');
+            console.log(r);
         });
     }
 
@@ -48,6 +51,7 @@ function Upload(props){
                               Select your archives...
                             </span>
                           </span>
+                            <span className={"file-name"}>{mainFile.name}</span>
                         </label>
                     </div>
                 </div>
@@ -64,6 +68,7 @@ function Upload(props){
                               Select your archives...
                             </span>
                           </span>
+                            <span className={"file-name"}>{srcFile.name}</span>
                         </label>
                     </div>
                 </div>
