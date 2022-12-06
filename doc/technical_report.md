@@ -1,8 +1,8 @@
 # Clonewar
 
 | Developers | Version of document | last update |
-| :---------: | :-----------------:| :----------: |
-| Ramaroson Rakotomihamina Johan && Tellier Quentin | 0.1 | 14/11/2022|
+| :---------: |:-------------------:|:-----------:|
+| Ramaroson Rakotomihamina Johan && Tellier Quentin |         0.2         | 06/12/2022  |
 
 ## 1. About 
 Clonewar is a web-app that allow you to analyze and detect clones among multiple java project. 
@@ -149,7 +149,32 @@ When we launch the server those methods will be executed, here is an example of 
 ![image](./postman-spec-getMethods.png)
 
 ### II. Front-end
-**TODO**
+
+Clonewar's front end is made in Html/Css using Javascript and its framework React. 
+The architecture is based on the following schema : 
+
+```
+App.jsx
+|
+|___ Pages
+|   |
+|   |__ Home.jsx
+|   |__ Details.jsx
+|
+|
+|___ Components
+    |
+    |___ Artifact.jsx
+    |___ Upload.jsx
+```
+
+The first Home page show the number of artifact already indexed in the application. 
+You can add another artifact by uploading your jar archives. 
+
+![image](./assets/front-page1-specV1.png)
+
+On this picture, one artifact is already store in the application's database. 
+
 ## 3. Techs
 
 |       Back        | Front | Mapping persistence | Database | UI |
