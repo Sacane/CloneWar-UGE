@@ -42,19 +42,6 @@ public class ArtifactWebLayerIntegrationTest {
 
 
     @Test
-    public void testEndpointSavingArtifact(){
-        String randomUUID = UUID.randomUUID().toString();
-        ArtifactDTO dto = new ArtifactDTO(randomUUID, "artifact0", LocalDate.now().toString(), "./repo/test/artifact.jar", null);
-        webClient.post()
-                .uri("/api/artifact/save")
-                .body(Mono.just(dto), ArtifactDTO.class)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(ArtifactDTO.class)
-                .value(artifactDTO -> artifactsMatches(artifactDTO, dto), IsEqual.equalTo(true));
-    }
-
-    @Test
     public void testEndpointFindAllArtifacts(){
         repository.saveAll(artifacts);
         webClient.get()
