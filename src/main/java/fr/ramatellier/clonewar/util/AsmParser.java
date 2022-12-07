@@ -1,6 +1,8 @@
 package fr.ramatellier.clonewar.util;
 
 
+import fr.ramatellier.clonewar.exception.InvalidJarException;
+import fr.ramatellier.clonewar.exception.InvalidJarFormatException;
 import fr.ramatellier.clonewar.instruction.Instruction;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import org.objectweb.asm.*;
@@ -27,6 +29,9 @@ public class AsmParser {
         resourceReader.consumeReader(r -> {
             try {
                 for(var filename: (Iterable<String>) r.list()::iterator) {
+                    if(filename.endsWith(".java")){
+                        throw new InvalidJarFormatException("Your main archives contains a .java file");
+                    }
                     if (!filename.endsWith(".class")) {
                         continue;
                     }
@@ -188,7 +193,7 @@ public class AsmParser {
                     }
                 }
             } catch (IOException e) {
-                throw new AssertionError();
+                throw new InvalidJarException(e);
             }
         });
 
