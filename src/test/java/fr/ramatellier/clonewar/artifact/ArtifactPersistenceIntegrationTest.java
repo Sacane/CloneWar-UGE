@@ -7,8 +7,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 import java.time.LocalDate;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -18,11 +18,13 @@ public class ArtifactPersistenceIntegrationTest {
     @Autowired
     private ArtifactRepository artifactRepository;
 
+
     private Artifact artifact;
 
     @BeforeEach
     public void setupArtifacts(){
         artifact = new Artifact("artifact123", "testArtifact1.jar", LocalDate.now(), null, null);
+        artifactRepository.save(artifact);
     }
 
     @Test
