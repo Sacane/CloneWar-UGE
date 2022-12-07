@@ -46,7 +46,7 @@ public class PomExtractor {
         return Optional.empty();
     }
 
-    public static Optional<String> retrieveArtifactFromContent(String pomContent){
+    static Optional<String> retrieveArtifactFromContent(String pomContent){
         if(!pomContent.startsWith("<project") || !pomContent.endsWith("</project>")) throw new IllegalArgumentException("This content is not a pom content");
         var pattern = Pattern.compile("<artifactId>(.*?)</artifactId>", Pattern.DOTALL);
         Matcher m;
