@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.util.exception;
+package fr.ramatellier.clonewar.exception;
 
 public class ArtifactNotFoundException extends RuntimeException{
     private static final String MESSAGE = "No Artefact found in database";
