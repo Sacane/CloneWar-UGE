@@ -19,4 +19,8 @@ public class RestExceptionHandler {
     ResponseEntity<Void> badJarInjected(){
         return ResponseEntity.badRequest().build();
     }
+
+    ResponseEntity<Void> pomNotFound(){
+        return ResponseEntity.notFound().build();
+    }
 }
