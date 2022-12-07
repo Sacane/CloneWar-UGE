@@ -1,6 +1,7 @@
 package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
+import fr.ramatellier.clonewar.exception.InvalidJarException;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import fr.ramatellier.clonewar.util.PomExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,7 +47,7 @@ public class ArtifactService {
             try {
                 return part.asInputStream().readAllBytes();
             } catch (IOException e) {
-                throw new AssertionError(e);
+                throw new InvalidJarException(e);
             }
         }).single();
     }
@@ -54,17 +55,15 @@ public class ArtifactService {
     public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(FilePart mainPart, FilePart srcPart){
         LOGGER.info("Persist files main :" + mainPart.filename() + " and its src : " + srcPart.filename());
         return retrieveBytesFromFilePart(mainPart)
-                .flatMap(mainBytes -> retrieveBytesFromFilePart(srcPart)
-                        .map(srcBytes ->
-                                {
+                .flatMap(mainBytes -> retrieveBytesFromFilePart(srcPart).map(srcBytes -> {
                                     try {
                                         var artifact = createArtifactByInfos(srcBytes, mainBytes);
                                         return repository.save(artifact).toDto();
                                     } catch (IOException e) {
-                                        throw new AssertionError(e);
+                                        throw new InvalidJarException(e);
                                     }
                                 }
-                        ));
+                ));
     }
 
     public Flux<Artifact> findAll(){
