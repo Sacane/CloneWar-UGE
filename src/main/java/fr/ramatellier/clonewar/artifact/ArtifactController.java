@@ -34,7 +34,7 @@ public class ArtifactController {
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
-    public Mono<ArtifactDTO> uploadJarFile(@RequestPart("src") FilePart srcFile, @RequestPart("main") FilePart mainFile) throws IOException {
+    public Mono<ArtifactDTO> uploadJarFile(@RequestPart("src") FilePart srcFile, @RequestPart("main") FilePart mainFile) {
         LOGGER.info("Trying to analyze main file : " + mainFile.filename() + " and src file : " + srcFile.filename());
         return service.createArtifactFromFileAndThenPersist(mainFile, srcFile);
     }
