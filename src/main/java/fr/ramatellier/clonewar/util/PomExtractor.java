@@ -1,6 +1,7 @@
 package fr.ramatellier.clonewar.util;
 
-import fr.ramatellier.clonewar.artifact.Artifact;
+import fr.ramatellier.clonewar.exception.InvalidJarException;
+import fr.ramatellier.clonewar.exception.PomNotFoundException;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -20,7 +21,7 @@ public class PomExtractor {
             throw new IllegalArgumentException("This class should take a pom.xml file");
         }
         if(!Path.of(pathToPom).toFile().exists()){
-            throw new IllegalArgumentException("this file doesn't exists");
+            throw new PomNotFoundException();
         }
         this.pom = pathToPom;
     }
@@ -76,7 +77,7 @@ public class PomExtractor {
                 }
                 return Optional.empty();
             } catch (IOException e) {
-                throw new AssertionError();
+                throw new InvalidJarException();
             }
         });
     }
