@@ -7,20 +7,6 @@ public final class Hasher {
     private final static int LIMIT = 1_000_007;
     private final static int BASE = 31;
 
-//    public static long hashInstruction(String content){
-//        Objects.requireNonNull(content);
-//        if(content.equals("")) throw new IllegalArgumentException("Can't hash an empty content");
-//        var toHash = content.replaceAll("\n", ",");
-//        var hashValue = 0L;
-//        var charArray = toHash.toCharArray();
-//        var pow = 1L;
-//        for(int i = 0; i < toHash.length(); i++){
-//            hashValue = (hashValue + (charArray[i] - 'a' + 1 + LIMIT) * pow) % LIMIT;
-//            pow = (pow* BASE) % LIMIT;
-//        }
-//        return hashValue;
-//    }
-
     /**
      * Hash an instruction using the rolling-hash strategy.
      * @param instruction to hash
