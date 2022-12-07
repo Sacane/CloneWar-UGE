@@ -2,6 +2,7 @@ package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
 import fr.ramatellier.clonewar.exception.InvalidJarException;
+import fr.ramatellier.clonewar.exception.PomNotFoundException;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import fr.ramatellier.clonewar.util.PomExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,7 +15,6 @@ import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
 @Service
@@ -32,11 +32,10 @@ public class ArtifactService {
     //SRC -> .JAVA
     ///MAIN -> .CLASS
     private Artifact createArtifactByInfos(byte[] srcContent, byte[] mainContent) throws IOException {
-        var artifactIdOptional = PomExtractor.getProjectArtifactId(srcContent);
-        if(artifactIdOptional.isEmpty()) throw new NoSuchElementException("There is no artifactId in this pom content");
-        var artifactId = artifactIdOptional.get();
+        var artifactId = PomExtractor.getProjectArtifactId(srcContent)
+                .orElseThrow(() -> new PomNotFoundException("There is no pom.xml in this source jar"));
         var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
-        var artifact = new Artifact(artifactId, artifactId, LocalDate.now(), mainContent, srcContent); //TODO replace second argument to URL
+        var artifact = new Artifact(artifactId, artifactId, LocalDate.now(), mainContent, srcContent);
         artifact.addAllInstructions(instructions);
         System.out.println("Instructions --> " + instructions);
         return artifact;
