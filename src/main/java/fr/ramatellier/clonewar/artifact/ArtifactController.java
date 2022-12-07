@@ -1,8 +1,6 @@
 package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
-import fr.ramatellier.clonewar.artifact.dto.ArtifactSaveDTO;
-import fr.ramatellier.clonewar.artifact.dto.ArtifactUploadDTO;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;

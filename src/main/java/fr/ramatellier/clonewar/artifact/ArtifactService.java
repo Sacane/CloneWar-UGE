@@ -33,11 +33,11 @@ public class ArtifactService {
 
     //SRC -> .JAVA
     ///MAIN -> .CLASS
-    private Artifact createArtifactByInfos(byte[] srcContent, byte[] mainContent) throws IOException {
+    private Artifact createArtifactByInfos(String mainName, String srcName, byte[] srcContent, byte[] mainContent) throws IOException {
         var artifactId = PomExtractor.getProjectArtifactId(srcContent)
                 .orElseThrow(() -> new PomNotFoundException("There is no pom.xml in this source jar"));
         var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
-        var artifact = new Artifact(artifactId, artifactId, LocalDate.now(), mainContent, srcContent);
+        var artifact = new Artifact(artifactId, mainName, srcName, LocalDate.now(), mainContent, srcContent);
         artifact.addAllInstructions(instructions);
         System.out.println("Instructions --> " + instructions);
         return artifact;
@@ -66,7 +66,7 @@ public class ArtifactService {
         return retrieveBytesFromFilePart(mainPart)
                 .flatMap(mainBytes -> retrieveBytesFromFilePart(srcPart).map(srcBytes -> {
                                     try {
-                                        var artifact = createArtifactByInfos(srcBytes, mainBytes);
+                                        var artifact = createArtifactByInfos(mainPart.filename(), srcPart.filename(), srcBytes, mainBytes);
                                         return saveArtifact(artifact).toDto();
                                     } catch (IOException e) {
                                         throw new InvalidJarException(e);
