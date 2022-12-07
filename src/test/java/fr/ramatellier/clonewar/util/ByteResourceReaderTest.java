@@ -64,7 +64,7 @@ public class ByteResourceReaderTest {
                     }
                 }
             } catch (IOException e) {
-                throw new AssertionError();
+                fail();
             }
         });
         var array = list.toArray();
