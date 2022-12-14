@@ -17,6 +17,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @Service
@@ -78,5 +79,9 @@ public class ArtifactService {
     public Flux<Artifact> findAll(){
         var defer = Flux.defer(() -> Flux.fromIterable(repository.findAll()));
         return defer.subscribeOn(schedulerCtx);
+    }
+
+    public Mono<String> getNameById(String id) {
+        return Mono.just(repository.findById(UUID.fromString(id)).get().name());
     }
 }
