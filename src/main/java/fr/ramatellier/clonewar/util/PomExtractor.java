@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,15 +48,26 @@ public class PomExtractor {
     }
 
     static Optional<String> retrieveArtifactFromContent(String pomContent){
-        if(!pomContent.startsWith("<project") || !pomContent.endsWith("</project>")) throw new IllegalArgumentException("This content is not a pom content");
+        if(!pomContent.endsWith("</project>")) throw new IllegalArgumentException("This content is not a pom content");
         var pattern = Pattern.compile("<artifactId>(.*?)</artifactId>", Pattern.DOTALL);
-        Matcher m;
+        var entryPattern = Pattern.compile("<([^/]*?)>", Pattern.DOTALL);
+        var outPattern = Pattern.compile("</(.*?)>", Pattern.DOTALL);
+        int depth = 0;
         var lines = pomContent.split("\n");
         for(var line : lines){
-            m = pattern.matcher(line);
-            if(m.find()){
+            System.out.println(depth);
+            var m = pattern.matcher(line);
+            if(m.find() && depth == 1){
                 return Optional.of(m.group(1));
             }
+            m = outPattern.matcher(line);
+            var m2 = entryPattern.matcher(line);
+            if(m.find() && m2.find()) continue;
+            if(m.find() && !m2.find()) {
+                depth--;
+                continue;
+            }
+            if(m2.find() && !m.find()) depth++;
         }
         return Optional.empty();
     }
@@ -64,7 +76,6 @@ public class PomExtractor {
         var reader = new ByteResourceReader(srcContent);
         return reader.retrieveFromReader(r -> {
             try {
-
                 for(var filename: (Iterable<String>) r.list()::iterator){
                     if(filename.contains("pom.xml")){
                         var md = r.open(filename).orElseThrow();
@@ -75,9 +86,9 @@ public class PomExtractor {
                         return Optional.of(s);
                     }
                 }
-                return Optional.empty();
+                throw new PomNotFoundException("No pom.xml found in this jar source...");
             } catch (IOException e) {
-                throw new InvalidJarException();
+                throw new InvalidJarException(e.getCause());
             }
         });
     }
