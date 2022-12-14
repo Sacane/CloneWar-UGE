@@ -1,8 +1,6 @@
 package fr.ramatellier.clonewar.util;
 
 
-import fr.ramatellier.clonewar.exception.InvalidJarException;
-import fr.ramatellier.clonewar.exception.InvalidJarFormatException;
 import fr.ramatellier.clonewar.instruction.Instruction;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import org.objectweb.asm.*;
@@ -23,16 +21,13 @@ public class AsmParser {
             }
         }
     }
-    public static ArrayList<Instruction> addInstructionsFromJar(String jarName, byte[] bytes) throws IOException {
+    public static ArrayList<Instruction> getInstructionsFromJar(String jarName, byte[] bytes) throws IOException {
         var builder = new InstructionBuilder(jarName);
         var resourceReader = new ByteResourceReader(bytes);
         resourceReader.consumeReader(r -> {
             try {
                 for(var filename: (Iterable<String>) r.list()::iterator) {
-                    if(filename.endsWith(".java")){
-                        throw new InvalidJarFormatException("Your main archives contains a .java file");
-                    }
-                    if (!filename.endsWith(".class")) {
+                    if (!filename.endsWith(".class") || filename.contains("Test")) {
                         continue;
                     }
                     try(var inputStream = r.open(filename).orElseThrow()) {
@@ -185,7 +180,7 @@ public class AsmParser {
                                     @Override
                                     public void visitEnd() {
                                         // System.err.println("end");
-                                        builder.endInstruction();
+                                        builder.endInstruction(filename);
                                     }
                                 };
                             }
@@ -193,7 +188,7 @@ public class AsmParser {
                     }
                 }
             } catch (IOException e) {
-                throw new InvalidJarException(e);
+                throw new AssertionError();
             }
         });
 
