@@ -17,6 +17,17 @@ function Upload(props){
             alert("You have to put both src and main archives !");
             return;
         }
+    let jar = null;
+    let src = null;
+    const onPutSrc = (file) => {
+        src = file.target.files[0];
+        console.log(file.target.files[0]);
+    }
+    const onPutMain = (file) => {
+        jar = file.target.files[0];
+        console.log(file.target.files[0]);
+    }
+    const upload = () => {
         const data = new FormData();
         data.append("main", mainFile);
         data.append("src", srcFile);
@@ -43,6 +54,26 @@ function Upload(props){
                     <div className={"file"}>
                         <label className={"file-label"}>
                             <input className={"file-input"} onChange={onPutMain} type={"file"} id={"mainFileId"}/>
+                    <label className={"label"}>Source archive (.class)</label>
+                    <div className={"file"}>
+                        <label className={"file-label"}>
+                            <input className={"file-input"} onChange={onPutMain} type={"file"} id={"mainFileId"}/>
+                            <span className={"file-cta"}>
+                            <span className="file-icon">
+                              <i className="fas fa-upload"/>
+                            </span>
+                            <span className={"file-label"} id={"file-name"}>
+                              Select your archives...
+                            </span>
+                          </span>
+                        </label>
+                    </div>
+                </div>
+                <div className={"field"}>
+                    <label className={"label"}>Main archive (.java)</label>
+                    <div className={"file"}>
+                        <label className={"file-label"}>
+                            <input className={"file-input"} type={"file"} onChange={onPutSrc} id={"srcFileId"}/>
                             <span className={"file-cta"}>
                             <span className="file-icon">
                               <i className="fas fa-upload"/>
