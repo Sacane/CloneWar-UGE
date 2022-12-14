@@ -24,7 +24,7 @@ public class ArtifactPersistenceIntegrationTest {
 
     @BeforeEach
     public void setupArtifacts(){
-        artifact = new Artifact("artifact123", "testArtifact1.jar", LocalDate.now(), null, null);
+        artifact = new Artifact("artifact123", "testArtifact1.jar", "testArtifact1.jar", LocalDate.now(), null, null);
         artifactRepository.save(artifact);
     }
 
@@ -38,7 +38,7 @@ public class ArtifactPersistenceIntegrationTest {
 
     @Test
     public void uniqueConstraintShouldBeEffective(){
-        var artifact2 = new Artifact("artifact123", "testArtifact1.jar", LocalDate.now(), null, null);
+        var artifact2 = new Artifact("artifact123", "testArtifact1.jar","testArtifact1.jar", LocalDate.now(), null, null);
         artifactRepository.save(artifact2);
         assertThrows(JpaSystemException.class, () -> artifactRepository.count());
     }
