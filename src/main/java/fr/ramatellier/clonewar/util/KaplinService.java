@@ -16,16 +16,12 @@ public class KaplinService {
         this.artifactRepository = artifactRepository;
     }
 
-    public String findNameWithId(String id) {
-        return artifactRepository.findById(UUID.fromString(id)).get().name();
-    }
-
-    public List<String> findAllNameExceptId(String id) {
+    public List<String> findAllIdExceptId(String id) {
         ArrayList<String> names = new ArrayList<>();
 
         artifactRepository.findAll().forEach(a -> {
             // if(!a.id().toString().equals(id))
-                names.add(a.name());
+                names.add(a.id().toString());
         });
 
         return names;

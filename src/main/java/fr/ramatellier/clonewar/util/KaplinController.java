@@ -1,7 +1,5 @@
 package fr.ramatellier.clonewar.util;
 
-import fr.ramatellier.clonewar.artifact.ArtifactController;
-import fr.ramatellier.clonewar.artifact.ArtifactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @RestController
 public class KaplinController {
@@ -18,12 +15,14 @@ public class KaplinController {
 
     @GetMapping(path="/api/kaplin/score/{id}")
     public Flux<Integer> scoreForJar(@PathVariable("id") String id) {
-        String name = service.findNameWithId(id);
-        List<String> names = service.findAllNameExceptId(id);
+        List<String> ids = service.findAllIdExceptId(id);
         var instructions = service.findInstructionsForId(id);
 
-        System.out.println(name);
-        System.out.println(names);
+        System.out.println(id);
+        System.out.println(ids);
+        for(var element: instructions) {
+            System.out.println(element);
+        }
 
         return Flux.just(0);
     }

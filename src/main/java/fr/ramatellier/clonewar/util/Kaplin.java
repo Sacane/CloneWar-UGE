@@ -1,8 +1,7 @@
 package fr.ramatellier.clonewar.util;
 
 import fr.ramatellier.clonewar.instruction.Instruction;
-import fr.ramatellier.clonewar.instruction.InstructionBuilder;
-import fr.ramatellier.clonewar.util.Hasher;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,9 +42,7 @@ public class Kaplin {
         return false;
     }
 
-    public static int compareJarInstructions(String jarName1, String jarName2, byte[] first, byte[] second) throws IOException {
-        var instructionsJar1 = InstructionBuilder.buildInstructionFromJar(jarName1, first);
-        var instructionsJar2 = InstructionBuilder.buildInstructionFromJar(jarName2, second);
+    public static int compareJarInstructions(List<Instruction> instructionsJar1, List<Instruction> instructionsJar2) throws IOException {
         var nbActualInstruction = 0;
         var nbInstruction = instructionsJar1.size();
 
