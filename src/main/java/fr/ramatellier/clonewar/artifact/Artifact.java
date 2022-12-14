@@ -30,7 +30,7 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 //    private byte[] srcFile;
     private LocalDate inputDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @JsonIgnore
     private final List<Instruction> instructions = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
         this.instructions.addAll(instructions);
     }
 
-    public List<Instruction> getInstructions() {
+    public List<Instruction> instructions() {
         return instructions;
     }
 

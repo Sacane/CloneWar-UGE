@@ -1,3 +1,21 @@
 p {
     text-align: center;
 }
+
+.table-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+
+}
+#artifacts{
+    border-radius: 1em;
+    box-shadow: 3px 2px 3px;
+    margin: 10px;
+}
+
+table th{
+    text-align: center;
+}
