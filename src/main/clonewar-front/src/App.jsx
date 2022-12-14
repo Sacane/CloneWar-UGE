@@ -4,12 +4,11 @@ import Artifact from "./component/Artifact/Artifact.jsx";
 import Upload from "./component/Upload/Upload.jsx";
 import React, {useEffect, useState} from "react";
 import artifact from "./component/Artifact/Artifact.jsx";
-
-
+import { useNavigate } from 'react-router-dom';
 
 
 function App() {
-
+    const navigate = useNavigate();
     const [liArtifacts, setLiArtifacts] = useState([]);
 
     useEffect(function() {
@@ -20,7 +19,7 @@ function App() {
                         <td>{a.name}</td>
                         <td>{a.url}</td>
                         <td>{a.date}</td>
-                        <td><button className={"button is-rounded"}>detail</button></td>
+                        <td><button onClick={() => navigate('/detail/' + a.id)} className={"button is-rounded"}>detail</button></td>
                     </tr>
                 )
                 setLiArtifacts(res);

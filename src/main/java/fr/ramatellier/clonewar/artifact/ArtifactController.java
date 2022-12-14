@@ -37,4 +37,9 @@ public class ArtifactController {
         return service.createArtifactFromFileAndThenPersist(mainFile, srcFile);
     }
 
+    @GetMapping(path="/api/artifact/name/{id}")
+    public Mono<String> getNameById(@PathVariable("id") String id) {
+        LOGGER.info("trying to get name from id");
+        return service.getNameById(id);
+    }
 }

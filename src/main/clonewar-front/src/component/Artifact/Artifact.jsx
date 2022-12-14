@@ -16,7 +16,7 @@ function Artifact(props){
                     </tr>
                 </thead>
                 <tbody>
-                {props.artifacts}
+                { props.artifacts }
                 </tbody>
             </table>
         </div>
