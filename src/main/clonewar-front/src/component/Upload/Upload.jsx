@@ -1,27 +1,36 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './Upload.css'
 
 function Upload(props){
 
-    let jar = null;
-    const artifactSave =
-        {
-            name: '',
-            url: '',
-            date: Date.now().toString()
-        }
+    const [srcFile, setSrcFile] = useState({name: ''});
+    const [mainFile, setMainFile] = useState({name: ''});
+    const onPutSrc = (file) => {
+        setSrcFile(file.target.files[0]);
 
-    const updateArtifact = (url) => {
-        artifactSave.url = url;
     }
-    const onPutFiles = (file) => {
-        console.log(file.target.files);
-        jar = file.target.files[0];
+    const onPutMain = (file) => {
+        setMainFile(file.target.files[0]);
     }
     const upload = () => {
-        updateArtifact(jar.name);
+        if(mainFile.name === '' || srcFile.name === ''){
+            alert("You have to put both src and main archives !");
+            return;
+        }
+    let jar = null;
+    let src = null;
+    const onPutSrc = (file) => {
+        src = file.target.files[0];
+        console.log(file.target.files[0]);
+    }
+    const onPutMain = (file) => {
+        jar = file.target.files[0];
+        console.log(file.target.files[0]);
+    }
+    const upload = () => {
         const data = new FormData();
-        data.append("jar", jar);
+        data.append("main", mainFile);
+        data.append("src", srcFile);
         fetch('http://localhost:8087/api/artifact/upload', {
             method: 'POST',
             body: data,
@@ -30,8 +39,8 @@ function Upload(props){
                 props.set(r);
             })
         }).catch(r => {
-            console.log('error !')
-            console.log(r)
+            console.log('TODO : Resolve error properly');
+            console.log(r);
         });
     }
 
@@ -39,12 +48,16 @@ function Upload(props){
         <div className={"Upload"}>
 
             <div className="form">
-                <p><b>Select your jar's source and main archive to create an artifact</b></p>
+                <p><b>Select your project archives</b></p>
                 <div className={"field"}>
-                    <label className={"label"}>Files</label>
+                    <label className={"label"}>Main archive (.class)</label>
                     <div className={"file"}>
                         <label className={"file-label"}>
-                            <input className={"file-input"} type={"file"} onChange={onPutFiles} id={"jarFileId"}/>
+                            <input className={"file-input"} onChange={onPutMain} type={"file"} id={"mainFileId"}/>
+                    <label className={"label"}>Source archive (.class)</label>
+                    <div className={"file"}>
+                        <label className={"file-label"}>
+                            <input className={"file-input"} onChange={onPutMain} type={"file"} id={"mainFileId"}/>
                             <span className={"file-cta"}>
                             <span className="file-icon">
                               <i className="fas fa-upload"/>
@@ -53,6 +66,40 @@ function Upload(props){
                               Select your archives...
                             </span>
                           </span>
+                        </label>
+                    </div>
+                </div>
+                <div className={"field"}>
+                    <label className={"label"}>Main archive (.java)</label>
+                    <div className={"file"}>
+                        <label className={"file-label"}>
+                            <input className={"file-input"} type={"file"} onChange={onPutSrc} id={"srcFileId"}/>
+                            <span className={"file-cta"}>
+                            <span className="file-icon">
+                              <i className="fas fa-upload"/>
+                            </span>
+                            <span className={"file-label"} id={"file-name"}>
+                              Select your archives...
+                            </span>
+                          </span>
+                            <span className={"file-name"}>{mainFile.name}</span>
+                        </label>
+                    </div>
+                </div>
+                <div className={"field"}>
+                    <label className={"label"}>Source archive (.java)</label>
+                    <div className={"file"}>
+                        <label className={"file-label"}>
+                            <input className={"file-input"} type={"file"} onChange={onPutSrc} id={"srcFileId"}/>
+                            <span className={"file-cta"}>
+                            <span className="file-icon">
+                              <i className="fas fa-upload"/>
+                            </span>
+                            <span className={"file-label"} id={"file-name"}>
+                              Select your archives...
+                            </span>
+                          </span>
+                            <span className={"file-name"}>{srcFile.name}</span>
                         </label>
                     </div>
                 </div>
