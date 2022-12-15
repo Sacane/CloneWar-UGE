@@ -9,19 +9,17 @@ function Detail(props) {
     useEffect(function() {
         fetch("http://localhost:8087/api/artifact/name/" + id).then(res => res.text()).then(name => setMainName(name));
 
-        fetch("http://localhost:8087/api/kaplin/score/" + id).then(res => console.log(res));
-        /*fetch("http://localhost:8087/api/artifacts").then(res => res.json())
+        fetch("http://localhost:8087/api/kaplin/score/" + id).then(res => res.json())
             .then(data => {
                 let res = data.map(a =>
-                    <tr key={a.id}>
+                    <tr key = {a.id}>
                         <td>{a.name}</td>
-                        <td>{a.url}</td>
-                        <td>{a.date}</td>
+                        <td>{a.score}</td>
                     </tr>
-                    )
-                    setArtifacts(res);
-            });*/
-    });
+                )
+                setArtifacts(res);
+            });
+    }, []);
 
     return (
         <div className="Detail">
@@ -35,8 +33,7 @@ function Detail(props) {
                     <thead>
                         <tr>
                             <th>Artifact name</th>
-                            <th>Url jar</th>
-                            <th>Input date</th>
+                            <th>Score</th>
                         </tr>
                         </thead>
                         <tbody>

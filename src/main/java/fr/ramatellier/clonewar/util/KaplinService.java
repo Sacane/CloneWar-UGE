@@ -27,6 +27,10 @@ public class KaplinService {
         return names;
     }
 
+    public String findNameForId(String id) {
+        return artifactRepository.findById(UUID.fromString(id)).get().name();
+    }
+
     public List<Instruction> findInstructionsForId(String id) {
         return artifactRepository.findById(UUID.fromString(id)).get().instructions();
     }
