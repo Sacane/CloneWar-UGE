@@ -34,7 +34,7 @@ public class Kaplin {
 
     public static boolean compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
         for(var elem: instructions) {
-            if(elem.hashValue() == instruction.hashValue() && rabinKarp(elem.content(), instruction.content())) {
+            if(elem.hashValue() == instruction.hashValue()) {
                 return true;
             }
         }
@@ -51,6 +51,13 @@ public class Kaplin {
                 nbActualInstruction++;
             }
         }
+
+        System.out.println(nbActualInstruction + " " + nbInstruction);
+
+        var content1 = "LOAD 100";
+        var content2 = "LOAD 100";
+
+        System.out.println(rabinKarp(content1, content2));
 
         return (nbActualInstruction / nbInstruction) * 100;
     }
