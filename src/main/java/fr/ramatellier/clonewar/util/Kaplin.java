@@ -1,30 +1,19 @@
 package fr.ramatellier.clonewar.util;
 
 import fr.ramatellier.clonewar.instruction.Instruction;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class Kaplin {
-    private static int contentLength(String text) {
-        var matcher = Pattern.compile("\n").matcher(text);
-        int occur = 0;
-
-        while(matcher.find()) {
-            occur++;
-        }
-        return occur;
-    }
-
     private static boolean rabinKarp(String s, String pattern) {
         var hashPattern = Hasher.hash(pattern);
 
         for(var i = 0; i < s.length() - pattern.length() + 1; i++) {
             var subS = s.substring(i, i + pattern.length() - 1);
+            System.out.println(subS);
             var hashS = Hasher.hash(subS);
-            if(hashS == hashPattern && contentLength(subS) == contentLength(pattern)) {
+            if(hashS == hashPattern) {
                 return true;
             }
         }
@@ -34,7 +23,7 @@ public class Kaplin {
 
     public static boolean compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
         for(var elem: instructions) {
-            if(elem.hashValue() == instruction.hashValue()) {
+            if(elem.hashValue() == instruction.hashValue() && elem.content().equals(instruction.content())) {
                 return true;
             }
         }
@@ -51,13 +40,6 @@ public class Kaplin {
                 nbActualInstruction++;
             }
         }
-
-        System.out.println(nbActualInstruction + " " + nbInstruction);
-
-        var content1 = "LOAD 100";
-        var content2 = "LOAD 100";
-
-        System.out.println(rabinKarp(content1, content2));
 
         return (nbActualInstruction / nbInstruction) * 100;
     }
