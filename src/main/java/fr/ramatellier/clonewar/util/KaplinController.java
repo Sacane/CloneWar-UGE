@@ -23,7 +23,6 @@ public class KaplinController {
         var instructions = service.findInstructionsForId(id);
 
         for(var secondId: ids) {
-            System.out.println(service.findNameForId(secondId));
             var secondInstructions = service.findInstructionsForId(secondId);
             var score = Kaplin.compareJarInstructions(instructions, secondInstructions);
             list.add(new ScoreDTO(secondId, service.findNameForId(secondId), String.valueOf(score) + "%"));

@@ -38,6 +38,14 @@ public class Instruction {
         this.order = order;
     }
 
+    public Instruction(String filename, int lineNumberStart, String content, long hash, int order) {
+        this.filename = filename;
+        this.lineNumberStart = lineNumberStart;
+        this.content = content;
+        this.hash = hash;
+        this.order = order;
+    }
+
     public String filename() {
         return filename;
     }

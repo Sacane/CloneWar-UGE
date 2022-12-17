@@ -1,11 +1,10 @@
 package fr.ramatellier.clonewar.instruction;
 
 import fr.ramatellier.clonewar.util.AsmParser;
+import fr.ramatellier.clonewar.util.Hasher;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -52,14 +51,21 @@ public class InstructionBuilder {
         hasFirstLine = false;
     }
 
-    private static List<String> cutStringWithWindow(String[] content, int window) {
-        var contentList = new ArrayList<String>();
+    private static Map<String, Long> cutStringWithWindow(String[] content, int window) {
+        var contentList = new HashMap<String, Long>();
+        var hash = new long[content.length];
+        for(var i = 0; i < content.length; i++) {
+            hash[i] = Hasher.hash(content[i]);
+        }
+
         for(var i = 0; i < content.length - window + 1; i++) {
             var newContent = new StringBuilder();
+            long hashScore = 0;
             for(var j = i; j < i + window; j++) {
                 newContent.append(content[j]);
+                hashScore += hash[j];
             }
-            contentList.add(newContent.toString());
+            contentList.put(newContent.toString(), hashScore);
         }
         return contentList;
     }
@@ -71,14 +77,10 @@ public class InstructionBuilder {
         var instructions = AsmParser.getInstructionsFromJar(jarName, bytes);
         for(var instruction: instructions) {
             var content = cutStringWithWindow(instruction.content().split("\n"), window);
-            for(var elem: content) {
-                list.add(new Instruction(instruction.filename(), instruction.getLineNumberStart(), elem, instruction.order()));
+            for(var element: content.entrySet()) {
+                list.add(new Instruction(instruction.filename(), instruction.getLineNumberStart(), element.getKey(), instruction.order()));
             }
         }
-        /*var content = cutStringWithWindow(AsmParser.getInstructionsFromJar(jarName, bytes).get(0).content().split("\n"), window);
-        for(var elem: content) {
-            list.add(new Instruction(jarName, 0, elem, 0));
-        }*/
 
         return list;
     }
