@@ -17,7 +17,7 @@ public class Kaplin {
 
     public static int compareJarInstructions(List<Instruction> instructionsJar1, List<Instruction> instructionsJar2) {
         var nbActualInstruction = 0;
-        var nbInstruction = instructionsJar1.size();
+        double nbInstruction = instructionsJar1.size();
 
         for(var instruction: instructionsJar1) {
             if(compareInstructionWithJarInstructions(instruction, instructionsJar2)) {
@@ -25,6 +25,6 @@ public class Kaplin {
             }
         }
 
-        return (nbActualInstruction / nbInstruction) * 100;
+        return (int) ((nbActualInstruction / nbInstruction) * 100);
     }
 }

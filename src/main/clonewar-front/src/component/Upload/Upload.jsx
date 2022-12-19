@@ -24,9 +24,11 @@ function Upload(props){
             method: 'POST',
             body: data,
         }).then(data => {
-            data.json().then(r => {
-                props.set(r);
-            })
+            if(data.status === 200) {
+                data.json().then(r => {
+                    props.set(r);
+                })
+            }
         }).catch(r => {
             console.log('TODO : Resolve error properly');
             console.log(r);

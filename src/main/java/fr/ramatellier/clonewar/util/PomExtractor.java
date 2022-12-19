@@ -69,7 +69,7 @@ public class PomExtractor {
 //            if(m2.find() && !m.find()) depth++;
 //        }
 //        return Optional.empty();
-        if(!pomContent.endsWith("</project>")) throw new IllegalArgumentException("This content is not a pom content");
+        if(!pomContent.trim().endsWith("</project>")) throw new IllegalArgumentException("This content is not a pom content");
         var pattern = Pattern.compile("<artifactId>(.*?)</artifactId>", Pattern.DOTALL);
         Matcher m;
         var lines = pomContent.split("\n");

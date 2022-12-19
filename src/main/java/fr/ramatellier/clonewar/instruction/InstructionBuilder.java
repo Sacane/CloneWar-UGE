@@ -51,19 +51,27 @@ public class InstructionBuilder {
         hasFirstLine = false;
     }
 
-    private static Map<String, Long> cutStringWithWindow(String[] content, int window) {
+    static Map<String, Long> cutStringWithWindow(String[] content, int window) {
         var contentList = new HashMap<String, Long>();
         var hash = new long[content.length];
+        var hashScore = 0L;
+        if(content.length < window) {
+            return contentList;
+        }
         for(var i = 0; i < content.length; i++) {
             hash[i] = Hasher.hash(content[i]);
+        }
+        for(var i = 0; i < window; i++) {
+            hashScore += hash[i];
         }
 
         for(var i = 0; i < content.length - window + 1; i++) {
             var newContent = new StringBuilder();
-            long hashScore = 0;
             for(var j = i; j < i + window; j++) {
                 newContent.append(content[j]);
-                hashScore += hash[j];
+            }
+            if(i != 0) {
+                hashScore = hashScore - hash[i - 1] + hash[i + window - 1];
             }
             contentList.put(newContent.toString(), hashScore);
         }
