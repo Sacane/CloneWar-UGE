@@ -5,6 +5,7 @@ import fr.ramatellier.clonewar.instruction.Instruction;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public class RabinKapService {
         return artifactRepository.findById(UUID.fromString(id)).get().instructions();
     }
 
-    public ArrayList<ScoreDTO> scoreByJar(String id){
+    public List<ScoreDTO> scoreByJar(String id){
         var list = new ArrayList<ScoreDTO>();
         var ids = findAllIdExceptId(id);
         var instructions = findInstructionsForId(id);
@@ -43,10 +44,9 @@ public class RabinKapService {
         for(var secondId: ids) {
             var secondInstructions = findInstructionsForId(secondId);
             var score = RabinKarp.compareJarInstructions(instructions, secondInstructions);
-            list.add(new ScoreDTO(secondId, findNameForId(secondId), score + "%"));
+            list.add(new ScoreDTO(secondId, findNameForId(secondId), String.valueOf(score)));
         }
-        return list;
+
+        return list.stream().sorted(Comparator.comparing(ScoreDTO::score)).toList();
     }
-
-
 }
