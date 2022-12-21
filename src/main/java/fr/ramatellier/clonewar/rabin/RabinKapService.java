@@ -1,7 +1,6 @@
 package fr.ramatellier.clonewar.rabin;
 
 import fr.ramatellier.clonewar.artifact.ArtifactRepository;
-import fr.ramatellier.clonewar.artifact.dto.ScoreDTO;
 import fr.ramatellier.clonewar.instruction.Instruction;
 import org.springframework.stereotype.Service;
 

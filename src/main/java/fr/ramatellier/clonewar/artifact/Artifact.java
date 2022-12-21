@@ -2,7 +2,6 @@ package fr.ramatellier.clonewar.artifact;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.ramatellier.clonewar.EntitySerializable;
-import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
 import fr.ramatellier.clonewar.instruction.Instruction;
 import jakarta.persistence.*;
 import java.time.LocalDate;

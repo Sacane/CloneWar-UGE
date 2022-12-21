@@ -1,6 +1,5 @@
 package fr.ramatellier.clonewar.artifact;
 
-import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
 import fr.ramatellier.clonewar.exception.InvalidJarException;
 import fr.ramatellier.clonewar.exception.UniqueConstraintException;
 import fr.ramatellier.clonewar.exception.PomNotFoundException;

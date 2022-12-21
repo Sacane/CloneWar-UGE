@@ -1,17 +1,10 @@
 package fr.ramatellier.clonewar.artifact;
 
-import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
-import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Duration;
 import java.util.logging.Logger;
 
 
