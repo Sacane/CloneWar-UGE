@@ -1,11 +1,11 @@
-package fr.ramatellier.clonewar.util;
+package fr.ramatellier.clonewar.rabin;
 
 import fr.ramatellier.clonewar.instruction.Instruction;
 
 import java.util.List;
 
-public class Kaplin {
-    public static boolean compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
+public class RabinKarp {
+    private static boolean compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
         for(var elem: instructions) {
             if(elem.hashValue() == instruction.hashValue() && elem.content().equals(instruction.content())) {
                 return true;

@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * TODO all the logic here has to be refract because a builder should take the filename of the
- */
 public class InstructionBuilder {
     private final ArrayList<Instruction> instructions = new ArrayList<>();
     private StringBuilder actualInstruction = new StringBuilder();
@@ -51,20 +48,13 @@ public class InstructionBuilder {
         hasFirstLine = false;
     }
 
-    static Map<String, Long> cutStringWithWindow(String[] content, int window) {
+
+    private static Map<String, Long> instructionToScore(String[] content, int window, long[] hash){
         var contentList = new HashMap<String, Long>();
-        var hash = new long[content.length];
         var hashScore = 0L;
-        if(content.length < window) {
-            return contentList;
-        }
-        for(var i = 0; i < content.length; i++) {
-            hash[i] = Hasher.hash(content[i]);
-        }
         for(var i = 0; i < window; i++) {
             hashScore += hash[i];
         }
-
         for(var i = 0; i < content.length - window + 1; i++) {
             var newContent = new StringBuilder();
             for(var j = i; j < i + window; j++) {
@@ -76,6 +66,17 @@ public class InstructionBuilder {
             contentList.put(newContent.toString(), hashScore);
         }
         return contentList;
+    }
+    static Map<String, Long> cutStringWithWindow(String[] content, int window) {
+        var contentList = new HashMap<String, Long>();
+        var hash = new long[content.length];
+        if(content.length < window) {
+            return contentList;
+        }
+        for(var i = 0; i < content.length; i++) {
+            hash[i] = Hasher.hash(content[i]);
+        }
+        return instructionToScore(content, window, hash);
     }
 
     public static ArrayList<Instruction> buildInstructionFromJar(String jarName, byte[] bytes) throws IOException {
