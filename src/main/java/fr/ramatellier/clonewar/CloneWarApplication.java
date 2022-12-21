@@ -1,6 +1,7 @@
 package fr.ramatellier.clonewar;
 
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
+import fr.ramatellier.clonewar.instruction.InstructionDTO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,5 +14,4 @@ public class CloneWarApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CloneWarApplication.class, args);
 	}
-
 }

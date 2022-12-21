@@ -12,4 +12,4 @@ out/
 .vscode
 
 ## Unwanted in production
-./database/*.db
+database/*.db

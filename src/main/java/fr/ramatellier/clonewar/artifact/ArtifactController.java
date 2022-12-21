@@ -1,10 +1,10 @@
 package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
-import fr.ramatellier.clonewar.artifact.dto.ArtifactSaveDTO;
-import fr.ramatellier.clonewar.artifact.dto.ArtifactUploadDTO;
+import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -20,16 +20,10 @@ public class ArtifactController {
 
     private final ArtifactService service;
     private static final Logger LOGGER = Logger.getLogger(ArtifactController.class.getName());
-    public static final Path UPLOAD_PATH = Paths.get("./src/main/resources/upload/");
     public ArtifactController(ArtifactService service){
         this.service = service;
     }
 
-    @PostMapping(path = "/api/artifact/save")
-    public Mono<ArtifactDTO> save(@RequestBody ArtifactSaveDTO artifact){
-        LOGGER.info("Trying to persist an simple artifact without instructions");
-        return service.saveArtifact(artifact.toEntity());
-    }
 
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
@@ -38,9 +32,14 @@ public class ArtifactController {
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
-    public Mono<ArtifactDTO> uploadJarFile(@RequestPart("jar") FilePart jarFile){
-        LOGGER.info("Attempt to upload a file: " + jarFile.filename());
-        return service.createArtifactFromFileAndThenPersist(jarFile);
+    public Mono<ArtifactDTO> uploadJarFile(@RequestPart("src") FilePart srcFile, @RequestPart("main") FilePart mainFile) {
+        LOGGER.info("Trying to analyze main file : " + mainFile.filename() + " and src file : " + srcFile.filename());
+        return service.createArtifactFromFileAndThenPersist(mainFile, srcFile);
     }
 
+    @GetMapping(path="/api/artifact/name/{id}")
+    public Mono<String> getNameById(@PathVariable("id") String id) {
+        LOGGER.info("trying to get name from id");
+        return service.getNameById(id);
+    }
 }

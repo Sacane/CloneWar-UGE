@@ -8,7 +8,6 @@ import java.util.UUID;
 @Entity
 @Table(name="instruction")
 public class Instruction {
-
     private static final long serialUUID = 2233498293L;
 
     @Id
@@ -39,6 +38,14 @@ public class Instruction {
         this.order = order;
     }
 
+    public Instruction(String filename, int lineNumberStart, String content, long hash, int order) {
+        this.filename = filename;
+        this.lineNumberStart = lineNumberStart;
+        this.content = content;
+        this.hash = hash;
+        this.order = order;
+    }
+
     public String filename() {
         return filename;
     }
@@ -50,6 +57,7 @@ public class Instruction {
     public long hashValue() {
         return hash;
     }
+
     public String content() {
         return content;
     }

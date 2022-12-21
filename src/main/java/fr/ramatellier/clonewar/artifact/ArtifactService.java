@@ -1,24 +1,23 @@
 package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
+import fr.ramatellier.clonewar.exception.InvalidJarException;
+import fr.ramatellier.clonewar.exception.UniqueConstraintException;
+import fr.ramatellier.clonewar.exception.PomNotFoundException;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
-import fr.ramatellier.clonewar.util.AsmParser;
-import fr.ramatellier.clonewar.util.ByteResourceReader;
 import fr.ramatellier.clonewar.util.PomExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @Service
@@ -26,61 +25,63 @@ public class ArtifactService {
 
     private final static Logger LOGGER = Logger.getLogger(ArtifactService.class.getName());
     private final ArtifactRepository repository;
-    private final TransactionTemplate transactionTemplate;
     private final Scheduler schedulerCtx;
-    private static final String UPLOAD_PATH = "./src/main/resources/upload/";
 
-    public ArtifactService(ArtifactRepository repository, TransactionTemplate transactionTemplate, @Qualifier("schedulerCtx") Scheduler schedulerCtx){
+    public ArtifactService(ArtifactRepository repository, @Qualifier("schedulerCtx") Scheduler schedulerCtx){
         this.repository = repository;
-        this.transactionTemplate = transactionTemplate;
         this.schedulerCtx = schedulerCtx;
-    }
-
-    /**
-     * TODO REMOVE
-     * @Deprecated
-     * @param entity
-     * @return
-     */
-    public Mono<ArtifactDTO> saveArtifact(Artifact entity){
-        return Mono.fromCallable(() -> transactionTemplate.execute(status -> {
-            var entityResponse = repository.save(entity);
-            return new ArtifactDTO(entityResponse.id().toString(), entityResponse.name(), entityResponse.inputDate().toString(), entityResponse.url(), null);
-        })).subscribeOn(schedulerCtx);
     }
 
     //SRC -> .JAVA
     ///MAIN -> .CLASS
-    private Artifact createArtifactByInfos(byte[] srcContent, byte[] mainContent) throws IOException {
-        var artifactIdOptional = PomExtractor.getProjectArtifactId(srcContent);
-        if(artifactIdOptional.isEmpty()) throw new NoSuchElementException("There is no artifactId in this pom content");
-        var artifactId = artifactIdOptional.get();
+    private Artifact createArtifactByInfos(String mainName, String srcName, byte[] srcContent, byte[] mainContent) throws IOException {
+        var artifactId = PomExtractor.getProjectArtifactId(srcContent)
+                .orElseThrow(() -> new PomNotFoundException("There is no pom.xml in this source jar"));
         var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
-        var artifact = new Artifact(artifactId, artifactId, LocalDate.now(), mainContent, srcContent); //TODO replace second argument to URL
+        var artifact = new Artifact(artifactId, mainName, srcName, LocalDate.now(), mainContent, srcContent);
         artifact.addAllInstructions(instructions);
         System.out.println("Instructions --> " + instructions);
         return artifact;
     }
 
-    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(FilePart filePart){
-        LOGGER.info("Persist file :" + filePart.filename());
-        return filePart.content().publishOn(Schedulers.boundedElastic()).map(signal -> {
-            try(var sig = signal.asInputStream()){
-                var bytes = sig.readAllBytes();
-                var srcBytes = Files.readAllBytes(Path.of("src/test/resources/samples/SeqSrc.jar")); //TODO remove this and replace by the given src jar(from front)
-                var artifact = createArtifactByInfos(srcBytes, bytes);
-                return repository.save(artifact).toDto();
+    private Mono<byte[]> retrieveBytesFromFilePart(FilePart filePart){
+        return filePart.content().publishOn(Schedulers.boundedElastic()).map(part -> {
+            try {
+                return part.asInputStream().readAllBytes();
             } catch (IOException e) {
-                throw new AssertionError(e);
+                throw new InvalidJarException(e);
             }
         }).single();
+    }
+
+    Artifact saveArtifact(Artifact artifact){
+        try{
+            return repository.save(artifact);
+        }catch (DataAccessException e){
+            throw new UniqueConstraintException(e);
+        }
+    }
+
+    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(FilePart mainPart, FilePart srcPart){
+        LOGGER.info("Persist files main :" + mainPart.filename() + " and its src : " + srcPart.filename());
+        return retrieveBytesFromFilePart(mainPart)
+                .flatMap(mainBytes -> retrieveBytesFromFilePart(srcPart).map(srcBytes -> {
+                                    try {
+                                        var artifact = createArtifactByInfos(mainPart.filename(), srcPart.filename(), srcBytes, mainBytes);
+                                        return saveArtifact(artifact).toDto();
+                                    } catch (IOException e) {
+                                        throw new InvalidJarException(e);
+                                    }
+                                }
+                ));
     }
 
     public Flux<Artifact> findAll(){
         var defer = Flux.defer(() -> Flux.fromIterable(repository.findAll()));
         return defer.subscribeOn(schedulerCtx);
     }
-    public void configure(){
-        var artifact = repository.findByName("");
+
+    public Mono<String> getNameById(String id) {
+        return Mono.just(repository.findById(UUID.fromString(id)).get().name());
     }
 }

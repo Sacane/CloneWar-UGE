@@ -28,11 +28,11 @@ public class ArtifactWebLayerIntegrationTest {
     private ArtifactRepository repository;
 
     private static final List<Artifact> artifacts = List.of(
-            new Artifact("artifact1", "artifact1.jar", LocalDate.now(), null, null),
-            new Artifact("artifact2", "artifact2.jar", LocalDate.now(), null, null),
-            new Artifact("artifact3", "artifact3.jar", LocalDate.now(), null, null),
-            new Artifact("artifact4", "artifact4.jar", LocalDate.now(), null, null),
-            new Artifact("artifact5", "artifact5.jar", LocalDate.now(), null, null)
+            new Artifact("artifact1", "artifact1.jar", "artifact1.jar", LocalDate.now(), null, null),
+            new Artifact("artifact2", "artifact2.jar", "artifact1.jar", LocalDate.now(), null, null),
+            new Artifact("artifact3", "artifact3.jar", "artifact1.jar", LocalDate.now(), null, null),
+            new Artifact("artifact4", "artifact4.jar", "artifact1.jar", LocalDate.now(), null, null),
+            new Artifact("artifact5", "artifact5.jar", "artifact1.jar", LocalDate.now(), null, null)
     );
 
 
@@ -40,19 +40,6 @@ public class ArtifactWebLayerIntegrationTest {
         return a1.name().equals(a2.name()) && a1.url().equals(a2.url()) && a1.date().equals(a2.date());
     }
 
-
-    @Test
-    public void testEndpointSavingArtifact(){
-        String randomUUID = UUID.randomUUID().toString();
-        ArtifactDTO dto = new ArtifactDTO(randomUUID, "artifact0", LocalDate.now().toString(), "./repo/test/artifact.jar", null);
-        webClient.post()
-                .uri("/api/artifact/save")
-                .body(Mono.just(dto), ArtifactDTO.class)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(ArtifactDTO.class)
-                .value(artifactDTO -> artifactsMatches(artifactDTO, dto), IsEqual.equalTo(true));
-    }
 
     @Test
     public void testEndpointFindAllArtifacts(){
@@ -64,10 +51,10 @@ public class ArtifactWebLayerIntegrationTest {
                 .expectStatus().isOk()
                 .expectBodyList(ArtifactDTO.class)
                 .value(List::size, IsEqual.equalTo(5))
-                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact1", LocalDate.now().toString(), "artifact1.jar", null))), IsEqual.equalTo(true))
-                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact2", LocalDate.now().toString(), "artifact2.jar", null))), IsEqual.equalTo(true))
-                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact3", LocalDate.now().toString(), "artifact3.jar", null))), IsEqual.equalTo(true))
-                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact4", LocalDate.now().toString(), "artifact4.jar", null))), IsEqual.equalTo(true))
-                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(null, "artifact5", LocalDate.now().toString(), "artifact5.jar", null))), IsEqual.equalTo(true));
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(UUID.randomUUID().toString(), "artifact1", LocalDate.now().toString(), "artifact1.jar", null))), IsEqual.equalTo(true))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(UUID.randomUUID().toString(), "artifact2", LocalDate.now().toString(), "artifact2.jar", null))), IsEqual.equalTo(true))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(UUID.randomUUID().toString(), "artifact3", LocalDate.now().toString(), "artifact3.jar", null))), IsEqual.equalTo(true))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(UUID.randomUUID().toString(), "artifact4", LocalDate.now().toString(), "artifact4.jar", null))), IsEqual.equalTo(true))
+                .value(list -> list.stream().anyMatch(artifactDTO -> artifactsMatches(artifactDTO, new ArtifactDTO(UUID.randomUUID().toString(), "artifact5", LocalDate.now().toString(), "artifact5.jar", null))), IsEqual.equalTo(true));
     }
 }
