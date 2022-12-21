@@ -48,39 +48,30 @@ public class PomExtractor {
     }
 
     static Optional<String> retrieveArtifactFromContent(String pomContent){
-//        if(!pomContent.endsWith("</project>")) throw new IllegalArgumentException("This content is not a pom content");
-//        var pattern = Pattern.compile("<artifactId>(.*?)</artifactId>", Pattern.DOTALL);
-//        var entryPattern = Pattern.compile("<(.*?)>", Pattern.DOTALL);
-//        var outPattern = Pattern.compile("</(.*?)>", Pattern.DOTALL);
-//        int depth = 0;
-//        var lines = pomContent.split("\n");
-//        for(var line : lines){
-//            var m = pattern.matcher(line);
-//            if(m.find() && depth == 1){
-//                return Optional.of(m.group(1));
-//            }
-//            m = outPattern.matcher(line.trim());
-//            if(m.matches()) {
-//                depth--;
-//                continue;
-//            }
-//            var m2 = entryPattern.matcher(line);
-//            if(m.find() && m2.find()) continue;
-//            if(m2.find() && !m.find()) depth++;
-//        }
-//        return Optional.empty();
-        if(!pomContent.trim().endsWith("</project>")) throw new IllegalArgumentException("This content is not a pom content");
         var pattern = Pattern.compile("<artifactId>(.*?)</artifactId>", Pattern.DOTALL);
-        Matcher m;
+        var inPattern = Pattern.compile("<[^/](.*?)>", Pattern.DOTALL);
+        var outPattern = Pattern.compile("</(.*?)>", Pattern.DOTALL);
+        int depth = 0;
         var lines = pomContent.split("\n");
         for(var line : lines){
-            m = pattern.matcher(line);
-            if(m.find()){
-                return Optional.of(m.group(1));
+            var trim = line.trim();
+            if(trim.startsWith("<?xml") || !trim.startsWith("<")) continue;
+            if(trim.startsWith("<project")) {
+                depth++;
+                continue;
             }
+            var m = pattern.matcher(trim);
+            var out = outPattern.matcher(trim);
+            var in = inPattern.matcher(trim);
+            if(in.find()) {
+                depth++;
+            }
+            if(out.find()) depth--;
+            System.out.println(depth + " line -> " + trim);
+            if(m.find() && depth == 1) return Optional.of(m.group(1));
         }
+        System.out.println("Empty");
         return Optional.empty();
-
     }
 
     public static Optional<String> getProjectArtifactId(byte[] srcContent) throws IOException {

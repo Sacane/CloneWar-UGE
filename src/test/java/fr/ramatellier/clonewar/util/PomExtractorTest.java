@@ -72,7 +72,6 @@ public class PomExtractorTest {
     public void extractorShouldRetrieveTheGoodArtifactId(){
         var content = """
                 <project>
-                
                         <modelVersion>4.0.0</modelVersion>
                         <groupId>fr.ramatellier</groupId>
                         <version>0.0.1-SNAPSHOT</version>
@@ -82,6 +81,9 @@ public class PomExtractorTest {
                             <name>Parent</name>
                             <artifactId>ParentId</artifactId>
                         </parent>
+                        <child>
+                            <name>Child</name>
+                        </child>
                         <artifactId>CloneWar</artifactId>
                 </project>
                 """.trim();
