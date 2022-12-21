@@ -10,7 +10,7 @@ import java.lang.module.ModuleFinder;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class AsmParser {
+public final class AsmParser {
 
     public static void printStream(Path path) throws IOException {
         var finder = ModuleFinder.of(path);

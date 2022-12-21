@@ -4,7 +4,7 @@ import fr.ramatellier.clonewar.instruction.Instruction;
 
 import java.util.List;
 
-public class RabinKarp {
+public final class RabinKarp {
     private static boolean compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
         for(var elem: instructions) {
             if(elem.hashValue() == instruction.hashValue() && elem.content().equals(instruction.content())) {
