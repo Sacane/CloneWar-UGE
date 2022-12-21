@@ -31,7 +31,7 @@ public class RabinKapService {
         return artifactRepository.findById(UUID.fromString(id)).get().name();
     }
 
-    public List<Instruction> findInstructionsForId(String id) {
+    private List<Instruction> findInstructionsForId(String id) {
         return artifactRepository.findById(UUID.fromString(id)).get().instructions();
     }
 
