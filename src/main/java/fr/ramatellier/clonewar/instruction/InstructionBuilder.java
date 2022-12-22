@@ -2,6 +2,8 @@ package fr.ramatellier.clonewar.instruction;
 
 import fr.ramatellier.clonewar.util.AsmParser;
 import fr.ramatellier.clonewar.util.Hasher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -10,6 +12,8 @@ import java.util.stream.Collectors;
 public class InstructionBuilder {
     private final ArrayList<Instruction> instructions = new ArrayList<>();
     private StringBuilder actualInstruction = new StringBuilder();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstructionBuilder.class);
     private int actualFirstLine;
     private boolean hasFirstLine;
     private int order = 0;
@@ -80,11 +84,14 @@ public class InstructionBuilder {
     }
 
     public static ArrayList<Instruction> buildInstructionFromJar(String jarName, byte[] bytes) throws IOException {
+        LOGGER.info("start building instructions...");
         var window = 4;
         var list = new ArrayList<Instruction>();
-
+        LOGGER.info("Get instruction from jar");
         var instructions = AsmParser.getInstructionsFromJar(jarName, bytes);
+        LOGGER.info("start indexing (using rabin karp)");
         for(var instruction: instructions) {
+            LOGGER.info("Treating a new instruction");
             var content = cutStringWithWindow(instruction.content().split("\n"), window);
             for(var element: content.entrySet()) {
                 list.add(new Instruction(instruction.filename(), instruction.getLineNumberStart(), element.getKey(), instruction.order()));

@@ -14,7 +14,10 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -32,6 +35,7 @@ public class ArtifactService {
     }
 
     private Artifact createArtifactByInfos(String mainName, String srcName, byte[] srcContent, byte[] mainContent) throws IOException {
+        LOGGER.info("Create artifact");
         var artifactId = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.ARTIFACT_ID)
                 .orElseThrow(() -> new PomNotFoundException("There is no pom.xml in this source jar"));
         var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
@@ -44,6 +48,7 @@ public class ArtifactService {
     private Mono<byte[]> retrieveBytesFromFilePart(FilePart filePart){
         return filePart.content().publishOn(Schedulers.boundedElastic()).map(part -> {
             try {
+                LOGGER.info("Test");
                 return part.asInputStream().readAllBytes();
             } catch (IOException e) {
                 throw new InvalidJarException(e);
@@ -64,13 +69,30 @@ public class ArtifactService {
         return retrieveBytesFromFilePart(mainPart)
                 .flatMap(mainBytes -> retrieveBytesFromFilePart(srcPart).map(srcBytes -> {
                                     try {
+                                        LOGGER.info("createArtifactFromFile");
                                         var artifact = createArtifactByInfos(mainPart.filename(), srcPart.filename(), srcBytes, mainBytes);
+                                        LOGGER.info("Artifact created");
                                         return saveArtifact(artifact).toDto();
                                     } catch (IOException e) {
+                                        LOGGER.info("error");
                                         throw new InvalidJarException(e);
                                     }
                                 }
                 ));
+    }
+    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(byte[] byteMain, byte[] byteSrc){
+        return Mono.fromCallable(() -> {
+           var artifact = createArtifactByInfos("main", "src", byteMain, byteSrc);
+           return saveArtifact(artifact).toDto();
+        });
+    }
+    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(File mainFile, File srcFile){
+        return Mono.fromCallable(() -> {
+            var artifact = createArtifactByInfos(mainFile.getName(), srcFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
+            mainFile.delete();
+            srcFile.delete();
+            return saveArtifact(artifact).toDto();
+        });
     }
 
     public Flux<Artifact> findAll(){

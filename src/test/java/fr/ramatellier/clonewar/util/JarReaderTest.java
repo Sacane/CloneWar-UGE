@@ -12,7 +12,7 @@ public class JarReaderTest {
 
     @Test
     public void storeShouldNotThrowAnyException(){
-        var jar = new File("./src/test/resources/samples/SeqMain.jar");
+        var jar = new File("./src/test/resources/samples/guavaMain.jar");
         try{
             var bytes = Files.readAllBytes(jar.toPath());
             var reader = new JarReader(bytes);
