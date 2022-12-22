@@ -31,10 +31,8 @@ public class ArtifactService {
         this.schedulerCtx = schedulerCtx;
     }
 
-    //SRC -> .JAVA
-    ///MAIN -> .CLASS
     private Artifact createArtifactByInfos(String mainName, String srcName, byte[] srcContent, byte[] mainContent) throws IOException {
-        var artifactId = PomExtractor.getProjectArtifactId(srcContent)
+        var artifactId = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.ARTIFACT_ID)
                 .orElseThrow(() -> new PomNotFoundException("There is no pom.xml in this source jar"));
         var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
         var artifact = new Artifact(artifactId, mainName, srcName, LocalDate.now(), mainContent, srcContent);

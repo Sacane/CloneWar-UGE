@@ -3,9 +3,6 @@ package fr.ramatellier.clonewar.util;
 import fr.ramatellier.clonewar.exception.PomNotFoundException;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PomExtractorTest {
@@ -31,7 +28,7 @@ public class PomExtractorTest {
                         <description>Project allow people to detect plagiarism between two projects</description>
                 </project>
                 """.trim();
-        var artifact = PomExtractor.retrieveArtifactFromContent(content);
+        var artifact = PomExtractor.extract(content, PomExtractor.XMLObject.ARTIFACT_ID);
         assertTrue(artifact.isPresent());
         assertEquals("CloneWar", artifact.get());
     }
@@ -50,7 +47,7 @@ public class PomExtractorTest {
                         </parent>
                 </project>
                 """.trim();
-        var res = PomExtractor.retrieveArtifactFromContent(content);
+        var res = PomExtractor.extract(content, PomExtractor.XMLObject.ARTIFACT_ID);
         assertTrue(res.isEmpty());
     }
     @Test
@@ -64,7 +61,7 @@ public class PomExtractorTest {
                         <description>Project allow people to detect plagiarism between two projects</description>
                 </project>
                 """.trim();
-        var artifact = PomExtractor.retrieveArtifactFromContent(content);
+        var artifact = PomExtractor.extract(content, PomExtractor.XMLObject.ARTIFACT_ID);
         assertTrue(artifact.isEmpty());
     }
 
@@ -87,10 +84,37 @@ public class PomExtractorTest {
                         <artifactId>CloneWar</artifactId>
                 </project>
                 """.trim();
-        var res = PomExtractor.retrieveArtifactFromContent(content);
+        var res = PomExtractor.extract(content, PomExtractor.XMLObject.ARTIFACT_ID);
         assertTrue(res.isPresent());
         assertNotEquals("Parent", res.get());
         assertEquals("CloneWar", res.get());
+    }
+
+    @Test
+    public void shouldRetrieveTheGoodVersion(){
+        var content = """
+                <project>
+                        <modelVersion>4.0.0</modelVersion>
+                        <groupId>fr.ramatellier</groupId>
+                        <name>CloneWar</name>
+                        <description>Project allow people to detect plagiarism between two projects</description>
+                        <parent>
+                            <name>Parent</name>
+                            <artifactId>ParentId</artifactId>
+                            <version>0.1</version>
+                        </parent>
+                        <child>
+                            <name>Child</name>
+                            <version>0.2</version>
+                        </child>
+                        <artifactId>CloneWar</artifactId>
+                        <version>0.0.1</version>
+                </project>
+                """.trim();
+        var res = PomExtractor.extract(content, PomExtractor.XMLObject.VERSION);
+        assertTrue(res.isPresent());
+        assertNotEquals("Parent", res.get());
+        assertEquals("0.0.1", res.get());
     }
 
     @Test

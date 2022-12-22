@@ -34,7 +34,7 @@ public class ByteResourceReaderTest {
                         var md = r.open(filename).orElseThrow();
                         Scanner scan = new Scanner(md).useDelimiter("\\A");
                         String result = scan.hasNext() ? scan.next() : "";
-                        s = PomExtractor.retrieveArtifactFromContent(result).get();
+                        s = PomExtractor.extract(result, PomExtractor.XMLObject.ARTIFACT_ID).get();
                         assertEquals("seq", s);
                         break;
                     }
