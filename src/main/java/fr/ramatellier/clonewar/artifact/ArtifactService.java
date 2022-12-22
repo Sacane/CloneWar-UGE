@@ -53,7 +53,7 @@ public class ArtifactService {
         }).single();
     }
 
-    Artifact saveArtifact(Artifact artifact){
+    private Artifact saveArtifact(Artifact artifact){
         try{
             return repository.save(artifact);
         }catch (DataAccessException e){

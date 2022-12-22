@@ -80,7 +80,7 @@ public class InstructionBuilder {
     }
 
     public static ArrayList<Instruction> buildInstructionFromJar(String jarName, byte[] bytes) throws IOException {
-        var window = 3;
+        var window = 4;
         var list = new ArrayList<Instruction>();
 
         var instructions = AsmParser.getInstructionsFromJar(jarName, bytes);

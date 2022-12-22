@@ -15,7 +15,7 @@ public final class RabinKarp {
         return false;
     }
 
-    public static int compareJarInstructions(List<Instruction> instructionsJar1, List<Instruction> instructionsJar2) {
+    public static int onInstructions(List<Instruction> instructionsJar1, List<Instruction> instructionsJar2) {
         var nbActualInstruction = 0;
         double nbInstruction = instructionsJar1.size();
 

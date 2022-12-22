@@ -43,7 +43,7 @@ public class RabinKapService {
 
         for(var secondId: ids) {
             var secondInstructions = findInstructionsForId(secondId);
-            var score = RabinKarp.compareJarInstructions(instructions, secondInstructions);
+            var score = RabinKarp.onInstructions(instructions, secondInstructions);
             list.add(new ScoreDTO(secondId, findNameForId(secondId), String.valueOf(score)));
         }
 
