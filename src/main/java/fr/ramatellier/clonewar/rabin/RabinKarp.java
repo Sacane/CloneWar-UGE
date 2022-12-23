@@ -16,16 +16,15 @@ import java.util.concurrent.Future;
 public final class RabinKarp {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabinKarp.class);
     private static boolean compareInstructionWithJarInstructions(Instruction instruction, List<Instruction> instructions) {
-        for(var elem: instructions) {
-            if(elem.hashValue() == instruction.hashValue() && elem.content().equals(instruction.content())) {
-                return true;
-            }
-        }
-        return false;
-//        LOGGER.info("start comparing");
-//        var value = instructions.stream().anyMatch(f -> f.hashValue() == instruction.hashValue());
-//        LOGGER.info("end comparing");
-//        return value;
+//        for(var elem: instructions) {
+//            if(elem.hashValue() == instruction.hashValue() && elem.content().equals(instruction.content())) {
+//                return true;
+//            }
+//        }
+//        return false;
+        return instructions
+                .stream()
+                .anyMatch(f -> f.hashValue() == instruction.hashValue() && f.content().equals(instruction.content()));
     }
 
     public static int onInstructions(List<Instruction> instructionsJar1, List<Instruction> instructionsJar2) {

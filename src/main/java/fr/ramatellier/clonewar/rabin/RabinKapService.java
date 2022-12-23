@@ -24,7 +24,7 @@ public class RabinKapService {
         ArrayList<String> names = new ArrayList<>();
 
         artifactRepository.findAll().forEach(a -> {
-            // if(!a.id().toString().equals(id))
+             if(!a.id().toString().equals(id))
                 names.add(a.id().toString());
         });
 
