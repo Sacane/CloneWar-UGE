@@ -96,11 +96,11 @@ public class ArtifactService {
     }
 
     public Flux<Artifact> findAll(){
-        var defer = Flux.defer(() -> Flux.fromIterable(repository.findAll()));
+        var defer = Flux.defer(() -> Flux.fromIterable(repository.findAllArtifact()));
         return defer.subscribeOn(schedulerCtx);
     }
 
     public Mono<String> getNameById(String id) {
-        return Mono.just(repository.findById(UUID.fromString(id)).get().name());
+        return Mono.just(repository.nameById(UUID.fromString(id)));
     }
 }

@@ -2,6 +2,8 @@ package fr.ramatellier.clonewar.rabin;
 
 import fr.ramatellier.clonewar.artifact.ArtifactRepository;
 import fr.ramatellier.clonewar.instruction.Instruction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.UUID;
 @Service
 public class RabinKapService {
     private final ArtifactRepository artifactRepository;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RabinKapService.class);
 
     public RabinKapService(ArtifactRepository artifactRepository) {
         this.artifactRepository = artifactRepository;
@@ -28,25 +32,21 @@ public class RabinKapService {
         return names;
     }
 
-    public String findNameForId(String id) {
-        return artifactRepository.findById(UUID.fromString(id)).get().name();
-    }
-
-    private List<Instruction> findInstructionsForId(String id) {
-        return artifactRepository.findById(UUID.fromString(id)).get().instructions();
-    }
-
     public List<ScoreDTO> scoreByJar(String id){
         var list = new ArrayList<ScoreDTO>();
         var ids = findAllIdExceptId(id);
-        var instructions = findInstructionsForId(id);
+        var instructions = artifactRepository.findById2(UUID.fromString(id)).instructions();
 
         for(var secondId: ids) {
-            var secondInstructions = findInstructionsForId(secondId);
-            var score = RabinKarp.onInstructions(instructions, secondInstructions);
-            list.add(new ScoreDTO(secondId, findNameForId(secondId), String.valueOf(score)));
-        }
 
+            var second = artifactRepository.findById2(UUID.fromString(secondId));
+            var secondInstructions = second.instructions();
+            LOGGER.info("get the artifact -> " + second.name());
+            var score = RabinKarp.onInstructions(instructions, secondInstructions);
+            LOGGER.info("compute score finished successfully");
+            list.add(new ScoreDTO(secondId, second.name(), String.valueOf(score)));
+        }
+        LOGGER.info("score is all done");
         return list.stream().sorted(Comparator.comparing(ScoreDTO::score)).toList();
     }
 }

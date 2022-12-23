@@ -85,7 +85,7 @@ public class InstructionBuilder {
 
     public static ArrayList<Instruction> buildInstructionFromJar(String jarName, byte[] bytes) throws IOException {
         LOGGER.info("start building instructions...");
-        var window = 4;
+        var window = 3;
         var list = new ArrayList<Instruction>();
         LOGGER.info("Get instruction from jar");
         var instructions = AsmParser.getInstructionsFromJar(jarName, bytes);
