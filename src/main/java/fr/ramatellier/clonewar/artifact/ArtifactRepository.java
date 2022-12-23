@@ -16,8 +16,8 @@ public interface ArtifactRepository extends CrudRepository<Artifact, UUID> {
     @Query(value = "SELECT a.name FROM Artifact a WHERE a.id=?1")
     String nameById(UUID id);
     @Query(value = "SELECT a FROM Artifact a WHERE a.id=?1")
-    Artifact findById2(UUID id);
+    Artifact customFindById(UUID id);
 
-    @Query(value = "Select a FROM Artifact a")
+    @Query(value = "SELECT * FROM Artifact a", nativeQuery = true)
     List<Artifact> findAllArtifact();
 }

@@ -1,7 +1,6 @@
 package fr.ramatellier.clonewar.rabin;
 
 import fr.ramatellier.clonewar.artifact.ArtifactRepository;
-import fr.ramatellier.clonewar.instruction.Instruction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,11 +34,11 @@ public class RabinKapService {
     public List<ScoreDTO> scoreByJar(String id){
         var list = new ArrayList<ScoreDTO>();
         var ids = findAllIdExceptId(id);
-        var instructions = artifactRepository.findById2(UUID.fromString(id)).instructions();
+        var instructions = artifactRepository.customFindById(UUID.fromString(id)).instructions();
 
         for(var secondId: ids) {
 
-            var second = artifactRepository.findById2(UUID.fromString(secondId));
+            var second = artifactRepository.customFindById(UUID.fromString(secondId));
             var secondInstructions = second.instructions();
             LOGGER.info("get the artifact -> " + second.name());
             var score = RabinKarp.onInstructions(instructions, secondInstructions);

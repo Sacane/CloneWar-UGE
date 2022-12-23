@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
@@ -28,10 +29,12 @@ public class ArtifactService {
     private final static Logger LOGGER = Logger.getLogger(ArtifactService.class.getName());
     private final ArtifactRepository repository;
     private final Scheduler schedulerCtx;
+    private final TransactionTemplate transactionTemplate;
 
-    public ArtifactService(ArtifactRepository repository, @Qualifier("schedulerCtx") Scheduler schedulerCtx){
+    public ArtifactService(ArtifactRepository repository, @Qualifier("schedulerCtx") Scheduler schedulerCtx, TransactionTemplate transactionTemplate){
         this.repository = repository;
         this.schedulerCtx = schedulerCtx;
+        this.transactionTemplate = transactionTemplate;
     }
 
     private Artifact createArtifactByInfos(String mainName, String srcName, byte[] srcContent, byte[] mainContent) throws IOException {
@@ -48,7 +51,6 @@ public class ArtifactService {
     private Mono<byte[]> retrieveBytesFromFilePart(FilePart filePart){
         return filePart.content().publishOn(Schedulers.boundedElastic()).map(part -> {
             try {
-                LOGGER.info("Test");
                 return part.asInputStream().readAllBytes();
             } catch (IOException e) {
                 throw new InvalidJarException(e);
@@ -89,18 +91,21 @@ public class ArtifactService {
     public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(File mainFile, File srcFile){
         return Mono.fromCallable(() -> {
             var artifact = createArtifactByInfos(mainFile.getName(), srcFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
-            mainFile.delete();
-            srcFile.delete();
+            if(!mainFile.delete() || srcFile.delete()){
+                LOGGER.severe("An error occurs because a file can't be deleted");
+            }
             return saveArtifact(artifact).toDto();
-        });
+        }).publishOn(Schedulers.boundedElastic());
     }
 
-    public Flux<Artifact> findAll(){
-        var defer = Flux.defer(() -> Flux.fromIterable(repository.findAllArtifact()));
-        return defer.subscribeOn(schedulerCtx);
+    public Flux<ArtifactDTO> findAll(){
+        return Flux.defer(() -> Flux.fromIterable(repository.findAllArtifact()
+                .stream()
+                .map(Artifact::toDto)
+                .toList())).subscribeOn(schedulerCtx);
     }
 
     public Mono<String> getNameById(String id) {
-        return Mono.just(repository.nameById(UUID.fromString(id)));
+        return Mono.fromCallable(() -> repository.nameById(UUID.fromString(id))).subscribeOn(Schedulers.boundedElastic());
     }
 }

@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -26,7 +27,7 @@ public class ArtifactController {
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
         LOGGER.info("Starting to retrieve all artifacts in database");
-        return service.findAll().map(Artifact::toDto);
+        return service.findAll().doOnNext(p -> LOGGER.info("End retrieving artifacts"));
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
@@ -37,7 +38,6 @@ public class ArtifactController {
         file1.createNewFile();
         file2.createNewFile();
         return srcFile.transferTo(file1).then(mainFile.transferTo(file2)).then(service.createArtifactFromFileAndThenPersist(file1, file2));
-
     }
 
     @GetMapping(path="/api/artifact/name/{id}")

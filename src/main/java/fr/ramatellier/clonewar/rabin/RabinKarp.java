@@ -36,7 +36,6 @@ public final class RabinKarp {
         var secondInstructions = instructionsJar2.stream().sorted(Comparator.comparing(Instruction::hashValue)).toList();
         try(var service = Executors.newFixedThreadPool(500)){
             for(var instruction: firstInstructions) {
-                LOGGER.info("get info from a new instruction...");
                 callables.add(() -> compareInstructionWithJarInstructions(instruction, secondInstructions));
             }
             var futures = service.invokeAll(callables);
