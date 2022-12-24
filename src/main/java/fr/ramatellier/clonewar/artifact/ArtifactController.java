@@ -26,18 +26,19 @@ public class ArtifactController {
 
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
-        LOGGER.info("Starting to retrieve all artifacts in database");
+        LOGGER.info("Start retrieving all artifacts from database");
         return service.findAll().doOnNext(p -> LOGGER.info("End retrieving artifacts"));
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
-    public Mono<ArtifactDTO> uploadJarFile(@RequestPart("src") FilePart srcFile, @RequestPart("main") FilePart mainFile) throws IOException {
-        LOGGER.info("Trying to analyze main file : " + mainFile.filename() + " and src file : " + srcFile.filename());
+    public Mono<ArtifactDTO> uploadJarFile(@RequestPart("src") FilePart srcFile, @RequestPart("main") FilePart mainFile) {
+        LOGGER.info("Analyzing main file : " + mainFile.filename() + " and its src file : " + srcFile.filename());
         var file1 = new File(srcFile.filename());
         var file2 = new File(mainFile.filename());
-        file1.createNewFile();
-        file2.createNewFile();
-        return srcFile.transferTo(file1).then(mainFile.transferTo(file2)).then(service.createArtifactFromFileAndThenPersist(file1, file2));
+        return srcFile
+                .transferTo(file1)
+                .then(mainFile.transferTo(file2))
+                .then(service.createArtifactFromFileAndThenPersist(file1, file2));
     }
 
     @GetMapping(path="/api/artifact/name/{id}")
