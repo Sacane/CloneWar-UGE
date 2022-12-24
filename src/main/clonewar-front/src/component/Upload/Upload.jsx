@@ -50,7 +50,7 @@ function Upload(props){
                               <i className="fas fa-upload"/>
                             </span>
                             <span className={"file-label"} id={"file-name"}>
-                              Select your archives...
+                              Select your main jar...
                             </span>
                           </span>
                             <span className={"file-name"}>{mainFile.name}</span>
@@ -67,7 +67,7 @@ function Upload(props){
                               <i className="fas fa-upload"/>
                             </span>
                             <span className={"file-label"} id={"file-name"}>
-                              Select your archives...
+                              Select your source jar...
                             </span>
                           </span>
                             <span className={"file-name"}>{srcFile.name}</span>

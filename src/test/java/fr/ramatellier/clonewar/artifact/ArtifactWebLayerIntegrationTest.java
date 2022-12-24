@@ -1,6 +1,5 @@
 package fr.ramatellier.clonewar.artifact;
 
-import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;

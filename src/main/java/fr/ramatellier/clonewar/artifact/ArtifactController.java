@@ -1,17 +1,16 @@
 package fr.ramatellier.clonewar.artifact;
 
-import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
-import org.springframework.http.MediaType;
+import fr.ramatellier.clonewar.util.AsmParser;
+import fr.ramatellier.clonewar.util.JarReader;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Duration;
+import java.nio.file.Files;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -27,14 +26,19 @@ public class ArtifactController {
 
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
-        LOGGER.info("Starting to retrieve all artifacts in database");
-        return service.findAll().map(Artifact::toDto);
+        LOGGER.info("Start retrieving all artifacts from database");
+        return service.findAll().doOnNext(p -> LOGGER.info("End retrieving artifacts"));
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
     public Mono<ArtifactDTO> uploadJarFile(@RequestPart("src") FilePart srcFile, @RequestPart("main") FilePart mainFile) {
-        LOGGER.info("Trying to analyze main file : " + mainFile.filename() + " and src file : " + srcFile.filename());
-        return service.createArtifactFromFileAndThenPersist(mainFile, srcFile);
+        LOGGER.info("Analyzing main file : " + mainFile.filename() + " and its src file : " + srcFile.filename());
+        var file1 = new File(srcFile.filename());
+        var file2 = new File(mainFile.filename());
+        return srcFile
+                .transferTo(file1)
+                .then(mainFile.transferTo(file2))
+                .then(service.createArtifactFromFileAndThenPersist(file1, file2));
     }
 
     @GetMapping(path="/api/artifact/name/{id}")

@@ -119,7 +119,7 @@ public class ArtifactController {
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
         LOGGER.info("Starting to retrieve all artifacts in database");
-        return service.findAll().delayElements(Duration.ofMillis(150)).map(Artifact::toDto);
+        return service.findAll();
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")

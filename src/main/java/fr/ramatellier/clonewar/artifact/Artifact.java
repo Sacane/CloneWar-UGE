@@ -2,7 +2,6 @@ package fr.ramatellier.clonewar.artifact;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.ramatellier.clonewar.EntitySerializable;
-import fr.ramatellier.clonewar.artifact.dto.ArtifactDTO;
 import fr.ramatellier.clonewar.instruction.Instruction;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -23,6 +22,7 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     private String url;
     private String urlSrc;
+    private String version;
 
 //    @Lob
     private byte[] jarFile;
@@ -38,17 +38,15 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
     private final List<Instruction> instructions = new ArrayList<>();
 
     public Artifact(){}
-    public Artifact(String name, String url, String urlSrc, LocalDate inputDate, byte[] jarFile, byte[] srcFile){
+    public Artifact(String name, String url, String urlSrc, LocalDate inputDate, byte[] jarFile, byte[] srcFile, String version){
         this.name= name;
         this.url = url;
         this.urlSrc = urlSrc;
         this.inputDate = inputDate;
         this.jarFile = jarFile;
         this.srcFile = srcFile;
+        this.version = version;
     }
-//    public Artifact(String name, String url, LocalDate inputDate){
-//        this(name, url, inputDate, null);
-//    }
 
     public void addAllInstructions(List<Instruction> instructions) {
         this.instructions.addAll(instructions);
@@ -78,9 +76,12 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
     public LocalDate inputDate(){
         return inputDate;
     }
+    public String version(){
+        return version;
+    }
 
     @Override
     public ArtifactDTO toDto() {
-        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url, urlSrc);
+        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url, urlSrc, version);
     }
 }
