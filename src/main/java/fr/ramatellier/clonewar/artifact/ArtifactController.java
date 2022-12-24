@@ -27,7 +27,7 @@ public class ArtifactController {
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
         LOGGER.info("Start retrieving all artifacts from database");
-        return service.findAll().doOnNext(p -> LOGGER.info("End retrieving artifacts"));
+        return service.findAll().doOnNext(p -> LOGGER.info("All artifacts retrieved successfully"));
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
