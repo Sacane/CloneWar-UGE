@@ -19,6 +19,7 @@ function App() {
                         <td>{a.name}</td>
                         <td>{a.url}</td>
                         <td>{a.date}</td>
+                        <td>{a.version}</td>
                         <td><button onClick={() => navigate('/detail/' + a.id)} className={"button is-rounded"}>detail</button></td>
                     </tr>
                 )
@@ -33,6 +34,7 @@ function App() {
                 <td>{a.name}</td>
                 <td>{a.url}</td>
                 <td>{a.date}</td>
+                <td>{a.version}</td>
                 <td><button onClick={() => navigate('/detail/' + a.id)} className={"button is-rounded"}>detail</button></td>
             </tr>
         );

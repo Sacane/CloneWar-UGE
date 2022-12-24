@@ -12,6 +12,7 @@ function Artifact(props){
                         <th>Artifact name</th>
                         <th>Url jar</th>
                         <th>Input date</th>
+                        <th>Version</th>
                         <th></th>
                     </tr>
                 </thead>

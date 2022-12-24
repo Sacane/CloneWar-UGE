@@ -40,9 +40,11 @@ public class ArtifactService {
     private Artifact createArtifactByInfos(String mainName, String srcName, byte[] srcContent, byte[] mainContent) throws IOException {
         LOGGER.info("Create artifact");
         var artifactId = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.ARTIFACT_ID)
-                .orElseThrow(() -> new PomNotFoundException("There is no pom.xml in this source jar"));
+                .orElseThrow(() -> new PomNotFoundException("There is no pom xml or it doesn't contains any artifactId for the project"));
+        var version = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.VERSION)
+                .orElseThrow(() -> new PomNotFoundException("here is no pom xml or it doesn't contains any version for the project"));
         var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
-        var artifact = new Artifact(artifactId, mainName, srcName, LocalDate.now(), mainContent, srcContent);
+        var artifact = new Artifact(artifactId, mainName, srcName, LocalDate.now(), mainContent, srcContent, version);
         artifact.addAllInstructions(instructions);
         System.out.println("Instructions --> " + instructions);
         return artifact;
