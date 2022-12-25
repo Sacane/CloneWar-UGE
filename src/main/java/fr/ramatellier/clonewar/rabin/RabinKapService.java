@@ -37,7 +37,6 @@ public class RabinKapService {
         var instructions = artifactRepository.customFindById(UUID.fromString(id)).instructions();
 
         for(var secondId: ids) {
-
             var second = artifactRepository.customFindById(UUID.fromString(secondId));
             var secondInstructions = second.instructions();
             LOGGER.info("get the artifact -> " + second.name());

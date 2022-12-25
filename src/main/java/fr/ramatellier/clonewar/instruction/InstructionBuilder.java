@@ -87,7 +87,6 @@ public class InstructionBuilder {
         LOGGER.info("start building instructions...");
         var window = 3;
         var list = new ArrayList<Instruction>();
-        LOGGER.info("Get instruction from jar");
         var instructions = AsmParser.getInstructionsFromJar(jarName, bytes);
         LOGGER.info("start indexing (using rabin karp)");
         for(var instruction: instructions) {
@@ -97,7 +96,6 @@ public class InstructionBuilder {
                 list.add(new Instruction(instruction.filename(), instruction.getLineNumberStart(), element.getKey(), instruction.order()));
             }
         }
-
         return list;
     }
 

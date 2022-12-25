@@ -27,12 +27,12 @@ public class ArtifactController {
     @GetMapping(path = "/api/artifacts")
     public Flux<ArtifactDTO> retrieveAllArtifacts(){
         LOGGER.info("Start retrieving all artifacts from database");
-        return service.findAll().doOnNext(p -> LOGGER.info("All artifacts retrieved successfully"));
+        return service.findAll().doOnNext(p -> LOGGER.info("Artifact " + p.name() + " has been retrieve successfully"));
     }
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
     public Mono<ArtifactDTO> uploadJarFile(@RequestPart("src") FilePart srcFile, @RequestPart("main") FilePart mainFile) {
-        LOGGER.info("Analyzing main file : " + mainFile.filename() + " and its src file : " + srcFile.filename());
+        LOGGER.info("Strating indexing from jar : " + mainFile.filename() + " and its sources : " + srcFile.filename());
         var file1 = new File(srcFile.filename());
         var file2 = new File(mainFile.filename());
         return srcFile
