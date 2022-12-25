@@ -40,7 +40,7 @@ public class ArtifactService {
         this.transactionTemplate = transactionTemplate;
     }
 
-    void checkSame(byte[] srcContent, byte[] mainContent){
+    static void checkSame(byte[] srcContent, byte[] mainContent){
         var srcReader = new ByteResourceReader(srcContent);
         var mainReader = new ByteResourceReader(mainContent);
         try{
@@ -87,28 +87,6 @@ public class ArtifactService {
         }
     }
 
-    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(FilePart mainPart, FilePart srcPart){
-        LOGGER.info("Persist files main :" + mainPart.filename() + " and its src : " + srcPart.filename());
-        return retrieveBytesFromFilePart(mainPart)
-                .flatMap(mainBytes -> retrieveBytesFromFilePart(srcPart).map(srcBytes -> {
-                                    try {
-                                        LOGGER.info("createArtifactFromFile");
-                                        var artifact = createArtifactByInfos(mainPart.filename(), srcPart.filename(), srcBytes, mainBytes);
-                                        LOGGER.info("Artifact created");
-                                        return saveArtifact(artifact).toDto();
-                                    } catch (IOException e) {
-                                        LOGGER.info("error");
-                                        throw new InvalidJarException(e);
-                                    }
-                                }
-                ));
-    }
-    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(byte[] byteMain, byte[] byteSrc){
-        return Mono.fromCallable(() -> {
-           var artifact = createArtifactByInfos("main", "src", byteMain, byteSrc);
-           return saveArtifact(artifact).toDto();
-        });
-    }
     public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(File mainFile, File srcFile){
         return Mono.fromCallable(() -> {
             var artifact = createArtifactByInfos(mainFile.getName(), srcFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
