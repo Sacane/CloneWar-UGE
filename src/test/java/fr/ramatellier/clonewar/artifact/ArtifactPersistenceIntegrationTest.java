@@ -30,13 +30,13 @@ public class ArtifactPersistenceIntegrationTest {
 
     @BeforeEach
     public void setupArtifacts(){
-        artifact = new Artifact("artifact123", "testArtifact1.jar", "testArtifact1.jar", LocalDate.now(), null, null);
+        artifact = new Artifact("artifact123", "testArtifact1.jar", "testArtifact1.jar", LocalDate.now(), null, null, "0.1");
         artifactRepository.save(artifact);
     }
 
     private void hugeSetup() throws IOException {
         Path path = Path.of(System.getProperty("user.dir") + "/src/test/resources/samples/guavaMain.jar");
-        var artifact = new Artifact("huge", "huge.jar", "hugesrc.jar", LocalDate.now(), Files.readAllBytes(path), null);
+        var artifact = new Artifact("huge", "huge.jar", "hugesrc.jar", LocalDate.now(), Files.readAllBytes(path), null, "0.1");
         artifactRepository.save(artifact);
     }
 
@@ -50,7 +50,7 @@ public class ArtifactPersistenceIntegrationTest {
 
     @Test
     public void uniqueConstraintShouldBeEffective(){
-        var artifact2 = new Artifact("artifact123", "testArtifact1.jar","testArtifact1.jar", LocalDate.now(), null, null);
+        var artifact2 = new Artifact("artifact123", "testArtifact1.jar","testArtifact1.jar", LocalDate.now(), null, null, "0.1");
         artifactRepository.save(artifact2);
         assertThrows(JpaSystemException.class, () -> artifactRepository.count());
     }
