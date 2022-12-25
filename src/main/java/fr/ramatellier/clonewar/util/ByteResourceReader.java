@@ -1,10 +1,13 @@
 package fr.ramatellier.clonewar.util;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReader;
 import java.lang.module.ModuleReference;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Scanner;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -46,6 +49,26 @@ public class ByteResourceReader {
         } finally {
             jarReader.delete();
         }
+    }
+    public Optional<String> searchForFileContent(String filename) throws IOException {
+        Objects.requireNonNull(filename);
+        if(!isInit) builderFinderFromBytes();
+        return retrieveFromReader(r -> {
+            try{
+                for(var fn: (Iterable<String>) r.list()::iterator){
+                    if(fn.contains(filename)){
+                        var md = r.open(fn).orElseThrow();
+                        var scan = new Scanner(md).useDelimiter("\\A");
+                        var content = scan.hasNext() ? scan.next() : "";
+                        if(content.equals("")) return Optional.empty();
+                        return Optional.of(content);
+                    }
+                }
+                return Optional.empty();
+            }catch (IOException e){
+                return Optional.empty();
+            }
+        });
     }
 
 }

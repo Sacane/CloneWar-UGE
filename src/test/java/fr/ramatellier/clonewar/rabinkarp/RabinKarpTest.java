@@ -34,7 +34,7 @@ public class RabinKarpTest {
     @Test
     public void test1() throws IOException {
         var score = scoreFromFile("json-1.0.jar", "jsoncloned-1.0.jar");
-        assertTrue(score <= 45);
+        assertTrue(score <= 60);
     }
 
     @Test
@@ -53,5 +53,17 @@ public class RabinKarpTest {
     public void test4() throws IOException{
         var score = scoreFromFile("Wrapper-1.0.jar", "WrapperCloned-1.0.jar");
         assertTrue(score >= 90);
+    }
+
+    @Test
+    public void test6() throws IOException{
+        var score = scoreFromFile("StringUtils-1.0.jar", "StringUtilsClone-1.0.jar");
+        assertTrue(score <= 10);
+    }
+
+    @Test
+    public void test7() throws IOException{
+        var score = scoreFromFile("StringUtils-2.0.jar", "StringUtilsClone-2.0.jar");
+        assertTrue(score <= 20);
     }
 }

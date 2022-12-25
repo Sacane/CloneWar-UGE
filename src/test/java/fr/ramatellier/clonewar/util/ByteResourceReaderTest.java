@@ -22,10 +22,8 @@ public class ByteResourceReaderTest {
     @Test
     public void artifactIdExtractedFromSrcJarTest(){
         var pathSrc = Path.of("src/test/resources/samples/SeqSrc.jar");
-//        var extractor = new PomExtractor("src/test/resources/samples/SeqSrc.jar");
         var bytes = assertDoesNotThrow(() -> Files.readAllBytes(pathSrc));
         var reader = new ByteResourceReader(bytes);
-
         assertDoesNotThrow(() -> reader.consumeReader(r -> {
             try {
                 String s;
@@ -69,5 +67,20 @@ public class ByteResourceReaderTest {
         });
         var array = list.toArray();
         assertArrayEquals(array, attempt);
+    }
+
+    @Test
+    public void searchFileContentTest() throws IOException {
+        var path = System.getProperty("user.dir") + "/src/test/resources/samples/";
+        var graphMainJar = Path.of(path + "GraphMain.jar");
+        var graphSrcJar = Path.of(path + "GraphSrc.jar");
+        var graphMainContent = Files.readAllBytes(graphMainJar);
+        var graphSrcContent = Files.readAllBytes(graphSrcJar);
+
+        var graphResourceReader = new ByteResourceReader(graphMainContent);
+        var graphSrcResourceReader = new ByteResourceReader(graphSrcContent);
+
+        assertTrue(graphSrcResourceReader.searchForFileContent("pom.xml").isPresent());
+        assertTrue(graphResourceReader.searchForFileContent("pom.xml").isPresent());
     }
 }
