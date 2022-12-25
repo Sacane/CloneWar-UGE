@@ -1,9 +1,12 @@
 package fr.ramatellier.clonewar.artifact;
 
 import fr.ramatellier.clonewar.exception.InvalidJarException;
+import fr.ramatellier.clonewar.exception.PomNotSameException;
 import fr.ramatellier.clonewar.exception.UniqueConstraintException;
 import fr.ramatellier.clonewar.exception.PomNotFoundException;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
+import fr.ramatellier.clonewar.util.ByteResourceReader;
+import fr.ramatellier.clonewar.util.JarReader;
 import fr.ramatellier.clonewar.util.PomExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -37,8 +40,24 @@ public class ArtifactService {
         this.transactionTemplate = transactionTemplate;
     }
 
+    void checkSame(byte[] srcContent, byte[] mainContent){
+        var srcReader = new ByteResourceReader(srcContent);
+        var mainReader = new ByteResourceReader(mainContent);
+        try{
+            var srcOpt = srcReader.searchForFileContent("pom.xml");
+            var mainOpt = mainReader.searchForFileContent("pom.xml");
+            if(srcOpt.isEmpty() || mainOpt.isEmpty()) throw new PomNotFoundException("pom not found");
+            var src = srcOpt.get();
+            var main = mainOpt.get();
+            if(!src.equals(main)) throw new PomNotSameException("The main and source jar are not the same.");
+        }catch (IOException e){
+            throw new InvalidJarException("Could not open the jar", e.getCause());
+        }
+    }
+
     private Artifact createArtifactByInfos(String mainName, String srcName, byte[] srcContent, byte[] mainContent) throws IOException {
         LOGGER.info("Create artifact");
+        checkSame(srcContent, mainContent); //Check if the pom.xml are equals or not
         var artifactId = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.ARTIFACT_ID)
                 .orElseThrow(() -> new PomNotFoundException("There is no pom xml or it doesn't contains any artifactId for the project"));
         var version = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.VERSION)
