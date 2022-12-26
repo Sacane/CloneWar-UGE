@@ -6,11 +6,9 @@ import fr.ramatellier.clonewar.exception.UniqueConstraintException;
 import fr.ramatellier.clonewar.exception.PomNotFoundException;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import fr.ramatellier.clonewar.util.ByteResourceReader;
-import fr.ramatellier.clonewar.util.JarReader;
 import fr.ramatellier.clonewar.util.PomExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Flux;
@@ -69,16 +67,6 @@ public class ArtifactService {
         artifact.addAllInstructions(instructions);
         System.out.println("Instructions --> " + instructions);
         return artifact;
-    }
-
-    private Mono<byte[]> retrieveBytesFromFilePart(FilePart filePart){
-        return filePart.content().publishOn(Schedulers.boundedElastic()).map(part -> {
-            try {
-                return part.asInputStream().readAllBytes();
-            } catch (IOException e) {
-                throw new InvalidJarException(e);
-            }
-        }).single();
     }
 
     private Artifact saveArtifact(Artifact artifact){
