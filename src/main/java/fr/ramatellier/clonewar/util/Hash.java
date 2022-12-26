@@ -2,7 +2,7 @@ package fr.ramatellier.clonewar.util;
 
 import java.util.Objects;
 
-public final class Hasher {
+public final class Hash {
 
     private final static int LIMIT = 1_000_007;
     private final static int BASE = 31;

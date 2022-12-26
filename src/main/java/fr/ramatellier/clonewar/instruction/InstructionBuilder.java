@@ -1,7 +1,7 @@
 package fr.ramatellier.clonewar.instruction;
 
 import fr.ramatellier.clonewar.util.AsmParser;
-import fr.ramatellier.clonewar.util.Hasher;
+import fr.ramatellier.clonewar.util.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +78,7 @@ public class InstructionBuilder {
             return contentList;
         }
         for(var i = 0; i < content.length; i++) {
-            hash[i] = Hasher.hash(content[i]);
+            hash[i] = Hash.hash(content[i]);
         }
         return instructionToScore(content, window, hash);
     }

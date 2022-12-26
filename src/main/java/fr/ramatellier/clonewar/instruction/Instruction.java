@@ -1,6 +1,6 @@
 package fr.ramatellier.clonewar.instruction;
 
-import fr.ramatellier.clonewar.util.Hasher;
+import fr.ramatellier.clonewar.util.Hash;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -34,7 +34,7 @@ public class Instruction {
         this.filename = filename;
         this.lineNumberStart = lineNumberStart;
         this.content = content;
-        this.hash = Hasher.hash(content);
+        this.hash = Hash.hash(content);
         this.order = order;
     }
 
