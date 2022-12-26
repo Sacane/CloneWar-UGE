@@ -145,8 +145,8 @@ public class PomExtractorTest {
                 """.trim();
 
         var contributors = PomExtractor.retrieveContributors(content.split("\n"));
-        assertTrue(contributors.size() > 0);
-        assertTrue(contributors.contains("Ramaroson Johan"));
+        assertTrue(contributors.isPresent());
+        assertTrue(contributors.get().equals("Ramaroson Johan"));
     }
 
     @Test
@@ -179,9 +179,35 @@ public class PomExtractorTest {
                 </project>
                 """.trim();
         var contributors = PomExtractor.retrieveContributors(content.split("\n"));
-        assertEquals(contributors.size(), 2);
-        assertTrue(contributors.contains("Ramaroson Johan"));
-        assertTrue(contributors.contains("Tellier Quentin"));
+        assertFalse(contributors.isEmpty());
+        assertTrue(contributors.get().contains("Ramaroson Johan"));
+        assertTrue(contributors.get().contains("Tellier Quentin"));
+        assertEquals("Ramaroson Johan, Tellier Quentin", contributors.get());
+    }
+
+    @Test
+    public void noContributorsShouldSendEmptyString(){
+        var content = """
+                <project>
+                        <modelVersion>4.0.0</modelVersion>
+                        <groupId>fr.ramatellier</groupId>
+                        <name>CloneWar</name>
+                        <description>Project allow people to detect plagiarism between two projects</description>
+                        <artifactId>CloneWar</artifactId>
+                        <version>0.0.1</version>
+                        <parent>
+                            <name>Parent</name>
+                            <artifactId>ParentId</artifactId>
+                            <version>0.1</version>
+                        </parent>
+                        <child>
+                            <name>Child</name>
+                            <version>0.2</version>
+                        </child>
+                </project>
+                """.trim();
+        var contributors = PomExtractor.retrieveContributors(content.split("\n"));
+        assertTrue(contributors.isEmpty());
     }
 
     @Test
