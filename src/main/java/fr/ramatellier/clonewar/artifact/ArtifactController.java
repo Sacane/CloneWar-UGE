@@ -1,16 +1,11 @@
 package fr.ramatellier.clonewar.artifact;
 
-import fr.ramatellier.clonewar.util.AsmParser;
-import fr.ramatellier.clonewar.util.JarReader;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -32,7 +27,7 @@ public class ArtifactController {
 
     @PostMapping(path="/api/artifact/upload", headers = "content-type=multipart/*")
     public Mono<ArtifactDTO> uploadJarFile(@RequestPart("src") FilePart srcFile, @RequestPart("main") FilePart mainFile) {
-        LOGGER.info("Strating indexing from jar : " + mainFile.filename() + " and its sources : " + srcFile.filename());
+        LOGGER.info("Start indexing from jar : " + mainFile.filename() + " and its sources : " + srcFile.filename());
         var file1 = new File(srcFile.filename());
         var file2 = new File(mainFile.filename());
         return srcFile

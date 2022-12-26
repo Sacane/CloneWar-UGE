@@ -1,6 +1,5 @@
 package fr.ramatellier.clonewar.util;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReader;
