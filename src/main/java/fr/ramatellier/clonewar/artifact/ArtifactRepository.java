@@ -9,12 +9,12 @@ import java.util.UUID;
 
 @Repository
 public interface ArtifactRepository extends CrudRepository<Artifact, UUID> {
-
     @Query(value = "SELECT a FROM Artifact a WHERE a.name=?1")
     Artifact findByName(String name);
 
     @Query(value = "SELECT a.name FROM Artifact a WHERE a.id=?1")
     String nameById(UUID id);
+
     @Query(value = "SELECT a FROM Artifact a WHERE a.id=?1")
     Artifact customFindById(UUID id);
 
