@@ -50,13 +50,8 @@ public class PomExtractor {
         return Optional.empty();
     }
 
-    static Optional<String> extract(String pomContent, XMLObject xml){
-        var tag = xmlToString(xml);
-        var pattern = Pattern.compile("<" + tag + ">(.*?)</" + tag + ">", Pattern.DOTALL);
-        var inPattern = Pattern.compile("<[^/](.*?)>", Pattern.DOTALL);
-        var outPattern = Pattern.compile("</(.*?)>", Pattern.DOTALL);
-        int depth = 0;
-        var lines = pomContent.split("\n");
+    private static Optional<String> preExtract(String[] lines, Pattern pattern, Pattern inPattern, Pattern outPattern){
+        var depth = 0;
         for(var line : lines){
             var trim = line.trim();
             if(trim.startsWith("<?xml") || !trim.startsWith("<")) continue;
@@ -65,15 +60,21 @@ public class PomExtractor {
                 continue;
             }
             var m = pattern.matcher(trim);
-            var out = outPattern.matcher(trim);
-            var in = inPattern.matcher(trim);
-            if(in.find()) {
+            if(inPattern.matcher(trim).find()) {
                 depth++;
             }
-            if(out.find()) depth--;
+            if(outPattern.matcher(trim).find()) depth--;
             if(m.find() && depth == 1) return Optional.of(m.group(1));
         }
         return Optional.empty();
+    }
+    static Optional<String> extract(String pomContent, XMLObject xml){
+        var tag = xmlToString(xml);
+        var pattern = Pattern.compile("<" + tag + ">(.*?)</" + tag + ">", Pattern.DOTALL);
+        var inPattern = Pattern.compile("<[^/](.*?)>", Pattern.DOTALL);
+        var outPattern = Pattern.compile("</(.*?)>", Pattern.DOTALL);
+        var lines = pomContent.split("\n");
+        return preExtract(lines, pattern, inPattern, outPattern);
     }
     static String xmlToString(XMLObject xmlObject){
         return switch(xmlObject){
