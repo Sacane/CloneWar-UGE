@@ -118,6 +118,73 @@ public class PomExtractorTest {
     }
 
     @Test
+    public void contributorsTest(){
+        var content = """
+                <project>
+                        <modelVersion>4.0.0</modelVersion>
+                        <groupId>fr.ramatellier</groupId>
+                        <name>CloneWar</name>
+                        <description>Project allow people to detect plagiarism between two projects</description>
+                        <artifactId>CloneWar</artifactId>
+                        <version>0.0.1</version>
+                        <developers>
+                            <developer>
+                                <name>Ramaroson Johan</name>
+                            </developer>
+                        </developers>
+                        <parent>
+                            <name>Parent</name>
+                            <artifactId>ParentId</artifactId>
+                            <version>0.1</version>
+                        </parent>
+                        <child>
+                            <name>Child</name>
+                            <version>0.2</version>
+                        </child>
+                </project>
+                """.trim();
+
+        var contributors = PomExtractor.retrieveContributors(content.split("\n"));
+        assertTrue(contributors.size() > 0);
+        assertTrue(contributors.contains("Ramaroson Johan"));
+    }
+
+    @Test
+    public void multipleContributorsTest(){
+        var content = """
+                <project>
+                        <modelVersion>4.0.0</modelVersion>
+                        <groupId>fr.ramatellier</groupId>
+                        <name>CloneWar</name>
+                        <description>Project allow people to detect plagiarism between two projects</description>
+                        <artifactId>CloneWar</artifactId>
+                        <version>0.0.1</version>
+                        <developers>
+                            <developer>
+                                <name>Ramaroson Johan</name>
+                            </developer>
+                            <developer>
+                                <name>Tellier Quentin</name>
+                            </developer>
+                        </developers>
+                        <parent>
+                            <name>Parent</name>
+                            <artifactId>ParentId</artifactId>
+                            <version>0.1</version>
+                        </parent>
+                        <child>
+                            <name>Child</name>
+                            <version>0.2</version>
+                        </child>
+                </project>
+                """.trim();
+        var contributors = PomExtractor.retrieveContributors(content.split("\n"));
+        assertEquals(contributors.size(), 2);
+        assertTrue(contributors.contains("Ramaroson Johan"));
+        assertTrue(contributors.contains("Tellier Quentin"));
+    }
+
+    @Test
     public void preconditions(){
         assertThrows(NullPointerException.class, () -> new PomExtractor(null));
         assertThrows(IllegalArgumentException.class, () -> new PomExtractor("foo.xml"));

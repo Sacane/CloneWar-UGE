@@ -5,9 +5,7 @@ import fr.ramatellier.clonewar.exception.PomNotFoundException;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +26,26 @@ public class PomExtractor {
             throw new PomNotFoundException();
         }
         this.pom = pathToPom;
+    }
+
+    public static List<String> retrieveContributors(String[] lines){
+        var depth = 0;
+        var list = new ArrayList<String>();
+        var devsPattern = Pattern.compile("<developers>");
+        var outDevPattern = Pattern.compile("</developer>");
+        var outDevsPattern = Pattern.compile("</developers>");
+        var devPattern = Pattern.compile("<developer>");
+        var nameDev = Pattern.compile("<name>(.*?)</name>");
+        for(var line : lines){
+            var matcher = nameDev.matcher(line);
+            if(outDevsPattern.matcher(line).find()){
+                break;
+            }
+            if(devsPattern.matcher(line).find() || devPattern.matcher(line).find()) depth++;
+            if(outDevPattern.matcher(line).find()) depth--;
+            if(matcher.find() && depth == 2) list.add(matcher.group(1));
+        }
+        return list;
     }
 
     /**
