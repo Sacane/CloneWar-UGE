@@ -60,8 +60,10 @@ public class ArtifactService {
         checkSame(srcContent, mainContent); //Check if the pom.xml are equals or not
         var artifactId = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.ARTIFACT_ID)
                 .orElseThrow(() -> new PomNotFoundException("There is no pom xml or it doesn't contains any artifactId for the project"));
+        LOGGER.info("ArtifactId retrieved successfully");
         var version = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.VERSION)
-                .orElseThrow(() -> new PomNotFoundException("here is no pom xml or it doesn't contains any version for the project"));
+                        .orElse("Unknown");
+        LOGGER.info("Attribute artifactId and version are retrieved successfully");
         var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
         var artifact = new Artifact(artifactId, mainName, srcName, LocalDate.now(), mainContent, srcContent, version);
         artifact.addAllInstructions(instructions);
