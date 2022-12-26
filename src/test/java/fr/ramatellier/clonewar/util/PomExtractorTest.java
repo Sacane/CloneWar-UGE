@@ -146,7 +146,7 @@ public class PomExtractorTest {
 
         var contributors = PomExtractor.retrieveContributors(content.split("\n"));
         assertTrue(contributors.isPresent());
-        assertTrue(contributors.get().equals("Ramaroson Johan"));
+        assertEquals("Ramaroson Johan", contributors.get());
     }
 
     @Test
@@ -185,6 +185,41 @@ public class PomExtractorTest {
         assertEquals("Ramaroson Johan, Tellier Quentin", contributors.get());
     }
 
+    @Test
+    public void contributorsShouldBeRetrieveEvenAfterMultipleLayer(){
+        var content = """
+                <project>
+                        <modelVersion>4.0.0</modelVersion>
+                        <groupId>fr.ramatellier</groupId>
+                        <name>CloneWar</name>
+                        <description>Project allow people to detect plagiarism between two projects</description>
+                        <artifactId>CloneWar</artifactId>
+                        <version>0.0.1</version>
+                        <parent>
+                            <name>Parent</name>
+                            <artifactId>ParentId</artifactId>
+                            <version>0.1</version>
+                        </parent>
+                        <child>
+                            <name>Child</name>
+                            <version>0.2</version>
+                        </child>
+                        <developers>
+                            <developer>
+                                <name>Ramaroson Johan</name>
+                            </developer>
+                            <developer>
+                                <name>Tellier Quentin</name>
+                            </developer>
+                        </developers>
+                </project>
+                """.trim();
+        var contributors = PomExtractor.retrieveContributors(content.split("\n"));
+        assertFalse(contributors.isEmpty());
+        assertTrue(contributors.get().contains("Ramaroson Johan"));
+        assertTrue(contributors.get().contains("Tellier Quentin"));
+        assertEquals("Ramaroson Johan, Tellier Quentin", contributors.get());
+    }
     @Test
     public void noContributorsShouldSendEmptyString(){
         var content = """
