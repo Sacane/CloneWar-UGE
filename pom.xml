@@ -7,6 +7,14 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>CloneWar</name>
     <description>Project allow people to detect plagiarism between two projects</description>
+    <developers>
+        <developer>
+            <name>Ramaroson Johan</name>
+        </developer>
+        <developer>
+            <name>Tellier Quentin</name>
+        </developer>
+    </developers>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
