@@ -11,16 +11,28 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public final class AsmParser {
-
+    /**
+     * Method that will print the name of all the files present at the path
+     * @param path The path that we want to print the name of his files
+     * @throws IOException Because open a ModuleReference can throw an IOException
+     */
     public static void printStream(Path path) throws IOException {
         var finder = ModuleFinder.of(path);
         var moduleReference = finder.findAll().stream().findFirst().orElseThrow();
-        try(var reader = moduleReference.open()){
-            for(var filename: (Iterable<String>) reader.list()::iterator){
+        try(var reader = moduleReference.open()) {
+            for(var filename: (Iterable<String>) reader.list()::iterator) {
                 System.out.println(filename);
             }
         }
     }
+
+    /**
+     * Method to find the instructions of a jar by parsing it and by taking the instructions that are inside the method, we also abstract the code
+     * @param jarName The name of the jar we want to parse
+     * @param bytes The array of bytes that represent the content of the jar
+     * @return The list of all the instructions we have found in the .class files of the jar
+     * @throws IOException It throws an IOException because consumeReader can throw it
+     */
     public static ArrayList<Instruction> getInstructionsFromJar(String jarName, byte[] bytes) throws IOException {
         var builder = new InstructionBuilder(jarName);
         var resourceReader = new ByteResourceReader(bytes);

@@ -26,19 +26,18 @@ import java.util.logging.Logger;
 
 @Service
 public class ArtifactService {
-
     private final static Logger LOGGER = Logger.getLogger(ArtifactService.class.getName());
     private final ArtifactRepository repository;
     private final Scheduler schedulerCtx;
     private final TransactionTemplate transactionTemplate;
 
-    public ArtifactService(ArtifactRepository repository, @Qualifier("schedulerCtx") Scheduler schedulerCtx, TransactionTemplate transactionTemplate){
+    public ArtifactService(ArtifactRepository repository, @Qualifier("schedulerCtx") Scheduler schedulerCtx, TransactionTemplate transactionTemplate) {
         this.repository = repository;
         this.schedulerCtx = schedulerCtx;
         this.transactionTemplate = transactionTemplate;
     }
 
-    static void checkSame(byte[] srcContent, byte[] mainContent){
+    static void checkSame(byte[] srcContent, byte[] mainContent) {
         var srcReader = new ByteResourceReader(srcContent);
         var mainReader = new ByteResourceReader(mainContent);
         try{
@@ -69,7 +68,7 @@ public class ArtifactService {
         return artifact;
     }
 
-    private Artifact saveArtifact(Artifact artifact){
+    private Artifact saveArtifact(Artifact artifact) {
         try{
             return repository.save(artifact);
         }catch (DataAccessException e){
@@ -77,7 +76,13 @@ public class ArtifactService {
         }
     }
 
-    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(File mainFile, File srcFile){
+    /**
+     * Method that will create an artifact to upload it to the database
+     * @param mainFile The file that contains the .class files
+     * @param srcFile The file that contains the .java files
+     * @return A Mono of the ArtifactDTO that we upload
+     */
+    public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(File mainFile, File srcFile) {
         return Mono.fromCallable(() -> {
             var artifact = createArtifactByInfos(mainFile.getName(), srcFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
             if(!mainFile.delete() || srcFile.delete()){
@@ -87,13 +92,22 @@ public class ArtifactService {
         }).publishOn(Schedulers.boundedElastic());
     }
 
-    public Flux<ArtifactDTO> findAll(){
+    /**
+     * Method that will find all the artifacts of the database
+     * @return A Flux of all the ArtifactDTO that already have been upload to the database
+     */
+    public Flux<ArtifactDTO> findAll() {
         return Flux.defer(() -> Flux.fromIterable(repository.findAllArtifact()
                 .stream()
                 .map(Artifact::toDto)
                 .toList())).subscribeOn(schedulerCtx);
     }
 
+    /**
+     * Method that will find the name of the artifact that have the specified id
+     * @param id The id of the artifact we want to find in the database
+     * @return A Mono with the name of the artifact that we search
+     */
     public Mono<String> getNameById(String id) {
         return Mono.fromCallable(() -> repository.nameById(UUID.fromString(id))).subscribeOn(Schedulers.boundedElastic());
     }

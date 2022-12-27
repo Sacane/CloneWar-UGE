@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PomExtractor {
-
     private final String pom;
 
     public enum XMLObject{
@@ -28,6 +27,11 @@ public class PomExtractor {
         this.pom = pathToPom;
     }
 
+    /**
+     * Method that will find the name of the developers in the content of a pom.xml
+     * @param lines The content of the pom.xml
+     * @return The list of the name of the developers
+     */
     public static List<String> retrieveContributors(String[] lines){
         var depth = 0;
         var list = new ArrayList<String>();
@@ -86,6 +90,7 @@ public class PomExtractor {
         }
         return Optional.empty();
     }
+
     static Optional<String> extract(String pomContent, XMLObject xml){
         var tag = xmlToString(xml);
         var pattern = Pattern.compile("<" + tag + ">(.*?)</" + tag + ">", Pattern.DOTALL);
@@ -94,6 +99,7 @@ public class PomExtractor {
         var lines = pomContent.split("\n");
         return preExtract(lines, pattern, inPattern, outPattern);
     }
+
     static String xmlToString(XMLObject xmlObject){
         return switch(xmlObject){
             case VERSION -> "version";
@@ -101,6 +107,7 @@ public class PomExtractor {
             case ARTIFACT_ID -> "artifactId";
         };
     }
+
     private static Optional<String> xmlContent(XMLObject obj, String pomContent){
         return switch(obj){
             case CONTRIBUTORS -> Optional.empty();
@@ -109,6 +116,13 @@ public class PomExtractor {
         };
     }
 
+    /**
+     * Generic method to find something in a pom.xml
+     * @param srcContent The content of the pom.xml is an array of bytes
+     * @param object It will find something in the pom.xml, CONTRIBUTORS for the name of the developers, ARTIFACT_ID for the artifactId and VERSION for the project version
+     * @return An Optional of what have been find in the pom.xml, it's empty if there is nothing
+     * @throws IOException The method retrieveFromReader can throw an IOException
+     */
     public static Optional<String> retrieveAttribute(byte[] srcContent, XMLObject object) throws IOException {
         var reader = new ByteResourceReader(srcContent);
         return reader.retrieveFromReader(r -> {

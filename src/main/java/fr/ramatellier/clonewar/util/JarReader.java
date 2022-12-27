@@ -9,7 +9,7 @@ public class JarReader {
     private boolean hasAlreadyWrite;
     private File file;
 
-    public JarReader(byte[] fluxJar){
+    public JarReader(byte[] fluxJar) {
         this.fluxJar = Objects.requireNonNull(fluxJar);
     }
 
@@ -24,15 +24,22 @@ public class JarReader {
         }
     }
 
-    public Path toPath(String path){
+    /**
+     * Method that create a file if we give the path of a jar file
+     * @param path The path to the jar file
+     * @return The path to the new file we created with store()
+     */
+    public Path toPath(String path) {
         if(!path.endsWith(".jar")) throw new IllegalArgumentException("Should take a jarPath");
         store(path);
         return file.toPath();
     }
 
-    public void delete(){
+    /**
+     *
+     */
+    public void delete() {
         if(!hasAlreadyWrite) throw new IllegalStateException("You can't close a reader while the file is not open");
         if(!file.delete()) throw new IllegalStateException("This file could not be deleted");
     }
-
 }
