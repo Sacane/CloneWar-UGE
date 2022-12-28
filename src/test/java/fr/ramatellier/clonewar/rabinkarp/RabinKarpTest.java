@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RabinKarpTest {
-
     private static final String TEST_PATH = "src/test/resources/tests/";
     private int scoreFromFile(String p1, String p2) throws IOException {
         var test = Path.of(TEST_PATH + p1);
@@ -64,6 +63,54 @@ public class RabinKarpTest {
     @Test
     public void test7() throws IOException{
         var score = scoreFromFile("StringUtils-2.0.jar", "StringUtilsClone-2.0.jar");
+        assertTrue(score <= 20);
+    }
+
+    @Test
+    public void test8() throws IOException {
+        var score = scoreFromFile("slice-1.0.jar", "slicecloned-1.0.jar");
+        assertTrue(score >= 70);
+    }
+
+    @Test
+    public void test9() throws IOException {
+        var score = scoreFromFile("numeric-1.0.jar", "numericcloned-1.0.jar");
+        assertTrue(score >= 50);
+    }
+
+    @Test
+    public void test10() throws IOException {
+        var score = scoreFromFile("series-1.0.jar", "seriescloned-1.0.jar");
+        assertTrue(score >= 60);
+    }
+
+    @Test
+    public void test11() throws IOException {
+        var score = scoreFromFile("Test4-1.0.jar", "ClonedTest4-1.0.jar");
+        assertTrue(score <= 50);
+    }
+
+    @Test
+    public void test12() throws IOException {
+        var score = scoreFromFile("Test5-1.0.jar", "ClonedTest5-1.0.jar");
+        assertTrue(score >= 80);
+    }
+
+    @Test
+    public void test13() throws IOException {
+        var score = scoreFromFile("Test6-1.0.jar", "ClonedTest6-1.0.jar");
+        assertTrue(score >= 90);
+    }
+
+    @Test
+    public void test14() throws IOException {
+        var score = scoreFromFile("Test7-1.0.jar", "ClonedTest7-1.0.jar");
+        assertTrue(score <= 20);
+    }
+
+    @Test
+    public void test15() throws IOException {
+        var score = scoreFromFile("Test8-1.0.jar", "ClonedTest8-1.0.jar");
         assertTrue(score <= 20);
     }
 }
