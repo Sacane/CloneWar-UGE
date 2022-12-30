@@ -24,26 +24,22 @@ public class Instruction {
     @Column(name = "content")
     private String content; //Each piece of instruction is separate with \n
 
-    @Column(name="order_entry")
-    private int order;
     @Column(name = "hash_value")
     private long hash;
 
     public Instruction(){}
-    public Instruction(String filename, int lineNumberStart, String content, int order){
+    public Instruction(String filename, int lineNumberStart, String content){
         this.filename = filename;
         this.lineNumberStart = lineNumberStart;
         this.content = content;
         this.hash = Hash.hash(content);
-        this.order = order;
     }
 
-    public Instruction(String filename, int lineNumberStart, String content, long hash, int order) {
+    public Instruction(String filename, int lineNumberStart, String content, long hash) {
         this.filename = filename;
         this.lineNumberStart = lineNumberStart;
         this.content = content;
         this.hash = hash;
-        this.order = order;
     }
 
     public String filename() {
@@ -66,9 +62,6 @@ public class Instruction {
         return id;
     }
 
-    public int order() {
-        return order;
-    }
 
     @Override
     public String toString() {

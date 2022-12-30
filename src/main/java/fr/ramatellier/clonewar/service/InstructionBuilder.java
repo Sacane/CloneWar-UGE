@@ -19,7 +19,6 @@ public class InstructionBuilder {
 
     private boolean hasFirstLine;
 
-    private int order = 0;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InstructionBuilder.class);
 
@@ -70,8 +69,7 @@ public class InstructionBuilder {
     public void endInstruction(String filename) {
         var instruction = actualInstruction.toString();
         if (!instruction.equals("")) {
-            instructions.add(new Instruction(filename, actualFirstLine, actualInstruction.toString(), order));
-            order++;
+            instructions.add(new Instruction(filename, actualFirstLine, actualInstruction.toString()));
         }
         actualInstruction = new StringBuilder();
         hasFirstLine = false;
@@ -137,7 +135,7 @@ public class InstructionBuilder {
             LOGGER.info("Treating a new instruction");
             var content = cutStringWithWindow(instruction.content().split("\n"), window);
             for(var element: content.entrySet()) {
-                list.add(new Instruction(instruction.filename(), instruction.getLineNumberStart(), element.getKey(), instruction.order()));
+                list.add(new Instruction(instruction.filename(), instruction.getLineNumberStart(), element.getKey()));
             }
         }
         return list;
