@@ -30,7 +30,7 @@ function Upload(props){
                 })
             }
             if(data.status === 400){
-                alert('Error because pom from main and sources are not the same !');
+                alert('An error occur with your uploaded jar, your pom may be deprecated or you might try to upload the same file..');
             }
             if(data.status === 404){
                 alert('No pom.xml found in source or main jar.')
