@@ -13,7 +13,7 @@ public class PomExtractor {
     private final String pom;
 
     public enum XMLObject{
-        CONTRIBUTORS, ARTIFACT_ID, VERSION
+        CONTRIBUTORS, ARTIFACT_ID, VERSION, URL
     }
 
     public PomExtractor(String pathToPom) {
@@ -105,6 +105,7 @@ public class PomExtractor {
             case VERSION -> "version";
             case CONTRIBUTORS -> "name";
             case ARTIFACT_ID -> "artifactId";
+            case URL -> "url";
         };
     }
 
@@ -113,6 +114,7 @@ public class PomExtractor {
             case CONTRIBUTORS -> Optional.empty();
             case VERSION -> extract(pomContent, XMLObject.VERSION);
             case ARTIFACT_ID -> extract(pomContent, XMLObject.ARTIFACT_ID);
+            case URL -> extract(pomContent, XMLObject.URL);
         };
     }
 

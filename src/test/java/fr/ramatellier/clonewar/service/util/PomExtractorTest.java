@@ -244,6 +244,24 @@ public class PomExtractorTest {
     }
 
     @Test
+    public void testUrlRetrieve(){
+        var content = """
+                <project>
+                        <modelVersion>4.0.0</modelVersion>
+                        <groupId>fr.ramatellier</groupId>
+                        <name>CloneWar</name>
+                        <description>Project allow people to detect plagiarism between two projects</description>
+                        <artifactId>CloneWar</artifactId>
+                        <version>0.0.1</version>
+                        <url>https://www.sacane.fr/</url>
+                </project>
+                """.trim();
+        var url = PomExtractor.extract(content, PomExtractor.XMLObject.URL);
+        assertTrue(url.isPresent());
+        assertEquals("https://www.sacane.fr/", url.get());
+    }
+
+    @Test
     public void preconditions(){
         assertThrows(NullPointerException.class, () -> new PomExtractor(null));
         assertThrows(IllegalArgumentException.class, () -> new PomExtractor("foo.xml"));
