@@ -1,7 +1,7 @@
 package fr.ramatellier.clonewar.instruction;
 
-import fr.ramatellier.clonewar.util.AsmParser;
-import fr.ramatellier.clonewar.util.Hash;
+import fr.ramatellier.clonewar.service.util.AsmParser;
+import fr.ramatellier.clonewar.service.util.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

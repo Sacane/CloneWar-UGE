@@ -1,6 +1,6 @@
 package fr.ramatellier.clonewar.instruction;
 
-import fr.ramatellier.clonewar.util.Hash;
+import fr.ramatellier.clonewar.service.util.Hash;
 import jakarta.persistence.*;
 
 import java.util.UUID;

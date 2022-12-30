@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.util;
+package fr.ramatellier.clonewar.service.util;
 
 import fr.ramatellier.clonewar.exception.InvalidJarException;
 import fr.ramatellier.clonewar.exception.PomNotFoundException;

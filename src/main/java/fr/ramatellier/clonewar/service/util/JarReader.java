@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.util;
+package fr.ramatellier.clonewar.service.util;
 
 import java.io.*;
 import java.nio.file.Path;

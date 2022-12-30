@@ -1,5 +1,7 @@
-package fr.ramatellier.clonewar.util;
+package fr.ramatellier.clonewar.service.util;
 
+import fr.ramatellier.clonewar.service.util.ByteResourceReader;
+import fr.ramatellier.clonewar.service.util.PomExtractor;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

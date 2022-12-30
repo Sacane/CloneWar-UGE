@@ -1,6 +1,7 @@
-package fr.ramatellier.clonewar.artifact;
+package fr.ramatellier.clonewar.service;
 
 import fr.ramatellier.clonewar.exception.PomNotSameException;
+import fr.ramatellier.clonewar.service.ArtifactService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;

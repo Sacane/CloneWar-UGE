@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.artifact;
+package fr.ramatellier.clonewar.persistence.artifact;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

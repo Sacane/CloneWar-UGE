@@ -1,5 +1,6 @@
-package fr.ramatellier.clonewar.artifact;
+package fr.ramatellier.clonewar.rest.artifact;
 
+import fr.ramatellier.clonewar.service.ArtifactService;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;

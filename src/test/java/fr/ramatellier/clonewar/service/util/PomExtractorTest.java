@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.util;
+package fr.ramatellier.clonewar.service.util;
 
 import fr.ramatellier.clonewar.exception.PomNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -145,8 +145,7 @@ public class PomExtractorTest {
                 """.trim();
 
         var contributors = PomExtractor.retrieveContributors(content.split("\n"));
-        assertTrue(contributors.isPresent());
-        assertEquals("Ramaroson Johan", contributors.get());
+        assertTrue(contributors.contains("Ramaroson Johan"));
     }
 
     @Test
@@ -180,9 +179,9 @@ public class PomExtractorTest {
                 """.trim();
         var contributors = PomExtractor.retrieveContributors(content.split("\n"));
         assertFalse(contributors.isEmpty());
-        assertTrue(contributors.get().contains("Ramaroson Johan"));
-        assertTrue(contributors.get().contains("Tellier Quentin"));
-        assertEquals("Ramaroson Johan, Tellier Quentin", contributors.get());
+        assertTrue(contributors.contains("Ramaroson Johan"));
+        assertTrue(contributors.contains("Tellier Quentin"));
+        assertEquals("[Ramaroson Johan, Tellier Quentin]", contributors.toString());
     }
 
     @Test
@@ -216,9 +215,8 @@ public class PomExtractorTest {
                 """.trim();
         var contributors = PomExtractor.retrieveContributors(content.split("\n"));
         assertFalse(contributors.isEmpty());
-        assertTrue(contributors.get().contains("Ramaroson Johan"));
-        assertTrue(contributors.get().contains("Tellier Quentin"));
-        assertEquals("Ramaroson Johan, Tellier Quentin", contributors.get());
+        assertTrue(contributors.contains("Ramaroson Johan"));
+        assertTrue(contributors.contains("Tellier Quentin"));
     }
     @Test
     public void noContributorsShouldSendEmptyString(){

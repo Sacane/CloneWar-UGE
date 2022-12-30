@@ -1,5 +1,6 @@
-package fr.ramatellier.clonewar.util;
+package fr.ramatellier.clonewar.service.util;
 
+import fr.ramatellier.clonewar.service.util.Hash;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

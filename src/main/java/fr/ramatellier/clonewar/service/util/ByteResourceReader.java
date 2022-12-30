@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.util;
+package fr.ramatellier.clonewar.service.util;
 
 import java.io.IOException;
 import java.lang.module.ModuleFinder;

@@ -1,6 +1,7 @@
 package fr.ramatellier.clonewar.artifact;
 
-import fr.ramatellier.clonewar.util.JarReader;
+import fr.ramatellier.clonewar.persistence.artifact.Artifact;
+import fr.ramatellier.clonewar.persistence.artifact.ArtifactRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.TestPropertySource;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

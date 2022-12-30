@@ -1,16 +1,18 @@
-package fr.ramatellier.clonewar.artifact;
+package fr.ramatellier.clonewar.service;
 
 import fr.ramatellier.clonewar.exception.InvalidJarException;
 import fr.ramatellier.clonewar.exception.PomNotSameException;
 import fr.ramatellier.clonewar.exception.UniqueConstraintException;
 import fr.ramatellier.clonewar.exception.PomNotFoundException;
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
-import fr.ramatellier.clonewar.util.ByteResourceReader;
-import fr.ramatellier.clonewar.util.PomExtractor;
+import fr.ramatellier.clonewar.persistence.artifact.Artifact;
+import fr.ramatellier.clonewar.persistence.artifact.ArtifactRepository;
+import fr.ramatellier.clonewar.rest.artifact.ArtifactDTO;
+import fr.ramatellier.clonewar.service.util.ByteResourceReader;
+import fr.ramatellier.clonewar.service.util.PomExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
@@ -29,12 +31,10 @@ public class ArtifactService {
     private final static Logger LOGGER = Logger.getLogger(ArtifactService.class.getName());
     private final ArtifactRepository repository;
     private final Scheduler schedulerCtx;
-    private final TransactionTemplate transactionTemplate;
 
-    public ArtifactService(ArtifactRepository repository, @Qualifier("schedulerCtx") Scheduler schedulerCtx, TransactionTemplate transactionTemplate) {
+    public ArtifactService(ArtifactRepository repository, @Qualifier("schedulerCtx") Scheduler schedulerCtx) {
         this.repository = repository;
         this.schedulerCtx = schedulerCtx;
-        this.transactionTemplate = transactionTemplate;
     }
 
     static void checkSame(byte[] srcContent, byte[] mainContent) {

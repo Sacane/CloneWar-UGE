@@ -1,7 +1,6 @@
-package fr.ramatellier.clonewar.rabinkarp;
+package fr.ramatellier.clonewar.service;
 
 import fr.ramatellier.clonewar.instruction.InstructionBuilder;
-import fr.ramatellier.clonewar.rabin.RabinKarp;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class RabinKarpTest {
         var clonedBytes = Files.readAllBytes(clonedTest);
         var testInstructions = InstructionBuilder.buildInstructionFromJar("test", testBytes);
         var clonedInstructions = InstructionBuilder.buildInstructionFromJar("cloned", clonedBytes);
-        var score = RabinKarp.onInstructions(testInstructions, clonedInstructions);
+        var score = RabinKapService.onInstructions(testInstructions, clonedInstructions);
         System.out.println(score);
         return score;
     }
