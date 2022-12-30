@@ -54,7 +54,7 @@ public class InstructionBuilder {
     }
 
     /**
-     * Method to give to the builder the number of the first line of the instruction
+     * Method to give to the builder the number of the first line of the instruction.
      * @param line The number of the first line
      */
     public void firstLine(int line) {
