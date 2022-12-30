@@ -91,11 +91,14 @@ public class ArtifactService {
      */
     public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(File mainFile, File srcFile) {
         return Mono.fromCallable(() -> {
-            var artifact = createArtifactByInfos(mainFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
-            if(!mainFile.delete() || srcFile.delete()){
-                LOGGER.severe("An error occurs because a file can't be deleted");
+            try {
+                var artifact = createArtifactByInfos(mainFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
+                return saveArtifact(artifact).toDto();
+            }finally {
+                if(!mainFile.delete() || srcFile.delete()){
+                    LOGGER.severe("An error occurs because a file can't be deleted");
+                }
             }
-            return saveArtifact(artifact).toDto();
         }).publishOn(Schedulers.boundedElastic());
     }
 
