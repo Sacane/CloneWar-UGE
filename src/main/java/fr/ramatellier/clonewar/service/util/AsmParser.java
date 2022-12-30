@@ -1,8 +1,8 @@
 package fr.ramatellier.clonewar.service.util;
 
 
-import fr.ramatellier.clonewar.instruction.Instruction;
-import fr.ramatellier.clonewar.instruction.InstructionBuilder;
+import fr.ramatellier.clonewar.persistence.Instruction.Instruction;
+import fr.ramatellier.clonewar.service.InstructionBuilder;
 import org.objectweb.asm.*;
 
 import java.io.IOException;

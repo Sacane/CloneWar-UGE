@@ -1,6 +1,5 @@
 package fr.ramatellier.clonewar.service;
 
-import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

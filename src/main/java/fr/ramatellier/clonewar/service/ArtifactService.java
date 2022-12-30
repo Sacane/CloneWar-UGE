@@ -4,7 +4,6 @@ import fr.ramatellier.clonewar.exception.InvalidJarException;
 import fr.ramatellier.clonewar.exception.PomNotSameException;
 import fr.ramatellier.clonewar.exception.UniqueConstraintException;
 import fr.ramatellier.clonewar.exception.PomNotFoundException;
-import fr.ramatellier.clonewar.instruction.InstructionBuilder;
 import fr.ramatellier.clonewar.persistence.artifact.Artifact;
 import fr.ramatellier.clonewar.persistence.artifact.ArtifactRepository;
 import fr.ramatellier.clonewar.rest.artifact.ArtifactDTO;

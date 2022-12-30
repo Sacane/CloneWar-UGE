@@ -1,5 +1,6 @@
-package fr.ramatellier.clonewar.instruction;
+package fr.ramatellier.clonewar.service;
 
+import fr.ramatellier.clonewar.persistence.Instruction.Instruction;
 import fr.ramatellier.clonewar.service.util.AsmParser;
 import fr.ramatellier.clonewar.service.util.Hash;
 import org.slf4j.Logger;

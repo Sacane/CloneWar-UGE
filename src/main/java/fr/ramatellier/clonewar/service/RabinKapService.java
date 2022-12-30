@@ -1,6 +1,6 @@
 package fr.ramatellier.clonewar.service;
 
-import fr.ramatellier.clonewar.instruction.Instruction;
+import fr.ramatellier.clonewar.persistence.Instruction.Instruction;
 import fr.ramatellier.clonewar.persistence.artifact.ArtifactRepository;
 import fr.ramatellier.clonewar.rest.rabin.ScoreDTO;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.artifact;
+package fr.ramatellier.clonewar.persistence;
 
 import fr.ramatellier.clonewar.persistence.artifact.Artifact;
 import fr.ramatellier.clonewar.persistence.artifact.ArtifactRepository;

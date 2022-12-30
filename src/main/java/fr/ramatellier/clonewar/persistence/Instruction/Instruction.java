@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.instruction;
+package fr.ramatellier.clonewar.persistence.Instruction;
 
 import fr.ramatellier.clonewar.service.util.Hash;
 import jakarta.persistence.*;
