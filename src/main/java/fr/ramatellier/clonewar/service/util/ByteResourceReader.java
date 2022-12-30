@@ -32,7 +32,7 @@ public class ByteResourceReader {
     }
 
     /**
-     * Method that will apply the given consumer to all the reader
+     * Method that will apply the given consumer to all the reader.
      * @param consumer The consumer we want to apply
      * @throws IOException The method open of ModuleReader can throw an IOException
      */
@@ -41,12 +41,13 @@ public class ByteResourceReader {
         if(!isInit) builderFinderFromBytes();
         try(var reader = finder.open()) {
             consumer.accept(reader);
+        }finally {
+            jarReader.delete();
         }
-        jarReader.delete();
     }
 
     /**
-     * Method that will apply a function to a reader and then delete it
+     * Method that will apply a function to a reader and then delete it.
      * @param fun The function we want to apply to the reader
      * @return The result of the function on the reader
      * @param <T> The return type of the function is a parameterized type
@@ -63,7 +64,7 @@ public class ByteResourceReader {
     }
 
     /**
-     * Method that will search the content of a specified file
+     * Method that will search the content of a specified file.
      * @param filename The name of the file
      * @return An Optional with the content of this file or else he will be empty
      * @throws IOException The method retrieveFromReader can throw an IOException
