@@ -29,11 +29,11 @@ public class ArtifactWebLayerIntegrationTest {
     private ArtifactRepository repository;
 
     private static final List<Artifact> artifacts = List.of(
-            new Artifact("artifact1", "artifact1.jar", "artifact1.jar", LocalDate.now(), null, null, "0.1"),
-            new Artifact("artifact2", "artifact2.jar", "artifact1.jar", LocalDate.now(), null, null, "0.1"),
-            new Artifact("artifact3", "artifact3.jar", "artifact1.jar", LocalDate.now(), null, null, "0.1"),
-            new Artifact("artifact4", "artifact4.jar", "artifact1.jar", LocalDate.now(), null, null, "0.1"),
-            new Artifact("artifact5", "artifact5.jar", "artifact1.jar", LocalDate.now(), null, null, "0.1")
+            new Artifact("artifact1", "artifact1.jar", LocalDate.now(), null, null, "0.1", "Ramaroson"),
+            new Artifact("artifact2", "artifact2.jar",  LocalDate.now(), null, null, "0.1", "Ramaroson"),
+            new Artifact("artifact3", "artifact3.jar", LocalDate.now(), null, null, "0.1", "Ramaroson"),
+            new Artifact("artifact4", "artifact4.jar",  LocalDate.now(), null, null, "0.1", "Ramaroson"),
+            new Artifact("artifact5", "artifact5.jar", LocalDate.now(), null, null, "0.1", "Ramaroson")
     );
 
 

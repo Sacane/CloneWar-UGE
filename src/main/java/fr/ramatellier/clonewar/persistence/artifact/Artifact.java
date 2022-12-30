@@ -22,10 +22,8 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     private String url;
 
-    private String urlSrc;
-
     private String version;
-
+    private String contributors;
 //    @Lob
     private byte[] jarFile;
 
@@ -39,14 +37,14 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
 
     public Artifact() {}
 
-    public Artifact(String name, String url, String urlSrc, LocalDate inputDate, byte[] jarFile, byte[] srcFile, String version){
+    public Artifact(String name, String url, LocalDate inputDate, byte[] jarFile, byte[] srcFile, String version, String contributors){
         this.name= name;
         this.url = url;
-        this.urlSrc = urlSrc;
         this.inputDate = inputDate;
         this.jarFile = jarFile;
         this.srcFile = srcFile;
         this.version = version;
+        this.contributors = contributors;
     }
 
     /**
@@ -113,12 +111,16 @@ public class Artifact implements EntitySerializable<ArtifactDTO> {
         return version;
     }
 
+    public String contributors() {
+        return contributors;
+    }
+
     /**
      * This method will create an ArtifactDTO which will be the representation of the current artifact but with all his fields represents by String
      * @return The representation of the current artifact with an ArtifactDTO
      */
     @Override
     public ArtifactDTO toDto() {
-        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url, urlSrc, version);
+        return new ArtifactDTO(id.toString(), name, inputDate.toString(), url, version, contributors);
     }
 }

@@ -28,11 +28,11 @@ public class PomExtractor {
     }
 
     /**
-     * Method that will find the name of the developers in the content of a pom.xml
+     * Find the name(s) of the developer(s) in the content of a pom.xml
      * @param lines The content of the pom.xml
      * @return The list of the name of the developers
      */
-    public static List<String> retrieveContributors(String[] lines){
+    static List<String> retrieveContributors(String[] lines){
         var depth = 0;
         var list = new ArrayList<String>();
         var devsPattern = Pattern.compile("<developers>");
@@ -50,6 +50,10 @@ public class PomExtractor {
             if(matcher.find() && depth == 2) list.add(matcher.group(1));
         }
         return list;
+    }
+    public static List<String> contributors(byte[] content) throws IOException {
+        var toString = byteContent(content);
+        return retrieveContributors(toString.split("\n"));
     }
 
     /**
@@ -126,19 +130,22 @@ public class PomExtractor {
      * @throws IOException The method retrieveFromReader can throw an IOException
      */
     public static Optional<String> retrieveAttribute(byte[] srcContent, XMLObject object) throws IOException {
-        var reader = new ByteResourceReader(srcContent);
+        var content = byteContent(srcContent);
+        if(content.equals("")) return Optional.empty();
+        return xmlContent(object, content);
+    }
+    static String byteContent(byte[] content) throws IOException {
+        var reader = new ByteResourceReader(content);
         return reader.retrieveFromReader(r -> {
             try {
                 for(var filename: (Iterable<String>) r.list()::iterator){
                     if(filename.contains("pom.xml")){
                         var md = r.open(filename).orElseThrow();
                         var scan = new Scanner(md).useDelimiter("\\A");
-                        var content = scan.hasNext() ? scan.next() : "";
-                        if(content.equals("")) return Optional.empty();
-                        return xmlContent(object, content);
+                        return scan.hasNext() ? scan.next() : "";
                     }
                 }
-                return Optional.empty();
+                return "";
             } catch (IOException e) {
                 throw new InvalidJarException(e.getCause());
             }

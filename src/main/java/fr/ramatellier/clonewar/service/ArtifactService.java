@@ -51,19 +51,27 @@ public class ArtifactService {
         }
     }
 
-    private Artifact createArtifactByInfos(String mainName, String srcName, byte[] srcContent, byte[] mainContent) throws IOException {
-        LOGGER.info("Create artifact");
-        checkSame(srcContent, mainContent); //Check if the pom.xml are equals or not
-        var artifactId = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.ARTIFACT_ID)
+    private record PomInfos(String artifactId, String version, String url, String contributors){}
+    private PomInfos getPomInfos(byte[] content) throws IOException {
+        var artifactId = PomExtractor.retrieveAttribute(content, PomExtractor.XMLObject.ARTIFACT_ID)
                 .orElseThrow(() -> new PomNotFoundException("There is no pom xml or it doesn't contains any artifactId for the project"));
         LOGGER.info("ArtifactId retrieved successfully");
-        var version = PomExtractor.retrieveAttribute(srcContent, PomExtractor.XMLObject.VERSION)
-                        .orElse("Unknown");
+        var version = PomExtractor.retrieveAttribute(content, PomExtractor.XMLObject.VERSION)
+                .orElse("Unknown");
         LOGGER.info("Attribute artifactId and version are retrieved successfully");
-        var instructions = InstructionBuilder.buildInstructionFromJar(artifactId, mainContent);
-        var artifact = new Artifact(artifactId, mainName, srcName, LocalDate.now(), mainContent, srcContent, version);
+        var url = PomExtractor.retrieveAttribute(content, PomExtractor.XMLObject.URL).orElse("unknown");
+        var contributors = PomExtractor.contributors(content);
+        return new PomInfos(artifactId, version, url, contributors.toString());
+    }
+    private Artifact createArtifactByInfos(String mainName, byte[] srcContent, byte[] mainContent) throws IOException {
+        LOGGER.info("Create artifact");
+        checkSame(srcContent, mainContent); //Check if the pom.xml are equals or not
+        var infos = getPomInfos(srcContent);
+        String contributors = infos.contributors;
+        if(contributors.isEmpty()) contributors = "unknown";
+        var instructions = InstructionBuilder.buildInstructionFromJar(mainName, mainContent);
+        var artifact = new Artifact(infos.artifactId, infos.url, LocalDate.now(), mainContent, srcContent, infos.version, contributors);
         artifact.addAllInstructions(instructions);
-        System.out.println("Instructions --> " + instructions);
         return artifact;
     }
 
@@ -83,7 +91,7 @@ public class ArtifactService {
      */
     public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(File mainFile, File srcFile) {
         return Mono.fromCallable(() -> {
-            var artifact = createArtifactByInfos(mainFile.getName(), srcFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
+            var artifact = createArtifactByInfos(mainFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
             if(!mainFile.delete() || srcFile.delete()){
                 LOGGER.severe("An error occurs because a file can't be deleted");
             }
