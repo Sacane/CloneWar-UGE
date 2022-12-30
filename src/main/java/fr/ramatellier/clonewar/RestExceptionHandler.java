@@ -1,4 +1,4 @@
-package fr.ramatellier.clonewar.service.util;
+package fr.ramatellier.clonewar;
 
 import fr.ramatellier.clonewar.exception.InvalidJarException;
 import fr.ramatellier.clonewar.exception.InvalidJarFormatException;

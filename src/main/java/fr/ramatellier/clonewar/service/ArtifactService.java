@@ -1,9 +1,6 @@
 package fr.ramatellier.clonewar.service;
 
-import fr.ramatellier.clonewar.exception.InvalidJarException;
-import fr.ramatellier.clonewar.exception.PomNotSameException;
-import fr.ramatellier.clonewar.exception.UniqueConstraintException;
-import fr.ramatellier.clonewar.exception.PomNotFoundException;
+import fr.ramatellier.clonewar.exception.*;
 import fr.ramatellier.clonewar.persistence.artifact.Artifact;
 import fr.ramatellier.clonewar.persistence.artifact.ArtifactRepository;
 import fr.ramatellier.clonewar.rest.artifact.ArtifactDTO;
@@ -90,6 +87,7 @@ public class ArtifactService {
      * @return A Mono of the ArtifactDTO that we upload
      */
     public Mono<ArtifactDTO> createArtifactFromFileAndThenPersist(File mainFile, File srcFile) {
+        if(mainFile.getName().equals(srcFile.getName())) throw new InvalidJarFormatException("Jar are the same");
         return Mono.fromCallable(() -> {
             try {
                 var artifact = createArtifactByInfos(mainFile.getName(), Files.readAllBytes(Path.of(mainFile.getAbsolutePath())), Files.readAllBytes(Path.of(srcFile.getAbsolutePath())));
