@@ -111,4 +111,34 @@ public class RabinKarpTest {
         var score = scoreFromFile("Test8-1.0.jar", "ClonedTest8-1.0.jar");
         assertTrue(score <= 20);
     }
+
+    @Test
+    public void test16() throws IOException {
+        var score = scoreFromFile("simd-1.0.jar", "simdcloned-1.0.jar");
+        assertTrue(score <= 10);
+    }
+
+    @Test
+    public void test17() throws IOException {
+        var score = scoreFromFile("seq-1.0.jar", "seqcloned-1.0.jar");
+        assertTrue(score >= 90);
+    }
+
+    @Test
+    public void test18() throws IOException {
+        var score = scoreFromFile("sed-1.0.jar", "sedcloned-1.0.jar");
+        assertTrue(score >= 40);
+    }
+
+    @Test
+    public void test19() throws IOException {
+        var score = scoreFromFile("graph-1.0.jar", "graphcloned-1.0.jar");
+        assertTrue(score >= 70);
+    }
+
+    @Test
+    public void test20() throws IOException {
+        var score = scoreFromFile("fifo-1.0.jar", "fifocloned-1.0.jar");
+        assertTrue(score <= 20);
+    }
 }
