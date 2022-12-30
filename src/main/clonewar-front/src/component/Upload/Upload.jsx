@@ -29,6 +29,12 @@ function Upload(props){
                     props.set(r);
                 })
             }
+            if(data.status === 400){
+                alert('Error because pom from main and sources are not the same !');
+            }
+            if(data.status === 404){
+                alert('No pom.xml found in source or main jar.')
+            }
         }).catch(r => {
             console.log('TODO : Resolve error properly');
             console.log(r);
