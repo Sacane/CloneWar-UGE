@@ -59,7 +59,7 @@ public class ArtifactService {
         var version = PomExtractor.retrieveAttribute(content, PomExtractor.XMLObject.VERSION)
                 .orElse("Unknown");
         LOGGER.info("Attribute artifactId and version are retrieved successfully");
-        var url = PomExtractor.retrieveAttribute(content, PomExtractor.XMLObject.URL).orElse("unknown");
+        var url = PomExtractor.retrieveAttribute(content, PomExtractor.XMLObject.URL).orElse("Unknown");
         var contributors = PomExtractor.contributors(content);
         return new PomInfos(artifactId, version, url, contributors.toString());
     }
@@ -68,7 +68,7 @@ public class ArtifactService {
         checkSame(srcContent, mainContent); //Check if the pom.xml are equals or not
         var infos = getPomInfos(srcContent);
         String contributors = infos.contributors;
-        if(contributors.isEmpty()) contributors = "unknown";
+        if(contributors.equals("[]")) contributors = "Unknown";
         var instructions = InstructionBuilder.buildInstructionFromJar(mainName, mainContent);
         var artifact = new Artifact(infos.artifactId, infos.url, LocalDate.now(), mainContent, srcContent, infos.version, contributors);
         artifact.addAllInstructions(instructions);

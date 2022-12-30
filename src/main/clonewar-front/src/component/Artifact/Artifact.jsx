@@ -10,9 +10,10 @@ function Artifact(props){
                 <thead>
                     <tr>
                         <th>Artifact name</th>
-                        <th>Url jar</th>
                         <th>Input date</th>
                         <th>Version</th>
+                        <th>Url</th>
+                        <th>contributors</th>
                         <th></th>
                     </tr>
                 </thead>
