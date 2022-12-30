@@ -25,7 +25,7 @@ public class JarReader {
     }
 
     /**
-     * Method that create a file if we give the path of a jar file
+     * Method that create a file if we give the path of a jar file.
      * @param path The path to the jar file
      * @return The path to the new file we created with store()
      */
