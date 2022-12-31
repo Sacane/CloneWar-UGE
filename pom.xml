@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.ramatellier</groupId>
     <artifactId>CloneWar</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>CloneWar</name>
     <description>Project allow people to detect plagiarism between two projects</description>
     <developers>
