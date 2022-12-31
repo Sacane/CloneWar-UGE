@@ -48,12 +48,10 @@ public class ByteResourceReaderTest {
     @Test
     public void readerShouldConsumeProperly() throws IOException {
         var attempt = new String[]{
-                "fr/sacane/test/Application.class",
-                "fr/sacane/test/Visited.class",
-                "fr/sacane/test/VisitedConstructor.class"
+                "fr/ramatellier/clonewar/CTest2.class"
         };
         var list = new ArrayList<String>();
-        var jar = new File("./src/test/resources/TestJar.jar");
+        var jar = new File("./src/test/resources/tests/ClonedTest2-1.0.jar");
         var bytes = assertDoesNotThrow(() -> Files.readAllBytes(jar.toPath()));
         var reader = new ByteResourceReader(bytes);
         reader.consumeReader(r -> {
