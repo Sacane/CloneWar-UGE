@@ -11,7 +11,7 @@ public class InvalidJarException extends RuntimeException{
         super(MESSAGE);
     }
     public InvalidJarException(String message, Throwable t){
-        super(MESSAGE, t);
+        super(message, t);
     }
 
 }

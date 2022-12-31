@@ -16,7 +16,7 @@ public class WebConfiguration implements WebFluxConfigurer {
 
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
-            "classpath:/static/", "classpath:/public/" };
+            "classpath:/static/" };
 
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {

@@ -29,6 +29,12 @@ function Upload(props){
                     props.set(r);
                 })
             }
+            if(data.status === 400){
+                alert('An error occur with your uploaded jar, your pom may be deprecated or you might try to upload the same file..');
+            }
+            if(data.status === 404){
+                alert('No pom.xml found in source or main jar.')
+            }
         }).catch(r => {
             console.log('TODO : Resolve error properly');
             console.log(r);

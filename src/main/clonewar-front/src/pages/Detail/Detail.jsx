@@ -10,11 +10,8 @@ function Detail(props) {
         if(score >= 80) {
             return {color: 'red'};
         }
-        else if(score >= 65) {
-            return {color: 'orange'};
-        }
         else if(score >= 50) {
-            return {color: 'yellow'};
+            return {color: 'orange'};
         }
         return {color: 'green'};
     }
